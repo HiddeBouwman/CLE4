@@ -5,7 +5,7 @@
 node_modules
 
 # Ignore vscode folder
-.vscode
+.vscode/settings.json
 
 #rest 
 npm-debug.log*
