@@ -1,5 +1,6 @@
 # Mermaid Diagram for Classes and Relationships
-Download
+Download the Mermaid plugin from the VS Code marketplace to view this diagram. 
+(in the workplace recomendations.)
 
 ```mermaid
 classDiagram
