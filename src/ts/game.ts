@@ -28,6 +28,9 @@ export class Game extends Engine {
         console.log("start de game!");
         // add and load start menu scene
         this.add('menu', new StartMenu());
+        this.add('level1', new LevelOne());
+        this.add('level2', new LevelTwo());
+        this.add('level3', new LevelThree());
         this.goToScene('menu');
     }
 }
