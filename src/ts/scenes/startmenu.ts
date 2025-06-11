@@ -1,9 +1,9 @@
 import { Scene } from "excalibur";
 
 
-export class LevelTwo extends Scene {
+export class StartMenu extends Scene {
     constructor() {
         super();
-        console.log("level 2 loaded");
+        console.log("game started");
     }
 }
