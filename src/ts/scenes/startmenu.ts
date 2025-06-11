@@ -7,8 +7,22 @@ export class StartMenu extends Scene {
     }
 
     onInitialize(engine) {
+        // Add title label at the top
+        const titleLabel = new Label({
+            text: "Choose level",
+            x: engine.drawWidth / 2,
+            y: 100, 
+            font: new Font({
+                size: 48,
+                unit: FontUnit.Px,
+                color: Color.Black,
+                textAlign: TextAlign.Center
+            })
+        });
+        this.add(titleLabel);
+
         //button via label class
-        const button = new Label({
+        const button_level1 = new Label({
             text: "Start Level 1",
             x: engine.drawWidth / 2,
             y: engine.drawHeight / 2,
@@ -22,10 +36,9 @@ export class StartMenu extends Scene {
         });
 
         //register clicks on label
-        button.on('pointerup', () => {
+        button_level1.on('pointerup', () => {
             engine.goToScene('level1');
         });
-
-        this.add(button);
+        this.add(button_level1);
     }
 }
