@@ -11,13 +11,14 @@ import {
 // voeg hier jouw eigen resources toe
 const Resources = {
   Fish: new ImageSource("images/fish.png"),
-//   FishMap: new ImageSource("images/global.png"),
-//   FisherMan: new ImageSource("images/Fisherman_idle.png"),
-//   Beach: new ImageSource("images/beach.png"),
-//   Font: new FontSource("fonts/KiwiSoda.ttf", "My Font", {
-//     filtering: ImageFiltering.Pixel,
-//     size: 16,
-//   }),
+  Floor: new ImageSource("images/floor.png"),
+  //   FishMap: new ImageSource("images/global.png"),
+  //   FisherMan: new ImageSource("images/Fisherman_idle.png"),
+  //   Beach: new ImageSource("images/beach.png"),
+  //   Font: new FontSource("fonts/KiwiSoda.ttf", "My Font", {
+  //     filtering: ImageFiltering.Pixel,
+  //     size: 16,
+  //   }),
 };
 
 const ResourceLoader = new Loader();

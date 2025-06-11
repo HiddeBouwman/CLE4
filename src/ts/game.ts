@@ -1,5 +1,5 @@
 import "../styles/style.css";
-import { DisplayMode, Engine, Timer } from "excalibur";
+import { DisplayMode, Engine, Timer, SolverStrategy, Vector } from "excalibur";
 import { ResourceLoader } from "./resources.ts";
 import { Color } from "excalibur";
 import { StartMenu } from './scenes/startmenu.ts';
@@ -16,9 +16,14 @@ export class Game extends Engine {
             pixelArt: true,
             suppressHiDPIScaling: true,
             displayMode: DisplayMode.FitScreen,
+            physics: {
+                solver: SolverStrategy.Realistic,
+                gravity: new Vector(0, 800),
+            }
         });
 
         this.backgroundColor = Color.fromHex("#5fb2e9");
+        this.showDebug(true)
 
         // Start game
         this.start(ResourceLoader).then(() => this.#startGame());
