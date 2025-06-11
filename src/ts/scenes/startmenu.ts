@@ -7,7 +7,7 @@ export class StartMenu extends Scene {
     }
 
     onInitialize(engine) {
-        // Create a button (as a label)
+        //button via label class
         const button = new Label({
             text: "Start Level 1",
             x: engine.drawWidth / 2,
@@ -21,7 +21,7 @@ export class StartMenu extends Scene {
             color: Color.Black
         });
 
-        // Make the label clickable
+        //register clicks on label
         button.on('pointerup', () => {
             engine.goToScene('level1');
         });
