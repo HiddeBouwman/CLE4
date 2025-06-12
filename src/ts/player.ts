@@ -1,5 +1,5 @@
-import { Actor, CollisionType, DegreeOfFreedom, Keys, Vector } from "excalibur";
-import type { Engine } from "excalibur";
+import { Actor, CollisionType, DegreeOfFreedom, Keys, Vector, Side} from "excalibur";
+import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { Floor } from "./floor.ts";
 import { Box } from "./objects/box.ts";
@@ -51,13 +51,18 @@ export class Player extends Actor {
 
     //on load register player collisions
     onInitialize(engine: Engine) {
-        this.on("collisionstart", (e) => this.hitSomething(e));
+        // this.on("collisionstart", (e) => this.hitSomething(e));
         this.on("collisionend", (e) => this.leaveObject(e));
     }
 
     //check collisions between players and objects.
-    hitSomething(e) {
-        if (e.other.owner instanceof Floor || e.other.owner instanceof Box) {
+    // hitSomething(e) {
+    //     if (e.other.owner.side instanceof Floor || e.other.owner instanceof Box) {
+    //         this.#onFloor = true;
+    //     }
+    // }
+    onCollisionStart(self: Collider, other: Collider, side: Side, contact: CollisionContact): void {
+        if (side === Side.Bottom && (other.owner instanceof Floor || other.owner instanceof Box)) {
             this.#onFloor = true;
         }
     }
