@@ -57,11 +57,11 @@ export class Player extends Actor {
         let kb = engine.input.keyboard
 
         //simpel jumping based on player and controles + collision with ground
-        if (this.#playerNumber === 1 && kb.wasPressed(Keys.Space)) {
+        if (this.#playerNumber === 1 && kb.wasPressed(Keys.Space) && this.#isOnGround) {
             this.jump()
         }
 
-        if (this.#playerNumber === 2 && kb.wasPressed(Keys.ArrowUp)) {
+        if (this.#playerNumber === 2 && kb.wasPressed(Keys.ArrowUp) && this.#isOnGround) {
             this.jump()
         }
     }
