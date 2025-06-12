@@ -4,25 +4,26 @@ import { Resources } from './resources.ts'
 export class Floor extends Actor {
     private myNineSlice: NineSlice;
 
-    constructor(x, y) {
-        super({ width: 900, height: 64 }); 
+    constructor(x: number, y: number) {
+        super();
+        
 
         const myNineSliceConfig: NineSliceConfig = {
-            width: 900,
-            height: 64, 
+            width: 96,
+            height: 96, 
             source: Resources.Floor, 
             sourceConfig: {
-                width: 64, 
-                height: 64, 
-                topMargin: 5,
-                leftMargin: 6,
-                bottomMargin: 5,
-                rightMargin: 6
+                width: 96, 
+                height: 96, 
+                topMargin: 32,
+                leftMargin: 32,
+                bottomMargin: 32,
+                rightMargin: 32,
             },
             destinationConfig: {
                 drawCenter: true,
                 horizontalStretch: NineSliceStretch.TileFit,
-                verticalStretch: NineSliceStretch.TileFit
+                verticalStretch: NineSliceStretch.TileFit,
             }
         };
 
