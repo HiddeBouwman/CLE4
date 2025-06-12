@@ -19,8 +19,9 @@ export class LevelOne extends Scene {
         this.add(this.player1);
         this.add(this.player2);
 
-        this.floor = new Floor(400, 580);
-        this.add(this.floor);
+
+        this.add(new Floor(400, 580, 800, 100));
+        this.add(new Floor(200, 200, 100, 100));
     }
 
     onActivate() {

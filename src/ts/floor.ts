@@ -1,16 +1,30 @@
 import { Actor, Vector, CollisionType, NineSlice, NineSliceConfig, NineSliceStretch } from "excalibur"
 import { Resources } from './resources.ts'
 
+/**
+ * Platoform class, use cordinates and size
+ * 
+ * @extends Actor
+ */
 export class Floor extends Actor {
-    private myNineSlice: NineSlice;
-
-    constructor(x: number, y: number) {
-        super();
+    #myNineSlice: NineSlice;
+    /**
+     * Creates a new Floor instance.
+     * 
+     * @param x - The x-coordinate position of the floor.
+     * @param y - The y-coordinate position of the floor.
+     * @param width - The width of the floor in pixels.
+     * @param height - The height of the floor in pixels.
+     */
+    constructor(x: number, y: number, width: number, height: number) {
+        super(
+            {width: width, height: height}
+        );
         
 
         const myNineSliceConfig: NineSliceConfig = {
-            width: 96,
-            height: 96, 
+            width: width + 20,
+            height: height + 20, 
             source: Resources.Floor, 
             sourceConfig: {
                 width: 96, 
@@ -27,8 +41,9 @@ export class Floor extends Actor {
             }
         };
 
-        this.myNineSlice = new NineSlice(myNineSliceConfig);
-        this.graphics.use(this.myNineSlice);
+        this.#myNineSlice = new NineSlice(myNineSliceConfig);
+        this.graphics.use(this.#myNineSlice);
+        this.scale = new Vector(2, 2);
 
         this.pos = new Vector(x, y);
         this.body.collisionType = CollisionType.Fixed;
