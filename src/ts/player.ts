@@ -27,7 +27,7 @@ const Controls: { player1: PlayerControls; player2: PlayerControls } = {
 };
 
 export class Player extends Actor {
-    #onFloor: boolean;
+    #onFloor: boolean = false;
     controls: PlayerControls;
 
     constructor(x: number, y: number, playerNumber: number) {
@@ -55,14 +55,14 @@ export class Player extends Actor {
         this.on("collisionend", (e) => this.leaveObject(e));
     }
 
-    //check collisions between players and other objects
+    //check collisions between players and objects.
     hitSomething(e) {
-        if (e.other.owner instanceof Floor || Box) {
+        if (e.other.owner instanceof Floor || e.other.owner instanceof Box) {
             this.#onFloor = true;
         }
     }
     leaveObject(e) {
-        if (e.other.owner instanceof Floor || Box) {
+        if (e.other.owner instanceof Floor || e.other.owner instanceof Box) {
             this.#onFloor = false;
         }
     }
@@ -80,12 +80,16 @@ export class Player extends Actor {
 
         if (kb.isHeld(this.controls.left)) {
             xspeed = -1;
+            console.log("Left");
         }
         if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
+            console.log("right");
+
         }
         if (kb.wasPressed(this.controls.up)) {
             this.jump();
+            console.log("jump")
         }
 
         // Apply horizontal movement
