@@ -4,20 +4,40 @@ Download the Mermaid plugin from the VS Code marketplace to view this diagram.
 
 ```mermaid
 classDiagram
-    class A {
+    class Actor {
         +methodA()
     }
-    class B {
+    class Game {
         +methodB()
     }
-    class C {
+    class Player {
         +methodC()
     }
-    class D {
+    class Level {
         +methodD()
     }
+    class Platform {
+        +methodE()
+    }
+    class ColoredPlatform {
+        +methodF()
+    }
+    class Box {
+        +methodG()
+    }
+    Actor <|-- Player
+    Actor <|-- Box
+    Actor <|-- Platform
+    Platform <|-- ColoredPlatform
+    Game "1" o-- "1" Engine : heeft
+    Engine "1" o-- "*" Scene : beheert
+    Scene "1" o-- "*" Actor : bevat
+    Level "1" o-- "*" Actor : bevat
 
-    A <|-- B
-    A <|-- C
-    B <|-- D
+
+    
 ```
+//voorbeeld
+Actor <|-- Player
+    Actor <|-- C
+    Player <|-- D
