@@ -20,7 +20,7 @@ export class Finish extends Actor {
     //Check if player collids with the finish (prototype).
     hitSomething(event) {
         if (event.other.owner instanceof Player && this.scene) {
-            // console.log("We collided.");
+            console.log("We collided.");
             
             // Switch scene back to level select menu.
             this.scene.engine.goToScene('menu');

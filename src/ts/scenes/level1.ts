@@ -1,4 +1,4 @@
-import { Scene } from "excalibur";
+import { Scene, Vector } from "excalibur";
 import { Player } from "../player.ts";
 import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
@@ -6,17 +6,19 @@ import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
 
 
+
 export class LevelOne extends Scene {
     floor: Floor;
     player1: Player;
     player2: Player;
     private cameraController: CameraController;
+
     constructor() {
         super();
     }
 
     onInitialize(engine) {
-        //add players, finish and floor to scene
+        //add players, finish object and floor to scene.
         this.player1 = new Player(380, 550, 1);
         this.player2 = new Player(300, 550, 2);
         this.add(this.player1);
@@ -38,5 +40,12 @@ export class LevelOne extends Scene {
 
     onActivate() {
         console.log("level 1 loaded");
+
+        // Reset player positions when level is activated.
+        if (this.player1 && this.player2) {
+            console.log("Pls");
+            this.player1.pos = new Vector(380, 550);
+            this.player2.pos = new Vector(300, 550);
+        }
     }
 }
