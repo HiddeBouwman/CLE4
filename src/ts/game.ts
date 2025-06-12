@@ -17,7 +17,7 @@ export class Game extends Engine {
             suppressHiDPIScaling: true,
             displayMode: DisplayMode.FitScreen,
             physics: {
-                solver: SolverStrategy.Realistic,
+                solver: SolverStrategy.Arcade,
                 gravity: new Vector(0, 800),
             }
         });
