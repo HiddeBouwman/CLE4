@@ -30,7 +30,7 @@ export class LevelOne extends Scene {
 
         this.add(new Finish(700, 500));
 
-        this.add(new Box(550, 500));
+        this.add(new Box(500, 500));
 
         this.cameraController = new CameraController(
             engine.currentScene,
