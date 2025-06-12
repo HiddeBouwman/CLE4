@@ -24,7 +24,7 @@ export class LevelOne extends Scene {
 
         this.add(new Finish(700, 500));
 
-        this.add(new Box(400, 500));
+        this.add(new Box(550, 500));
 
         this.add(new Floor(400, 1080, 1000, 500));
         this.add(new Floor(200, 200, 100, 100));

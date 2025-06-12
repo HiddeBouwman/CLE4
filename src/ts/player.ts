@@ -36,15 +36,14 @@ export class Player extends Actor {
         //important requirements for a Actor
         this.scale = new Vector(0.5, 0.5);
         this.pos = new Vector(x, y);
-
-        //player controls
-        this.controls = playerNumber === 1
-            ? Controls.player1
-            : Controls.player2;
-
+ 
+        //Init player controls
+        this.controls = playerNumber === 1 ? Controls.player1: Controls.player2;
+    
+        // Use graphics.
         this.graphics.use(Resources.Fish.toSprite());
 
-        //physics
+        // Init physics
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
     }
@@ -57,7 +56,9 @@ export class Player extends Actor {
 
     //check collisions between players and objects.
     hitSomething(e) {
+        // Improved collision check
         if (e.other.owner instanceof Floor || e.other.owner instanceof Box) {
+            console.log("Hit floor/box"); // Debug log
             this.#onFloor = true;
         }
     }
@@ -67,29 +68,30 @@ export class Player extends Actor {
         }
     }
 
-    //if on ground jump and reset on ground status
     jump() {
-        this.#onFloor
-            ? this.body.applyLinearImpulse(new Vector(0, -6000))
-            : null;
+        if (this.#onFloor) {
+            console.log("Jumping!"); // Debug log
+            this.vel = new Vector(this.vel.x, -600); // Adjust jump force as needed
+            this.#onFloor = false;
+        }
     }
 
     onPreUpdate(engine) {
         let kb = engine.input.keyboard;
         let xspeed = 0;
 
+        // Movement controls
         if (kb.isHeld(this.controls.left)) {
             xspeed = -1;
-            console.log("Left");
         }
         if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
-            console.log("right");
-
         }
-        if (kb.wasPressed(this.controls.up)) {
+
+        // Jump control - Changed from up to W/Up arrow
+        if (kb.wasPressed(this.controls.up) && this.#onFloor) {
             this.jump();
-            console.log("jump")
+            console.log("Attempting to jump, onFloor:", this.#onFloor); // Debug log
         }
 
         // Apply horizontal movement
