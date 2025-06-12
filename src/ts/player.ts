@@ -12,7 +12,7 @@ export class Player extends Actor {
         super({ width: 100, height: 100, collisionType: CollisionType.Active })
 
         //important requirements for a Actor
-        this.scale = new Vector(1.5, 1.5)
+        this.scale = new Vector(0.5, 0.5)
         this.pos = new Vector(x, y)
 
         //player identifier
@@ -47,7 +47,7 @@ export class Player extends Actor {
     //if on ground jump and reset on ground status
     jump() {
         if (this.#isOnGround) {
-            this.body.applyLinearImpulse(new Vector(0, -10000));
+            this.body.applyLinearImpulse(new Vector(0, -6000));
             this.#isOnGround = false;
         }
     }
