@@ -56,32 +56,14 @@ export class Player extends Actor {
 
     onPreUpdate(engine) {
         let kb = engine.input.keyboard
-        let xspeed = 0
-        
-        // Add horizontal movement player 1.
-        if (this.#playerNumber === 1) {
-            if (kb.isHeld(Keys.A) && this.pos.x > 0) {
-                xspeed = -1
-            }
-            if (kb.isHeld(Keys.D) && this.pos.x < 800) {
-                xspeed = 1
-            }
-            if (kb.wasPressed(Keys.Space)) {
-                this.jump()
-            }
+
+        //simpel jumping based on player and controles + collision with ground
+        if (this.#playerNumber === 1 && kb.wasPressed(Keys.Space)) {
+            this.jump()
         }
 
-        // Add horizontal movement player 2.
-        if (this.#playerNumber === 2) {
-            if (kb.isHeld(Keys.Left) && this.pos.x > 0) {
-                xspeed = -1
-            }
-            if (kb.isHeld(Keys.Right) && this.pos.x < 800) {
-                xspeed = 1
-            }
-            if (kb.wasPressed(Keys.ArrowUp)) {
-                this.jump()
-            }
+        if (this.#playerNumber === 2 && kb.wasPressed(Keys.ArrowUp)) {
+            this.jump()
         }
 
         // Apply horizontal movement
