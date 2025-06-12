@@ -36,15 +36,14 @@ export class Player extends Actor {
         //important requirements for a Actor
         this.scale = new Vector(0.5, 0.5);
         this.pos = new Vector(x, y);
-
-        //player controls
-        this.controls = playerNumber === 1
-            ? Controls.player1
-            : Controls.player2;
-
+ 
+        //Init player controls
+        this.controls = playerNumber === 1 ? Controls.player1: Controls.player2;
+    
+        // Use graphics.
         this.graphics.use(Resources.Fish.toSprite());
 
-        //physics
+        // Init physics
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
     }
@@ -67,34 +66,36 @@ export class Player extends Actor {
         }
     }
     leaveObject(e) {
-        if (e.other.owner instanceof Floor || e.other.owner instanceof Box) {
+        if (e.other.owner instanceof Floor) {
             this.#onFloor = false;
         }
     }
 
-    //if on ground jump and reset on ground status
     jump() {
-        this.#onFloor
-            ? this.body.applyLinearImpulse(new Vector(0, -6000))
-            : null;
+        if (this.#onFloor) {
+            console.log("Jumping!");
+            this.vel = new Vector(this.vel.x, -600);
+            this.#onFloor = false;
+            console.log(this.#onFloor);
+        }
     }
 
     onPreUpdate(engine) {
         let kb = engine.input.keyboard;
         let xspeed = 0;
 
+        // Movement controls
         if (kb.isHeld(this.controls.left)) {
             xspeed = -1;
-            console.log("Left");
         }
         if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
-            console.log("right");
-
         }
-        if (kb.wasPressed(this.controls.up)) {
+
+        // Jump controls
+        if (kb.wasPressed(this.controls.up) && this.#onFloor) {
             this.jump();
-            console.log("jump")
+            console.log("Attempting to jump, onFloor:", this.#onFloor);
         }
 
         // Apply horizontal movement
