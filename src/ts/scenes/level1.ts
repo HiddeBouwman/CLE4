@@ -26,12 +26,18 @@ export class LevelOne extends Scene {
         this.add(this.player2);
 
         // Parameters: x, y, width, height
+        //walls
+        this.add(new Floor(-28, 0, 5, 30));
+        this.add(new Floor(28, 0, 5, 30));
+        //floor
         this.add(new Floor(0, 40, 30, 30));
-        this.add(new Floor(2, 5, 4, 2));
+        // platforms
+        this.add(new Floor(2, 6, 4, 2));
+        this.add(new Floor(7, 1, 4, 2));
 
         this.add(new Finish(700, 500));
 
-        this.add(new Box(550, 500));
+        this.add(new Box(500, 500));
 
         this.add(new Platform(300, 100, 128, 32));
 

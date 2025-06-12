@@ -1,4 +1,11 @@
-import { Actor, CollisionType, DegreeOfFreedom, Keys, Vector, Side} from "excalibur";
+import {
+    Actor,
+    CollisionType,
+    DegreeOfFreedom,
+    Keys,
+    Side,
+    Vector,
+} from "excalibur";
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { Floor } from "./floor.ts";
@@ -36,10 +43,12 @@ export class Player extends Actor {
         //important requirements for a Actor
         this.scale = new Vector(0.5, 0.5);
         this.pos = new Vector(x, y);
- 
+
         //Init player controls
-        this.controls = playerNumber === 1 ? Controls.player1: Controls.player2;
-    
+        this.controls = playerNumber === 1
+            ? Controls.player1
+            : Controls.player2;
+
         // Use graphics.
         this.graphics.use(Resources.Fish.toSprite());
 
@@ -60,8 +69,16 @@ export class Player extends Actor {
     //         this.#onFloor = true;
     //     }
     // }
-    onCollisionStart(self: Collider, other: Collider, side: Side, contact: CollisionContact): void {
-        if (side === Side.Bottom && (other.owner instanceof Floor || other.owner instanceof Box)) {
+    onCollisionStart(
+        self: Collider,
+        other: Collider,
+        side: Side,
+        contact: CollisionContact,
+    ): void {
+        if (
+            side === Side.Bottom &&
+            (other.owner instanceof Floor || other.owner instanceof Box)
+        ) {
             this.#onFloor = true;
         }
     }

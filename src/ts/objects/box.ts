@@ -2,7 +2,7 @@ import { Actor, CollisionType, Vector, } from "excalibur";
 import { Resources } from "../resources.ts";
 
 export class Box extends Actor {
-    constructor(x, y) {
+    constructor(x: number, y: number) {
         super({
             width: 100,
             height: 100,
