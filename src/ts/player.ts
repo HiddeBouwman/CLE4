@@ -77,10 +77,10 @@ export class Player extends Actor {
         let kb = engine.input.keyboard;
         let xspeed = 0;
 
-        if (kb.isHeld(this.controls.left) && this.pos.x > 0) {
+        if (kb.isHeld(this.controls.left)) {
             xspeed = -1;
         }
-        if (kb.isHeld(this.controls.right) && this.pos.x < 800) {
+        if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
         }
         if (kb.wasPressed(this.controls.up)) {
