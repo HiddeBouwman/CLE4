@@ -9,13 +9,16 @@ export class CameraController  {
         this.camera = scene.camera;
     }
 
-
+    //update camera
     update(player1?: Actor, player2?: Actor) {
         if (player1 && player2) {
+            //follow the midpoint
             const mid = player1.pos.add(player2.pos).scale(0.5);
             this.camera.pos = mid;
 
+            
 
+            //zoom out
             const distance = player1.pos.distance(player2.pos);
             const minZoom = 0.5;
             const maxZoom = 1.5;

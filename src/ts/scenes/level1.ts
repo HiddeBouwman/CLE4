@@ -21,7 +21,7 @@ export class LevelOne extends Scene {
         this.add(this.player2);
 
 
-        this.add(new Floor(400, 580, 800, 100));
+        this.add(new Floor(400, 1080, 1000, 500));
         this.add(new Floor(200, 200, 100, 100));
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
