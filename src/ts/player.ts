@@ -2,6 +2,7 @@ import { Actor, CollisionType, DegreeOfFreedom, Keys, Vector } from "excalibur";
 import type { Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { Floor } from "./floor.ts";
+import { Box } from "./objects/box.ts";
 
 type PlayerControls = {
     left: Keys;
@@ -56,12 +57,12 @@ export class Player extends Actor {
 
     //check collisions between players and other objects
     hitSomething(e) {
-        if (e.other.owner instanceof Floor) {
+        if (e.other.owner instanceof Floor || Box) {
             this.#onFloor = true;
         }
     }
     leaveObject(e) {
-        if (e.other.owner instanceof Floor) {
+        if (e.other.owner instanceof Floor || Box) {
             this.#onFloor = false;
         }
     }
