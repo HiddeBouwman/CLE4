@@ -4,7 +4,7 @@ import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
-import { Platform } from "../objects/platform.ts";
+import { PressurePlate } from "../objects/pressurePlate.ts";
 
 
 
@@ -39,7 +39,7 @@ export class LevelOne extends Scene {
 
         this.add(new Box(500, 500));
 
-        this.add(new Platform(300, 100, 128, 32));
+        this.add(new PressurePlate(100, 321));
 
         this.cameraController = new CameraController(
             engine.currentScene,
