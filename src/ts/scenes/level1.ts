@@ -19,6 +19,8 @@ export class LevelOne extends Scene {
         this.add(this.player1);
         this.add(this.player2);
 
+        // Add finish object (adjust x,y position as needed)
+        this.add(new Finish(700, 500));
 
         this.add(new Floor(400, 580, 800, 100));
         this.add(new Floor(200, 200, 100, 100));
