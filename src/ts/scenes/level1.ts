@@ -1,7 +1,7 @@
 import { Scene } from "excalibur";
 import { Player } from "../player.ts";
 import { Floor } from "../floor.ts";
-
+import { Finish } from "../objects/finish.ts";  // Add this import
 
 export class LevelOne extends Scene {
     floor: Floor;
@@ -13,13 +13,12 @@ export class LevelOne extends Scene {
     }
 
     onInitialize(engine) {
-        //add players and floor to scene
+        //add players, finish and floor to scene
         this.player1 = new Player(380, 550, 1);
         this.player2 = new Player(300, 550, 2);
         this.add(this.player1);
         this.add(this.player2);
 
-        // Add finish object (adjust x,y position as needed)
         this.add(new Finish(700, 500));
 
         this.add(new Floor(400, 580, 800, 100));

@@ -12,6 +12,7 @@ import {
 const Resources = {
   Fish: new ImageSource("images/fish.png"),
   Floor: new ImageSource("images/floor.png"),
+  Finish: new ImageSource("images/finish.png"),
   //   FishMap: new ImageSource("images/global.png"),
   //   FisherMan: new ImageSource("images/Fisherman_idle.png"),
   //   Beach: new ImageSource("images/beach.png"),

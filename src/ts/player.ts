@@ -36,7 +36,6 @@ export class Player extends Actor {
         this.on('collisionstart', (event) => this.hitSomething(event))
     }
 
-
     //check collisions between players and other objects
     hitSomething(event) {
         if (event.other.owner instanceof Floor) {
@@ -52,7 +51,6 @@ export class Player extends Actor {
             this.#isOnGround = false;
         }
     }
-
 
     onPreUpdate(engine) {
         let kb = engine.input.keyboard
