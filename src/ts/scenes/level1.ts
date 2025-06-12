@@ -3,6 +3,7 @@ import { Player } from "../player.ts";
 import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
+import { Box } from "../objects/box.ts";
 
 
 export class LevelOne extends Scene {
@@ -23,6 +24,8 @@ export class LevelOne extends Scene {
 
         this.add(new Finish(700, 500));
 
+        this.add(new Box(400, 500));
+
         this.add(new Floor(400, 1080, 1000, 500));
         this.add(new Floor(200, 200, 100, 100));
 
@@ -30,8 +33,8 @@ export class LevelOne extends Scene {
     }
 
     onPreUpdate(engine, delta) {
-    this.cameraController.update(this.player1, this.player2);
-}
+        this.cameraController.update(this.player1, this.player2);
+    }
 
     onActivate() {
         console.log("level 1 loaded");
