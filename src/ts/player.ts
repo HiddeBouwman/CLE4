@@ -56,23 +56,23 @@ export class Player extends Actor {
 
     //check collisions between players and objects.
     hitSomething(e) {
-        // Improved collision check
+        
         if (e.other.owner instanceof Floor || e.other.owner instanceof Box) {
-            console.log("Hit floor/box"); // Debug log
             this.#onFloor = true;
         }
     }
     leaveObject(e) {
-        if (e.other.owner instanceof Floor || e.other.owner instanceof Box) {
+        if (e.other.owner instanceof Floor) {
             this.#onFloor = false;
         }
     }
 
     jump() {
         if (this.#onFloor) {
-            console.log("Jumping!"); // Debug log
-            this.vel = new Vector(this.vel.x, -600); // Adjust jump force as needed
+            console.log("Jumping!");
+            this.vel = new Vector(this.vel.x, -600);
             this.#onFloor = false;
+            console.log(this.#onFloor);
         }
     }
 
@@ -88,10 +88,10 @@ export class Player extends Actor {
             xspeed = 1;
         }
 
-        // Jump control - Changed from up to W/Up arrow
+        // Jump controls
         if (kb.wasPressed(this.controls.up) && this.#onFloor) {
             this.jump();
-            console.log("Attempting to jump, onFloor:", this.#onFloor); // Debug log
+            console.log("Attempting to jump, onFloor:", this.#onFloor);
         }
 
         // Apply horizontal movement
