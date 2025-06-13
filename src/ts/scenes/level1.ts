@@ -1,11 +1,11 @@
-import { Scene, Vector } from "excalibur";
+import { Scene, Engine, Vector } from "excalibur";
 import { Player } from "../player.ts";
 import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
 import { PressurePlate } from "../objects/pressurePlate.ts";
-
+import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 
 
 export class LevelOne extends Scene {
@@ -13,15 +13,15 @@ export class LevelOne extends Scene {
     player1: Player;
     player2: Player;
     private cameraController: CameraController;
-
+    private parallax!: ParallaxBackgroundManager; // Achtergrond
     constructor() {
         super();
     }
 
-    onInitialize(engine) {
+    onInitialize(engine: Engine) {
+        //add players, finish and floor to scene
         this.player1 = new Player(7 * 32, 14 * 32, 1);
         this.player2 = new Player(9 * 32, 14 * 32, 2);
-
         this.add(this.player1);
         this.add(this.player2);
 
@@ -41,14 +41,13 @@ export class LevelOne extends Scene {
 
         this.add(new PressurePlate(100, 321));
 
-        this.cameraController = new CameraController(
-            engine.currentScene,
-            engine.currentScene.camera,
-        );
+        this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
+        this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
     }
 
-    onPreUpdate(engine, delta) {
+    onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
+        this.parallax.update();
     }
 
     onActivate() {

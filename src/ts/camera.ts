@@ -19,10 +19,10 @@ export class CameraController  {
 
             
 
-            //zoom out
+            // zoom moet even weg dus ik heb beide waarden naar 1.0 gezet
             const distance = player1.pos.distance(player2.pos);
-            const minZoom = 0.5;
-            const maxZoom = 1.5;
+            const minZoom = 1.0;
+            const maxZoom = 1.0;
             const baseDistance = 400; 
             let zoom = baseDistance / (distance + 1); 
             zoom = Math.max(minZoom, Math.min(maxZoom, zoom));
