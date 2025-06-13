@@ -76,7 +76,7 @@ export class Player extends Actor {
             otherBody?.collisionType === CollisionType.Fixed ||
             otherBody?.collisionType === CollisionType.Active
         ) {
-            if (side === Side.Bottom) {
+            if (side === Side.Bottom && other.owner.hasTag('ground')) {
                 this.#onGround = true;
             }
         }
@@ -88,14 +88,17 @@ export class Player extends Actor {
         lastContact: CollisionContact,
     ): void {
         const otherBody = other.owner.get(BodyComponent);
+        
         if (
             otherBody?.collisionType === CollisionType.Fixed ||
             otherBody?.collisionType === CollisionType.Active
         ) {
-            if (side === Side.Bottom)
-            this.#onGround = false;
+            if (side === Side.Bottom && other.owner.hasTag('ground')) {
+                this.#onGround = false;
+            }
         }
     }
+    
 
     jump() {
         if (this.#onGround) {

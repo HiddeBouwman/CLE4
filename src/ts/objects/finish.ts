@@ -2,14 +2,6 @@ import { Actor, Vector, CollisionType, Keys } from "excalibur";
 import { Player } from "../player.ts";
 import { Resources } from "../resources.ts";
 
-// Import Controls.
-type PlayerControls = {
-    left: Keys;
-    right: Keys;
-    up: Keys;
-    down: Keys;
-};
-
 // Import Controls from Player class.
 import { Controls } from "../player.ts";
 
