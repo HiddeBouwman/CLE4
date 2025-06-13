@@ -6,7 +6,7 @@ import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
 import { PressurePlate } from "../objects/pressurePlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
-
+import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 
 export class LevelOne extends Scene {
     floor: Floor;
@@ -39,7 +39,11 @@ export class LevelOne extends Scene {
 
         this.add(new Box(500, 500));
 
-        this.add(new PressurePlate(100, 321));
+        
+        const platform1 = new ElevatorPlatform(500, 100, 100, 20, 1); 
+        this.add(platform1);
+
+        this.add(new PressurePlate(100, 321, platform1));
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
