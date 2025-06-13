@@ -1,5 +1,6 @@
 import {
     Actor,
+    BodyComponent,
     CollisionType,
     DegreeOfFreedom,
     Keys,
@@ -8,8 +9,7 @@ import {
 } from "excalibur";
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
-import { Floor } from "./floor.ts";
-import { Box } from "./objects/box.ts";
+import { CollisionGroup } from "./collision.ts";
 
 type PlayerControls = {
     left: Keys;
@@ -34,11 +34,19 @@ const Controls: { player1: PlayerControls; player2: PlayerControls } = {
 };
 
 export class Player extends Actor {
-    #onFloor: boolean = false;
+    #onGround: boolean = false;
+    #isInAir: boolean = true;
     controls: PlayerControls;
 
     constructor(x: number, y: number, playerNumber: number) {
-        super({ width: 100, height: 100, collisionType: CollisionType.Active });
+        super(
+            {
+                width: 100,
+                height: 100,
+                collisionType: CollisionType.Active,
+                collisionGroup: CollisionGroup.Player,
+            },
+        );
 
         //important requirements for a Actor
         this.scale = new Vector(0.5, 0.5);
@@ -57,43 +65,27 @@ export class Player extends Actor {
         this.body.bounciness = 0.1;
     }
 
-    //on load register player collisions
-    onInitialize(engine: Engine) {
-        // this.on("collisionstart", (e) => this.hitSomething(e));
-        this.on("collisionend", (e) => this.leaveObject(e));
-    }
-
-    //check collisions between players and objects.
-    // hitSomething(e) {
-    //     if (e.other.owner.side instanceof Floor || e.other.owner instanceof Box) {
-    //         this.#onFloor = true;
-    //     }
-    // }
     onCollisionStart(
         self: Collider,
         other: Collider,
         side: Side,
         contact: CollisionContact,
     ): void {
+        const otherBody = other.owner.get(BodyComponent);
         if (
-            side === Side.Bottom &&
-            (other.owner instanceof Floor || other.owner instanceof Box)
+            otherBody?.collisionType === CollisionType.Fixed ||
+            otherBody?.collisionType === CollisionType.Active
         ) {
-            this.#onFloor = true;
-        }
-    }
-    leaveObject(e) {
-        if (e.other.owner instanceof Floor) {
-            this.#onFloor = false;
+            if (side === Side.Bottom) {
+                this.#onGround = true;
+            }
         }
     }
 
     jump() {
-        if (this.#onFloor) {
-            console.log("Jumping!");
+        if (this.#onGround) {
             this.vel = new Vector(this.vel.x, -600);
-            this.#onFloor = false;
-            console.log(this.#onFloor);
+            this.#onGround = false;
         }
     }
 
@@ -110,9 +102,8 @@ export class Player extends Actor {
         }
 
         // Jump controls
-        if (kb.wasPressed(this.controls.up) && this.#onFloor) {
+        if (kb.wasPressed(this.controls.up) && this.#onGround) {
             this.jump();
-            console.log("Attempting to jump, onFloor:", this.#onFloor);
         }
 
         // Apply horizontal movement
