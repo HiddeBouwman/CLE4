@@ -2,6 +2,7 @@ import { Actor, CollisionType, Vector, } from "excalibur";
 import { Resources } from "../resources.ts";
 import { ElevatorPlatform } from "./elevatorPlatform.ts";
 import { Player } from "../player.ts";
+import { Box } from "./box.ts";
 
 export class PressurePlate extends Actor {
     private targetPlatform: ElevatorPlatform;
@@ -18,14 +19,19 @@ export class PressurePlate extends Actor {
         this.targetPlatform = targetPlatform;
     }
 
+
     onInitialize(engine) {
+        //check for collisions with Player or Box
         this.on("collisionstart", (evt) => {
-            if (evt.other.owner && evt.other.owner instanceof Player) {
+            const other = evt.other.owner;
+            if (other && (other instanceof Player || other instanceof Box)) {
                 this.targetPlatform.startElevating();
             }
         });
+        //check when Player or Box leaves the pressure plate
         this.on("collisionend", (evt) => {
-            if (evt.other.owner && evt.other.owner instanceof Player) {
+            const other = evt.other.owner;
+            if (other && (other instanceof Player || other instanceof Box)) {
                 this.targetPlatform.stopElevating();
             }
         });

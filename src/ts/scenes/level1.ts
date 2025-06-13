@@ -52,7 +52,7 @@ export class LevelOne extends Scene {
             180, 30, new Vector(0.5, -2), -100);
         this.add(platform1);
 
-        this.add(new PressurePlate(100, 321, platform1));
+        this.add(new PressurePlate(600, 321, platform1));
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
