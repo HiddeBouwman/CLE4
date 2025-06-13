@@ -10,9 +10,11 @@ export class Platform extends Actor {
             height: height,
             collisionType: CollisionType.Fixed
         });
+        
 
         this.playerNumber = playerNumber;
         this.pos = new Vector(x, y);
+        this.addTag('ground');
 
         // kies sprite of kleur op basis van speler
         if (playerNumber === 1) {
@@ -24,10 +26,12 @@ export class Platform extends Actor {
             this.graphics.use(sprite);
         }
 
-        // custom collider
-        const colliderHeight = height - 8;
-        const colliderOffset = new Vector(0, 4);
-        const box = Shape.Box(width, colliderHeight, colliderOffset);
-        this.collider.set(box);
+        // Stel gewenste collider-grootte in (bijvoorbeeld 100 breed, 8 hoog)
+        const colliderWidth = width; // of bijvoorbeeld 100
+        const colliderHeight = 8;
+
+        // Plaats de collider onderaan de sprite
+        const colliderOffset = new Vector(0, (height / 2) - (colliderHeight / 2));
+        this.collider.useBoxCollider(colliderWidth, colliderHeight, colliderOffset);
     }
 }

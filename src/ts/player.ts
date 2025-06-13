@@ -10,6 +10,7 @@ import {
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
+import { Platform } from "./objects/platform.ts";
 
 type PlayerControls = {
     left: Keys;
@@ -37,9 +38,12 @@ export class Player extends Actor {
     #onGround: boolean = false;
     #isInAir: boolean = true;
     controls: PlayerControls;
+    speedBoost: boolean = false;
+    jumpBoost: boolean = false;
+    playerNumber: number;
 
     constructor(x: number, y: number, playerNumber: number) {
-        super(
+            super(
             {
                 width: 100,
                 height: 100,
@@ -47,6 +51,9 @@ export class Player extends Actor {
                 collisionGroup: CollisionGroup.Player,
             },
         );
+
+        this.playerNumber = playerNumber;
+        
 
         //important requirements for a Actor
         this.scale = new Vector(0.5, 0.5);
@@ -63,6 +70,7 @@ export class Player extends Actor {
         // Init physics
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
+        
     }
 
     onCollisionStart(
@@ -80,6 +88,10 @@ export class Player extends Actor {
                 this.#onGround = true;
             }
         }
+        if (other.owner instanceof Platform && other.owner.playerNumber === this.playerNumber) {
+        this.speedBoost = true;
+        this.jumpBoost = true;
+    }
     }
     onCollisionEnd(
         self: Collider,
@@ -97,12 +109,19 @@ export class Player extends Actor {
                 this.#onGround = false;
             }
         }
+
+        // reset boost
+        if (other.owner instanceof Platform && other.owner.playerNumber === this.playerNumber) {
+            this.speedBoost = false;
+            this.jumpBoost = false;
+        }
     }
     
 
     jump() {
         if (this.#onGround) {
-            this.vel = new Vector(this.vel.x, -600);
+            let jumpPower = this.jumpBoost ? 800 : 600;
+            this.vel = new Vector(this.vel.x, -jumpPower);
             this.#onGround = false;
         }
     }
@@ -124,8 +143,10 @@ export class Player extends Actor {
             this.jump();
         }
 
-        // Apply horizontal movement
-        let movement = new Vector(xspeed, 0).normalize().scale(300);
+        // apply horizontal movement
+        let speed = this.speedBoost ? 600 : 300;
+        let movement = new Vector(xspeed, 0).normalize().scale(speed);
         this.vel = new Vector(movement.x, this.vel.y);
     }
 }
+
