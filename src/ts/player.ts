@@ -18,7 +18,7 @@ type PlayerControls = {
     down: Keys;
 };
 
-const Controls: { player1: PlayerControls; player2: PlayerControls } = {
+export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
     player1: {
         left: Keys.A,
         right: Keys.D,
