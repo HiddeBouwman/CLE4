@@ -81,6 +81,20 @@ export class Player extends Actor {
             }
         }
     }
+    onCollisionEnd(
+        self: Collider,
+        other: Collider,
+        side: Side,
+        lastContact: CollisionContact,
+    ): void {
+        const otherBody = other.owner.get(BodyComponent);
+        if (
+            otherBody?.collisionType === CollisionType.Fixed ||
+            otherBody?.collisionType === CollisionType.Active
+        ) {
+            this.#onGround = false;
+        }
+    }
 
     jump() {
         if (this.#onGround) {
