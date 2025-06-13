@@ -1,6 +1,7 @@
 import { Actor, Vector, CollisionType, Keys } from "excalibur";
 import { Player } from "../player.ts";
 import { Resources } from "../resources.ts";
+import { CollisionGroup } from "../collision.ts";
 
 // Import Controls from Player class.
 import { Controls } from "../player.ts";
@@ -10,10 +11,19 @@ export class Finish extends Actor {
     private player2Present: boolean = false;
 
     constructor(x: number, y: number) {
-        super({ width: 100, height: 100, collisionType: CollisionType.Active })
+        super({ 
+            width: 100, 
+            height: 100, 
+            collisionGroup: CollisionGroup.Finish
+        })
         
         this.scale = new Vector(0.5, 0.5)
         this.pos = new Vector(x, y)
+        
+        // Make sure it stays in place
+        this.body.useGravity = false
+        this.body.friction = 1
+        this.body.mass = 0
         
         this.graphics.use(Resources.Finish.toSprite());
     }

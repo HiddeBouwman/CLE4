@@ -36,7 +36,8 @@ export class LevelOne extends Scene {
         this.add(new Floor(2, 6, 4, 2));
         this.add(new Floor(7, 1, 4, 2));
 
-        this.add(new Finish(700, 500));
+        // For some reason can't be 500 when collition group is created but works for now.
+        this.add(new Finish(700, 308));
 
         this.add(new Box(500, 500));
 
