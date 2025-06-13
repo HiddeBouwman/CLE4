@@ -15,6 +15,7 @@ const Resources = {
   Finish: new ImageSource("images/finish.png"),
   Box: new ImageSource("images/box.png"),
   pressurePlate: new ImageSource("images/pressure-plate-base.png"),
+  Platform: new ImageSource("images/testplatform.webp"),
   //   Font: new FontSource("fonts/KiwiSoda.ttf", "My Font", {
   //     filtering: ImageFiltering.Pixel,
   //     size: 16,
