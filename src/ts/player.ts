@@ -92,6 +92,7 @@ export class Player extends Actor {
             otherBody?.collisionType === CollisionType.Fixed ||
             otherBody?.collisionType === CollisionType.Active
         ) {
+            if (side === Side.Bottom)
             this.#onGround = false;
         }
     }
