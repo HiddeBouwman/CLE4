@@ -7,6 +7,7 @@ import {
     Vector,
 } from "excalibur";
 import { Resources } from "./resources.ts";
+import { CollisionGroup } from "./collision.ts";
 
 /**
  * Creates a new Floor instance.
@@ -25,6 +26,7 @@ export class Floor extends Actor {
                 width: width * 32 - 20,
                 height: height * 32 - 18,
                 collisionType: CollisionType.Fixed,
+                collisionGroup: CollisionGroup.Ground
             },
         );
 
