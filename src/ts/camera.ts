@@ -11,6 +11,7 @@ export class CameraController  {
 
     //update camera
     update(player1?: Actor, player2?: Actor) {
+        const maxDistance = 800;
         if (player1 && player2) {
             //follow the midpoint
             const mid = player1.pos.add(player2.pos).scale(0.5);

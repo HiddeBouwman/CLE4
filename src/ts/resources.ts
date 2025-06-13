@@ -14,9 +14,8 @@ const Resources = {
   Floor: new ImageSource("images/floor.png"),
   Finish: new ImageSource("images/finish.png"),
   Box: new ImageSource("images/box.png"),
-  //   FishMap: new ImageSource("images/global.png"),
-  //   FisherMan: new ImageSource("images/Fisherman_idle.png"),
-  //   Beach: new ImageSource("images/beach.png"),
+  pressurePlate: new ImageSource("images/pressure-plate-base.png"),
+  Platform: new ImageSource("images/testplatform.webp"),
   //   Font: new FontSource("fonts/KiwiSoda.ttf", "My Font", {
   //     filtering: ImageFiltering.Pixel,
   //     size: 16,

@@ -1,7 +1,15 @@
-import { Actor, CollisionType, DegreeOfFreedom, Keys, Vector } from "excalibur";
-import type { Engine } from "excalibur";
+import {
+    Actor,
+    CollisionType,
+    DegreeOfFreedom,
+    Keys,
+    Side,
+    Vector,
+} from "excalibur";
+import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { Floor } from "./floor.ts";
+import { Box } from "./objects/box.ts";
 
 type PlayerControls = {
     left: Keys;
@@ -26,7 +34,7 @@ const Controls: { player1: PlayerControls; player2: PlayerControls } = {
 };
 
 export class Player extends Actor {
-    #onFloor: boolean;
+    #onFloor: boolean = false;
     controls: PlayerControls;
 
     constructor(x: number, y: number, playerNumber: number) {
@@ -36,27 +44,41 @@ export class Player extends Actor {
         this.scale = new Vector(0.5, 0.5);
         this.pos = new Vector(x, y);
 
-        //player controls
+        //Init player controls
         this.controls = playerNumber === 1
             ? Controls.player1
             : Controls.player2;
 
+        // Use graphics.
         this.graphics.use(Resources.Fish.toSprite());
 
-        //physics
+        // Init physics
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
     }
 
     //on load register player collisions
     onInitialize(engine: Engine) {
-        this.on("collisionstart", (e) => this.hitSomething(e));
+        // this.on("collisionstart", (e) => this.hitSomething(e));
         this.on("collisionend", (e) => this.leaveObject(e));
     }
 
-    //check collisions between players and other objects
-    hitSomething(e) {
-        if (e.other.owner instanceof Floor) {
+    //check collisions between players and objects.
+    // hitSomething(e) {
+    //     if (e.other.owner.side instanceof Floor || e.other.owner instanceof Box) {
+    //         this.#onFloor = true;
+    //     }
+    // }
+    onCollisionStart(
+        self: Collider,
+        other: Collider,
+        side: Side,
+        contact: CollisionContact,
+    ): void {
+        if (
+            side === Side.Bottom &&
+            (other.owner instanceof Floor || other.owner instanceof Box)
+        ) {
             this.#onFloor = true;
         }
     }
@@ -66,25 +88,31 @@ export class Player extends Actor {
         }
     }
 
-    //if on ground jump and reset on ground status
     jump() {
-        this.#onFloor
-            ? this.body.applyLinearImpulse(new Vector(0, -6000))
-            : null;
+        if (this.#onFloor) {
+            console.log("Jumping!");
+            this.vel = new Vector(this.vel.x, -600);
+            this.#onFloor = false;
+            console.log(this.#onFloor);
+        }
     }
 
     onPreUpdate(engine) {
         let kb = engine.input.keyboard;
         let xspeed = 0;
 
-        if (kb.isHeld(this.controls.left) && this.pos.x > 0) {
+        // Movement controls
+        if (kb.isHeld(this.controls.left)) {
             xspeed = -1;
         }
-        if (kb.isHeld(this.controls.right) && this.pos.x < 800) {
+        if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
         }
-        if (kb.wasPressed(this.controls.up)) {
+
+        // Jump controls
+        if (kb.wasPressed(this.controls.up) && this.#onFloor) {
             this.jump();
+            console.log("Attempting to jump, onFloor:", this.#onFloor);
         }
 
         // Apply horizontal movement
