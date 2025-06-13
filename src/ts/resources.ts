@@ -21,6 +21,11 @@ const Resources = {
   //     filtering: ImageFiltering.Pixel,
   //     size: 16,
   //   }),
+  BackgroundFront: new ImageSource("images/backgrounds/background-front-layer.png"),
+  BackgroundSecond: new ImageSource("images/backgrounds/background-second-layer.png"),
+  BackgroundThird: new ImageSource("images/backgrounds/background-third-layer.png"),
+  BackgroundBack: new ImageSource("images/backgrounds/background-back-layer.png"),
+  BackgroundSky: new ImageSource("images/backgrounds/background-sky.png"),
 };
 
 const ResourceLoader = new Loader();
