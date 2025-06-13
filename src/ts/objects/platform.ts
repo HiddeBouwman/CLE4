@@ -4,14 +4,24 @@ import { Resources } from "../resources.ts";
 export class Platform extends Actor {
     playerNumber: number; // 1 of 2
 
-    constructor(x: number, y: number, width: number, height: number, playerNumber: number) {
+    constructor(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        playerNumber: number,
+        colliderWidth: number,
+        colliderHeight: number,
+        colliderOffset: Vector
+    ) {
         super({
-            width: width,
-            height: height,
+            width,
+            height,
             collisionType: CollisionType.Fixed
         });
-        
 
+        
+        this.collider.useBoxCollider(colliderWidth, colliderHeight, colliderOffset);
         this.playerNumber = playerNumber;
         this.pos = new Vector(x, y);
         this.addTag('ground');
@@ -22,16 +32,9 @@ export class Platform extends Actor {
         } else {
             // bijvoorbeeld een andere sprite of een tint
             const sprite = Resources.Platform.toSprite();
-            sprite.tint = Color.Black; 
+            sprite.tint = Color.Black;
             this.graphics.use(sprite);
         }
 
-        // Stel gewenste collider-grootte in (bijvoorbeeld 100 breed, 8 hoog)
-        const colliderWidth = width; // of bijvoorbeeld 100
-        const colliderHeight = 8;
-
-        // Plaats de collider onderaan de sprite
-        const colliderOffset = new Vector(0, (height / 2) - (colliderHeight / 2));
-        this.collider.useBoxCollider(colliderWidth, colliderHeight, colliderOffset);
     }
 }
