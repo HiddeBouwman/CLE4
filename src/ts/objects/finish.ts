@@ -12,16 +12,16 @@ export class Finish extends Actor {
 
     constructor(x: number, y: number) {
         super({ 
-            width: 100, 
+            width: 10, 
             height: 100, 
             collisionGroup: CollisionGroup.Finish
         })
         
-        this.scale = new Vector(0.5, 0.5)
+        this.scale = new Vector(2, 2)
         this.pos = new Vector(x, y)
         
-        // Make sure it stays in place
-        this.body.useGravity = false
+        // Make sure it stays in place (had a very weird bug).
+        this.body.useGravity = true
         this.body.friction = 1
         this.body.mass = 0
         
