@@ -13,6 +13,7 @@ import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
 import { Platform } from "./objects/platform.ts";
+import { Box } from "./objects/box.ts"
 
 type PlayerControls = {
     left: Keys;
@@ -101,6 +102,10 @@ export class Player extends Actor {
         ) {
             this.speedBoost = true;
             this.jumpBoost = true;
+        }
+        if (other.owner instanceof Box && side === Side.Bottom) {
+            this.vel = new Vector(this.vel.x, 0); // Stop val
+            this.#onGround = true;
         }
     }
     onCollisionEnd(

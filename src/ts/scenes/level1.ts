@@ -53,7 +53,7 @@ export class LevelOne extends Scene {
             180, 30, new Vector(0.5, -2), -100);
         this.add(movingPlatform);
 
-        this.add(new PressurePlate(600, 321, movingPlatform));
+        this.add(new PressurePlate(600, 306, movingPlatform));
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
@@ -70,8 +70,8 @@ export class LevelOne extends Scene {
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
             console.log("Pls");
-            this.player1.pos = new Vector(380, 550);
-            this.player2.pos = new Vector(300, 550);
+            this.player1.pos = new Vector(210, 550);
+            this.player2.pos = new Vector(270, 550);
         }
     }
 }
