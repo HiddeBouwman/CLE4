@@ -17,6 +17,7 @@ const Resources = {
   Teleport: new Sound("sounds/teleport.mp3"),
   Jump: new Sound("sounds/jump.wav"),
   finishMSG: new Sound("sounds/finishMSG.wav"),
+  Menu: new Sound("sounds/level1.wav"),
   Walking: new Sound("sounds/run.mp3"),
   Push: new Sound("sounds/push.mp3"),
   buttonSound: new Sound("sounds/button.mp3"),
