@@ -1,8 +1,31 @@
-import { Actor, Vector, Shape, CompositeCollider, CollisionType } from "excalibur";
+import { Actor, Vector, Shape, CompositeCollider, CollisionType, PolygonCollider } from "excalibur";
 import { Resources } from "../resources";
 import { ElevatorPlatform } from "./elevatorPlatform";
 import { Player } from "../player";
 import { Box } from "./box";
+
+// These are for the polygon collisionboxes. 
+const points1 = [
+  new Vector(-36, 31),
+  new Vector(-32, 31),
+  new Vector(-32, 24)
+];
+
+const rampCollider1 = new PolygonCollider({
+  points: points1
+});
+
+const points2 = [
+    new Vector(36, 31),
+    new Vector(32, 31),
+    new Vector(32, 24)
+];
+
+const rampCollider2 = new PolygonCollider({
+    points: points2
+});
+
+
 
 export class PressurePlate extends Actor {
     private targetPlatform: ElevatorPlatform;
@@ -33,8 +56,8 @@ export class PressurePlate extends Actor {
         // Create a composite collider: box in the center, circles on the sides
         const composite = new CompositeCollider([
             Shape.Box(60, 12, Vector.Half, new Vector(0, 26)),
-            Shape.Box(6, 6, new Vector(5.5, -4.5)),
-            Shape.Box(6, 6, new Vector(-4.5, -4.5)),
+            rampCollider1,
+            rampCollider2
         ]);
         this.collider.set(composite);
 
