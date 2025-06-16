@@ -4,17 +4,18 @@ import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
-import { PressurePlate } from "../objects/pressureplate.ts";
+import { PressurePlate } from "../objects/pressurePlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform } from "../objects/platform.ts";
+import { Portal } from "../objects/portal.ts";
 
 export class LevelOne extends Scene {
     floor: Floor;
     player1: Player;
     player2: Player;
     private cameraController: CameraController;
-    private parallax!: ParallaxBackgroundManager; // Achtergrond
+    private parallax!: ParallaxBackgroundManager; // Background
     constructor() {
         super();
     }
@@ -27,17 +28,19 @@ export class LevelOne extends Scene {
         this.add(this.player2);
 
         // Parameters: x, y, width, height
-        //walls
+        // walls
         this.add(new Floor(-28, 0, 5, 30));
         this.add(new Floor(28, 0, 5, 30));
-        //floor
+        // floor
         this.add(new Floor(0, 40, 30, 30));
         // platforms
         this.add(new Floor(2, 6, 4, 2));
         this.add(new Floor(7, 1, 4, 2));
 
-        // For some reason can't be 500 when collition group is created but works for now.
+        // Finish
         this.add(new Finish(700, 308));
+        // Portal
+        this.add(new Portal(-300, 280));
 
         this.add(new Box(500, 500));
 

@@ -11,9 +11,13 @@ import {
 // voeg hier jouw eigen resources toe
 const Resources = {
   Fish: new ImageSource("images/fish.png"),
-  Floor: new ImageSource("images/floor.png"),
+  Floor: new ImageSource("images/ground.png"),
   Finish: new ImageSource("images/finish.png"),
   Portal: new ImageSource("images/portal.png"),
+  Teleport: new Sound("sounds/teleport.mp3"),
+  Jump: new Sound("sounds/jump.wav"),
+  finishMSG: new Sound("sounds/finishMSG.wav"),
+
   Box: new ImageSource("images/box.png"),
   pressurePlateBase: new ImageSource("images/objects/pressure-plate/pressure-plate-base.png"),
   PressurePlateGreen: new ImageSource("images/objects/pressure-plate/pressure-plate-green/pressure-plate.png"),
