@@ -26,6 +26,8 @@ const Resources = {
   BackgroundThird: new ImageSource("images/backgrounds/background-third-layer.png"),
   BackgroundBack: new ImageSource("images/backgrounds/background-back-layer.png"),
   BackgroundSky: new ImageSource("images/backgrounds/background-sky.png"),
+  BackgroundBottomFill: new ImageSource("images/backgrounds/background-bottom-fill.png"),
+
 };
 
 const ResourceLoader = new Loader();
