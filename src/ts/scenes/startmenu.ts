@@ -1,9 +1,11 @@
 import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign } from "excalibur";
+import { Resources } from "../resources.ts";
 
 export class StartMenu extends Scene {
     constructor() {
         super();
         console.log("game started");
+        Resources.Menu.play();
     }
 
     onInitialize(engine) {

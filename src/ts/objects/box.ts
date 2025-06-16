@@ -6,6 +6,7 @@ import {
     Vector,
 } from "excalibur";
 import { Resources } from "../resources.ts";
+import { Player } from "../player.ts";
 
 export class Box extends Actor {
     #roundedbox = new CompositeCollider([
@@ -15,6 +16,8 @@ export class Box extends Actor {
         //Shape.Circle(5, new Vector(-26, 23)),
     ]);
     private topPlatform: Actor;
+    private isPushing: boolean = false;
+    private pushSoundTimer: number = 0;
 
     constructor(x: number, y: number) {
         super({
@@ -40,5 +43,35 @@ export class Box extends Actor {
         });
         this.topPlatform.addTag("ground");
         this.addChild(this.topPlatform);
+
+        // Push sound bij duwen
+        this.on("collisionstart", (evt) => {
+            const other = evt.other.owner;
+            if (other instanceof Player) {
+                this.isPushing = true
+            }
+        });
+
+        this.on("collisionend", (evt) => {
+            const other = evt.other.owner;
+            if (other instanceof Player) {
+                this.isPushing = false
+            }
+        });
     }
+
+        // In je onPreUpdate:
+    onPreUpdate(engine, delta) {
+        if (this.isPushing) {
+            this.pushSoundTimer -= delta;
+            if (this.pushSoundTimer <= 0) {
+                Resources.Push.play();
+                this.pushSoundTimer = 1000;
+            }
+        } else {
+            this.pushSoundTimer = 0;
+        }
+    }
+    
+
 }

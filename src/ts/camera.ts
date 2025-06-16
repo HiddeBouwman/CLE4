@@ -17,8 +17,6 @@ export class CameraController  {
             const mid = player1.pos.add(player2.pos).scale(0.5);
             this.camera.pos = mid;
 
-            
-
             // zoom moet even weg dus ik heb beide waarden naar 1.0 gezet
             const distance = player1.pos.distance(player2.pos);
             const minZoom = 1.0;

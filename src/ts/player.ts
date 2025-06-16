@@ -33,6 +33,7 @@ export class Player extends Actor {
     speedBoost: boolean = false;
     jumpBoost: boolean = false;
     playerNumber: number;
+    walkSoundTimer: number = 0;
     #capsule = new CompositeCollider([
         Shape.Circle(10, new Vector(0, -20)),
         Shape.Box(40, 40),
@@ -164,6 +165,7 @@ export class Player extends Actor {
     onPreUpdate(engine, delta) {
         this._lastEngine = engine;
         this._lastDelta = delta;
+
         let kb = engine.input.keyboard;
         let xspeed = 0;
 
@@ -214,5 +216,18 @@ export class Player extends Actor {
         if (!this._pendingCarrierDelta.equals(Vector.Zero)) {
             this.pos = this.pos.add(this._pendingCarrierDelta);
         }
+        if (this.#onGround && xspeed !== 0) {
+           this.walkSoundTimer -= delta;
+            if (this.walkSoundTimer <= 0) {
+                this.walkSoundTimer = 300;
+                Resources.Walking.play();
+                console.log("Walking sound started");
+            }
+        }
+
+        // apply horizontal movement
+        let speed = this.speedBoost ? 600 : 300;
+        let movement = new Vector(xspeed, 0).normalize().scale(speed);
+        this.vel = new Vector(movement.x, this.vel.y);
     }
 }

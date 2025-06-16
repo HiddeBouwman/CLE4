@@ -67,8 +67,10 @@ export class PressurePlate extends Actor {
             const other = evt.other.owner;
             if (other && (other instanceof Player || other instanceof Box)) {
                 this._activeCount++;
+                // If this is the first object, activate the plate
                 if (this._activeCount === 1) {
                     // Use new method for multi-plate support
+                    Resources.buttonSound.play();
                     if (typeof this.targetPlatform.registerPressurePlateActivated === "function") {
                         this.targetPlatform.registerPressurePlateActivated();
                     } else {
