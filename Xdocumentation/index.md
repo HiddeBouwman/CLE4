@@ -5,7 +5,8 @@ Meer informatie over code style kun je hier vinden: [Code Style](./Code%20Style.
 [[code style.md]]
 
 ## Classes
+
 Hier links naar de documentatie per class:
+
 - [Player](./Classes/Player.md)
 - [floor/wall](./Classes/Platforms.md)
-

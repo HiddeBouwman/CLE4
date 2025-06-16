@@ -1,7 +1,8 @@
 # Mermaid Diagram for Classes and Relationships
-Download the Mermaid plugin from the VS Code marketplace to view this diagram. 
+
+Download the Mermaid plugin from the VS Code marketplace to view this diagram.
 (in the workplace recomendations.)
-https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid
+[Mermaid Plugin](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid)
 
 ```mermaid
 classDiagram
@@ -38,6 +39,7 @@ classDiagram
 
     
 ```
+
 //voorbeeld
 Actor <|-- Player
     Actor <|-- C
