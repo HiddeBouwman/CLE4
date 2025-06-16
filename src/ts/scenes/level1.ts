@@ -4,7 +4,7 @@ import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
-import { PressurePlate } from "../objects/pressureplate.ts";
+import { PressurePlate } from "../objects/pressurePlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform } from "../objects/platform.ts";
@@ -37,10 +37,10 @@ export class LevelOne extends Scene {
         this.add(new Floor(2, 6, 4, 2));
         this.add(new Floor(7, 1, 4, 2));
 
-        // Finish 
+        // Finish
         this.add(new Finish(700, 308));
         // Portal
-        this.add(new Portal(-300, 308));
+        this.add(new Portal(-300, 280));
 
         this.add(new Box(500, 500));
 
