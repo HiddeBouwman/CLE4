@@ -8,6 +8,7 @@ import { PressurePlate } from "../objects/pressureplate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform } from "../objects/platform.ts";
+import { Portal } from "../objects/portal.ts";
 
 export class LevelOne extends Scene {
     floor: Floor;
@@ -36,8 +37,10 @@ export class LevelOne extends Scene {
         this.add(new Floor(2, 6, 4, 2));
         this.add(new Floor(7, 1, 4, 2));
 
-        // For some reason can't be 500 when collition group is created but works for now.
+        // Finish 
         this.add(new Finish(700, 308));
+        // Portal
+        this.add(new Portal(-300, 308));
 
         this.add(new Box(500, 500));
 
