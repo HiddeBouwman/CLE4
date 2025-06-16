@@ -37,10 +37,10 @@ export class LevelOne extends Scene {
         this.add(new Floor(2, 6, 4, 2));
         this.add(new Floor(7, 1, 4, 2));
 
-        // Finish 
+        // Finish
         this.add(new Finish(700, 308));
         // Portal
-        this.add(new Portal(-300, 308));
+        this.add(new Portal(-300, 280));
 
         this.add(new Box(500, 500));
 

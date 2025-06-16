@@ -15,7 +15,7 @@ const Resources = {
   Finish: new ImageSource("images/finish.png"),
   Portal: new ImageSource("images/portal.png"),
   Teleport: new Sound("sounds/teleport.mp3"),
-  Jump: new Sound("sounds/jump.mp3"),
+  Jump: new Sound("sounds/jump.wav"),
   finishMSG: new Sound("sounds/finishMSG.wav"),
 
   Box: new ImageSource("images/box.png"),
