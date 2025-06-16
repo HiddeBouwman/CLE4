@@ -9,6 +9,7 @@ import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform } from "../objects/platform.ts";
 import { Portal } from "../objects/portal.ts";
+import { Resources } from "../resources.ts";
 
 export class LevelOne extends Scene {
     floor: Floor;
@@ -21,6 +22,9 @@ export class LevelOne extends Scene {
     }
 
     onInitialize(engine: Engine) {
+
+        Resources.Menu.stop();
+
         //add players, finish and floor to scene
         this.player1 = new Player(7 * 32, 14 * 32, 1);
         this.player2 = new Player(9 * 32, 14 * 32, 2);

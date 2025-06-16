@@ -17,6 +17,7 @@ const Resources = {
   Teleport: new Sound("sounds/teleport.mp3"),
   Jump: new Sound("sounds/jump.wav"),
   finishMSG: new Sound("sounds/finishMSG.wav"),
+  Menu: new Sound("sounds/level1.wav"),
 
   Box: new ImageSource("images/box.png"),
   pressurePlateBase: new ImageSource("images/objects/pressure-plate/pressure-plate-base.png"),
