@@ -21,7 +21,9 @@ const Resources = {
   Push: new Sound("sounds/push.mp3"),
 
   Box: new ImageSource("images/box.png"),
-  pressurePlate: new ImageSource("images/pressure-plate-base.png"),
+  pressurePlateBase: new ImageSource("images/objects/pressure-plate/pressure-plate-base.png"),
+  PressurePlateGreen: new ImageSource("images/objects/pressure-plate/pressure-plate-green/pressure-plate.png"),
+  PressurePlateGreenActivated: new ImageSource("images/objects/pressure-plate/pressure-plate-green/pressure-plate-activated.png"),
   Platform: new ImageSource("images/testplatform.webp"),
   BlackPlatform: new ImageSource("images/blackplatformtest.png"),
   //   Font: new FontSource("fonts/KiwiSoda.ttf", "My Font", {
