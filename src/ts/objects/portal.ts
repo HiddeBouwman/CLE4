@@ -1,4 +1,4 @@
-import { Actor, Vector, CollisionType, Keys } from "excalibur";
+import { Actor, Vector, CollisionType, Resource } from "excalibur";
 import { Player } from "../player.ts";
 import { Resources } from "../resources.ts";
 import { CollisionGroup } from "../collision.ts";
@@ -6,61 +6,43 @@ import { CollisionGroup } from "../collision.ts";
 // Import Controls from Player class.
 import { Controls } from "../player.ts";
 
-export class Finish extends Actor {
+export class Portal extends Actor {
     private player1Present: boolean = false;
     private player2Present: boolean = false;
-
+    
     constructor(x: number, y: number) {
         super({ 
-            width: 10, 
+            width: 100, 
             height: 100, 
+            collisionType: CollisionType.Active,
+            // Uses the same stuff as Finish functionality, maybe will change later once it gets more complex.
             collisionGroup: CollisionGroup.Finish
         })
         
-        this.scale = new Vector(2, 2)
+        this.scale = new Vector(0.7, 0.7)
         this.pos = new Vector(x, y)
-        
-        // Make sure it stays in place (had a very weird bug).
-        this.body.useGravity = true
-        this.body.friction = 1
-        this.body.mass = 0
-        
+        this.body.useGravity = false 
         this.graphics.use(Resources.Portal.toSprite());
+
     }
 
     onInitialize(engine) {
         this.on('collisionstart', (event) => this.hitSomething(event))
-        this.on('collisionend', (event) => this.playerLeaves(event))
     }
 
-
-    // Specifics for later, this is enough for now..
+    // Handle teleportation.
     hitSomething(event) {
         if (event.other.owner instanceof Player && this.scene) {
             const player = event.other.owner as Player;
             
-            // Tracks players colliding into finish object.
-            player.controls === Controls.player1 
-                ? (this.player1Present = true, console.log("Player 1 reached finish"))
-                : (this.player2Present = true, console.log("Player 2 reached finish"));
-
-            // Switch scene if both are present.
-            if (this.player1Present && this.player2Present) {
-                console.log("Both players at finish - switching scene!");
-                this.scene.engine.goToScene('menu');
-            }
-        }
-    }
-
-    // Checks if player leaves.
-    playerLeaves(event) {
-        if (event.other.owner instanceof Player) {
-            const player = event.other.owner as Player;
+            // Teleport the player to a new position.
+            const teleportPos = new Vector(500, 100);
+            player.pos = teleportPos;
             
-            // 
-            player.controls === Controls.player1
-                ? (this.player1Present = false, console.log("Player 1 left finish"))
-                : (this.player2Present = false, console.log("Player 2 left finish"));
+            // Debugging.
+            console.log(`${player.playerNumber === 1 ? "Player 1" : "Player 2"} teleported!`);
+            Resources.Teleport.play();
+
         }
     }
 }

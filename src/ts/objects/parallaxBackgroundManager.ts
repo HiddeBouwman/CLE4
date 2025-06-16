@@ -11,6 +11,9 @@ export class ParallaxBackgroundManager {
     private bottomFillSpeed = 0.125;
     private bottomFillZ = -1.5;
     private bottomFillMinY = -1112;
+    private bottomFillCurrentY: number = 0; // Stores last active position
+    private bottomFillLockY: number = 2048;  // Camera world Y where locking begins
+
 
     constructor(scene: Scene, camera: Camera, engine: Engine) {
         this.camera = camera;
@@ -42,7 +45,7 @@ export class ParallaxBackgroundManager {
         image: ImageSource,
         speed: number,
         z: number,
-        mirrorOdd = false, // doesn't need to exist anymore since the sky is a static image but i'm to lazy to change the code to remove it
+        mirrorOdd = false,
         verticalRepeat = false
     ) {
         const layerContainer = new Actor({
@@ -63,7 +66,7 @@ export class ParallaxBackgroundManager {
             : Math.ceil(this.engine.drawWidth / imageWidth) + 2;
 
         for (let i = 0; i < repeatCount; i++) {
-            const isMirrored = mirrorOdd && i % 2 === 1; // even repeated backgrounds get mirrored, was intended for the sky so it currently has no use.
+            const isMirrored = mirrorOdd && i % 2 === 1; // even repeated backgrounds get mirrored, intended for the sky only.
 
             const pos = verticalRepeat // for the bottomFill layer.
                 ? new Vector(0, i * imageHeight)
@@ -78,12 +81,20 @@ export class ParallaxBackgroundManager {
 
             part.graphics.use(sprite);
 
-            // Mirror horizontally if needed (e.g. for a sky gradient that tiles smoothly) (has no actual use)
-            if (isMirrored) {
-                part.scale = new Vector(-1, 1);
+            // Mirror if needed
+            let scaleX = isMirrored ? -1 : 1;
+            let scaleY = 1;
+
+            // If this is the sky layer, stretch it vertically
+            if (image === Resources.BackgroundSky) {
+                const desiredHeight = this.engine.drawHeight;
+                const actualHeight = sprite.height;
+                scaleY = desiredHeight / actualHeight;
             }
 
+            part.scale = new Vector(scaleX, scaleY);
             layerContainer.addChild(part);
+                
         }
 
         // Store the layer for future updates
@@ -106,7 +117,7 @@ export class ParallaxBackgroundManager {
         const sprite = image.toSprite();
         const imageWidth = sprite.width;
 
-        const repeatCount = Math.ceil(this.engine.drawWidth / imageWidth) + 2;
+        const repeatCount = Math.ceil(this.engine.drawWidth / imageWidth);
 
         for (let i = 0; i < repeatCount; i++) {
             const part = new Actor({
@@ -130,40 +141,46 @@ export class ParallaxBackgroundManager {
     update() {
         const cam = this.camera;
         const screenCenter = new Vector(this.engine.drawWidth / 2, this.engine.drawHeight / 2);
-
         const defaultOffset = new Vector(-1200, -600);
 
-        // Update all standard parallax layers
+        // Update regular parallax layers
         for (const { actor, speed } of this.layers) {
             const parallaxX = cam.pos.x * (1 - speed) + defaultOffset.x;
 
             let posY: number;
             if (speed === 0.0025) {
-                // Sky layer follows camera Y exactly (hence why the mirroring thing has no use)
                 posY = screenCenter.y + cam.pos.y + defaultOffset.y;
             } else {
-                // Other layers use a reduced Y parallax to create depth
                 posY = screenCenter.y + cam.pos.y * (0.9 - speed) + defaultOffset.y;
             }
 
-            actor.scale = Vector.One;
+            // If this is the sky layer, stretch it to fill screen height
+            if (speed === 0.0025) {
+                const spriteHeight = actor.height; // original sprite height
+                const scaleY = this.engine.drawHeight / spriteHeight;
+                actor.scale = new Vector(1, scaleY); // stretch vertically only
+            } else {
+                actor.scale = Vector.One;
+            }
+
             actor.pos = new Vector(screenCenter.x + parallaxX, posY);
         }
 
-        // --- Special update logic for the bottom fill layer ---
+        // --- BottomFill logic with "freeze" below lockY ---
+
         const speed = this.bottomFillSpeed;
-        const offset = new Vector(-1200, -88); // Custom offset for bottomFill
+        const offset = new Vector(-1200, -88);
         const parallaxX = cam.pos.x * (1 - speed) + offset.x;
 
-        // Compute intended Y position based on parallax
-        let desiredY = screenCenter.y + cam.pos.y * (0.9 - speed) + offset.y;
-
-        // Prevent the bottom fill from moving above the min Y limit
-        if (desiredY < this.bottomFillMinY) {
-            desiredY = this.bottomFillMinY;
+        // Only update bottomFill Y position if camera is above lockY
+        if (cam.pos.y <= this.bottomFillLockY) {
+            // Update active Y position while camera is above or at lockY
+            this.bottomFillCurrentY = screenCenter.y + cam.pos.y * (0.9 - speed) + offset.y;
+        } else if (cam.pos.y > this.bottomFillLockY) {
+            this.bottomFillCurrentY = screenCenter.y + cam.pos.y + defaultOffset.y;
         }
 
         this.bottomFill.scale = Vector.One;
-        this.bottomFill.pos = new Vector(screenCenter.x + parallaxX, desiredY);
-    }
+        this.bottomFill.pos = new Vector(screenCenter.x + parallaxX, this.bottomFillCurrentY);
+    }    
 }

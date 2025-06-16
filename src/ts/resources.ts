@@ -14,6 +14,9 @@ const Resources = {
   Floor: new ImageSource("images/ground.png"),
   Finish: new ImageSource("images/finish.png"),
   Portal: new ImageSource("images/portal.png"),
+  Teleport: new Sound("sounds/teleport.mp3"),
+  finishMSG: new Sound("sounds/finishMSG.wav"),
+
   Box: new ImageSource("images/box.png"),
   pressurePlate: new ImageSource("images/pressure-plate-base.png"),
   Platform: new ImageSource("images/testplatform.webp"),
