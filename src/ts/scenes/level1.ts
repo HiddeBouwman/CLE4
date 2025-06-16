@@ -4,7 +4,7 @@ import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
-import { PressurePlate } from "../objects/pressurePlate.ts";
+import { PressurePlate } from "../objects/pressureplate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform, PlatformType, MovementMode } from "../objects/platform.ts";

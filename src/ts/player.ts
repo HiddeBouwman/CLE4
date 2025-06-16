@@ -211,12 +211,12 @@ export class Player extends Actor {
         }
     }
 
-    onPostUpdate(engine) {
+    onPostUpdate(engine, delta) {
         // Apply delta AFTER physics
         if (!this._pendingCarrierDelta.equals(Vector.Zero)) {
             this.pos = this.pos.add(this._pendingCarrierDelta);
         }
-        if (this.#onGround && xspeed !== 0) {
+        if (this.#onGround && Math.abs(this.vel.x) > 0.1) {
            this.walkSoundTimer -= delta;
             if (this.walkSoundTimer <= 0) {
                 this.walkSoundTimer = 300;
@@ -224,10 +224,5 @@ export class Player extends Actor {
                 console.log("Walking sound started");
             }
         }
-
-        // apply horizontal movement
-        let speed = this.speedBoost ? 600 : 300;
-        let movement = new Vector(xspeed, 0).normalize().scale(speed);
-        this.vel = new Vector(movement.x, this.vel.y);
     }
 }
