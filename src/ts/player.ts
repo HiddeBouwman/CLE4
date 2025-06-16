@@ -42,6 +42,7 @@ export class Player extends Actor {
     speedBoost: boolean = false;
     jumpBoost: boolean = false;
     playerNumber: number;
+    walkSoundTimer: number = 0;
     #capsule = new CompositeCollider([
         Shape.Circle(10, new Vector(0, -20)),
         Shape.Box(40, 40),
@@ -138,7 +139,7 @@ export class Player extends Actor {
         }
     }
 
-    onPreUpdate(engine) {
+    onPreUpdate(engine, delta) {
         let kb = engine.input.keyboard;
         let xspeed = 0;
 
@@ -153,6 +154,15 @@ export class Player extends Actor {
         // Jump controls
         if (kb.wasPressed(this.controls.up) && this.#onGround) {
             this.jump();
+        }
+
+        if (this.#onGround && xspeed !== 0) {
+           this.walkSoundTimer -= delta;
+            if (this.walkSoundTimer <= 0) {
+                this.walkSoundTimer = 300;
+                Resources.Walking.play();
+                console.log("Walking sound started");
+            }
         }
 
         // apply horizontal movement
