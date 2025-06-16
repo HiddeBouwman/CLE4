@@ -2,8 +2,10 @@ import {
     Actor,
     BodyComponent,
     CollisionType,
+    CompositeCollider,
     DegreeOfFreedom,
     Keys,
+    Shape,
     Side,
     Vector,
 } from "excalibur";
@@ -36,14 +38,19 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
 
 export class Player extends Actor {
     #onGround: boolean = false;
-    #isInAir: boolean = true;
     controls: PlayerControls;
     speedBoost: boolean = false;
     jumpBoost: boolean = false;
     playerNumber: number;
+    #capsule = new CompositeCollider([
+        Shape.Circle(10, new Vector(0, -20)),
+        Shape.Box(40, 40),
+        Shape.Circle(10, new Vector(0, 20)),
+    ]);
+
 
     constructor(x: number, y: number, playerNumber: number) {
-            super(
+        super(
             {
                 width: 100,
                 height: 100,
@@ -53,7 +60,6 @@ export class Player extends Actor {
         );
 
         this.playerNumber = playerNumber;
-        
 
         //important requirements for a Actor
         this.scale = new Vector(0.5, 0.5);
@@ -70,7 +76,7 @@ export class Player extends Actor {
         // Init physics
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
-        
+        this.collider.set(this.#capsule)
     }
 
     onCollisionStart(
@@ -84,14 +90,18 @@ export class Player extends Actor {
             otherBody?.collisionType === CollisionType.Fixed ||
             otherBody?.collisionType === CollisionType.Active
         ) {
-            if (side === Side.Bottom && other.owner.hasTag('ground')) {
+            if (side === Side.Bottom && other.owner.hasTag("ground")) {
                 this.#onGround = true;
             }
         }
-        if (other.owner instanceof Platform && other.owner.playerNumber === this.playerNumber) {
-        this.speedBoost = true;
-        this.jumpBoost = true;
-    }
+        // give boost to a player based on the platform
+        if (
+            other.owner instanceof Platform &&
+            other.owner.playerNumber === this.playerNumber
+        ) {
+            this.speedBoost = true;
+            this.jumpBoost = true;
+        }
     }
     onCollisionEnd(
         self: Collider,
@@ -100,23 +110,24 @@ export class Player extends Actor {
         lastContact: CollisionContact,
     ): void {
         const otherBody = other.owner.get(BodyComponent);
-        
+
         if (
             otherBody?.collisionType === CollisionType.Fixed ||
             otherBody?.collisionType === CollisionType.Active
         ) {
-            if (side === Side.Bottom && other.owner.hasTag('ground')) {
+            if (side === Side.Bottom && other.owner.hasTag("ground")) {
                 this.#onGround = false;
             }
         }
-
         // reset boost
-        if (other.owner instanceof Platform && other.owner.playerNumber === this.playerNumber) {
+        if (
+            other.owner instanceof Platform &&
+            other.owner.playerNumber === this.playerNumber
+        ) {
             this.speedBoost = false;
             this.jumpBoost = false;
         }
     }
-    
 
     jump() {
         if (this.#onGround) {
@@ -149,4 +160,3 @@ export class Player extends Actor {
         this.vel = new Vector(movement.x, this.vel.y);
     }
 }
-
