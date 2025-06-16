@@ -19,20 +19,20 @@ export class Platform extends Actor {
             height,
             collisionType: CollisionType.Fixed
         });
-
         
+
         this.collider.useBoxCollider(colliderWidth, colliderHeight, colliderOffset);
         this.playerNumber = playerNumber;
         this.pos = new Vector(x, y);
         this.addTag('ground');
 
-        // kies sprite of kleur op basis van speler
+        // different sprite for each player
         if (playerNumber === 1) {
             this.graphics.use(Resources.Platform.toSprite());
         } else {
-            // bijvoorbeeld een andere sprite of een tint
+            // different sprite for player 2
             const sprite = Resources.Platform.toSprite();
-            sprite.tint = Color.Black;
+            sprite.tint = Color.Black; 
             this.graphics.use(sprite);
         }
 

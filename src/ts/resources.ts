@@ -19,6 +19,7 @@ const Resources = {
   finishMSG: new Sound("sounds/finishMSG.wav"),
   Walking: new Sound("sounds/run.mp3"),
   Push: new Sound("sounds/push.mp3"),
+  buttonSound: new Sound("sounds/button.mp3"),
 
   Box: new ImageSource("images/box.png"),
   pressurePlateBase: new ImageSource("images/objects/pressure-plate/pressure-plate-base.png"),

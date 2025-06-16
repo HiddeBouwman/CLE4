@@ -72,8 +72,10 @@ export class PressurePlate extends Actor {
             // Only count players and boxes
             if (other && (other instanceof Player || other instanceof Box)) {
                 this._activeCount++;
+                
                 // If this is the first object, activate the plate
                 if (this._activeCount === 1) {
+                    Resources.buttonSound.play();
                     this.targetPlatform.startElevating();
                     this.plateSprite.graphics.use(Resources.PressurePlateGreenActivated.toSprite());
                 }

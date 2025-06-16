@@ -44,8 +44,10 @@ export class LevelOne extends Scene {
 
         this.add(new Box(500, 500));
 
-        const coloredPlatform1 = new Platform(-200, 100, 100, 20, 1); // wit voor speler 1
-        const coloredPlatform2 = new Platform(-400, 100, 100, 20, 2); // zwart voor speler 2
+        const coloredPlatform1 = new Platform(-200, 100, 100, 20, 1,
+            180, 30, new Vector(0.5, -2)); // wit voor speler 1
+        const coloredPlatform2 = new Platform(-400, 100, 100, 20, 2,
+            180, 30, new Vector(0.5, -2)); // zwart voor speler 2
 
         this.add(coloredPlatform1);
         this.add(coloredPlatform2);
