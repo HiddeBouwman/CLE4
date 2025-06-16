@@ -24,6 +24,21 @@ const Resources = {
   PressurePlateGreenActivated: new ImageSource("images/objects/pressure-plate/pressure-plate-green/pressure-plate-activated.png"),
   Platform: new ImageSource("images/testplatform.webp"),
   BlackPlatform: new ImageSource("images/blackplatformtest.png"),
+
+  PurplePlatformHorizontalStationary: new ImageSource("images/objects/moving-platform/purple-platforms/purple-platform-small-horizontal-stationary.png"),
+  // PurplePlatformHorizontalLeft: new ImageSource("images/objects/moving-platform/purple-platforms/purple-platform-small-horizontal-left.png"),
+  // PurplePlatformHorizontalRight: new ImageSource("images/objects/moving-platform/purple-platforms/purple-platform-small-horizontal-right.png"),
+  PurplePlatformVerticalStationary: new ImageSource("images/objects/moving-platform/purple-platforms/purple-platform-small-vertical-stationary.png"),
+  // PurplePlatformVerticalUp: new ImageSource("images/objects/moving-platform/purple-platforms/purple-platform-small-vertical-up.png"),
+  // PurplePlatformVerticalDown: new ImageSource("images/objects/moving-platform/purple-platforms/purple-platform-small-vertical-down.png"),
+  YellowPlatformHorizontalStationary: new ImageSource("images/objects/moving-platform/yellow-platforms/yellow-platform-small-horizontal-stationary.png"),
+  // YellowPlatformHorizontalLeft: new ImageSource("images/objects/moving-platform/yellow-platforms/yellow-platform-small-horizontal-left.png"),
+  // YellowPlatformHorizontalRight: new ImageSource("images/objects/moving-platform/yellow-platforms/yellow-platform-small-horizontal-right.png"),
+  YellowPlatformVerticalStationary: new ImageSource("images/objects/moving-platform/yellow-platforms/yellow-platform-small-vertical-stationary.png"),
+  // YellowPlatformVerticalUp: new ImageSource("images/objects/moving-platform/yellow-platforms/yellow-platform-small-vertical-up.png"),
+  // YellowPlatformVerticalDown: new ImageSource("images/objects/moving-platform/yellow-platforms/yellow-platform-small-vertical-down.png"),
+  NeutralPlatform: new ImageSource("images/objects/moving-platform-neutral-platform-small.png"),
+
   //   Font: new FontSource("fonts/KiwiSoda.ttf", "My Font", {
   //     filtering: ImageFiltering.Pixel,
   //     size: 16,

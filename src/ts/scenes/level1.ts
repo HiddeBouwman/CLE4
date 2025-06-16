@@ -7,7 +7,7 @@ import { Box } from "../objects/box.ts";
 import { PressurePlate } from "../objects/pressurePlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
-import { Platform } from "../objects/platform.ts";
+import { Platform, PlatformType, MovementMode } from "../objects/platform.ts";
 import { Portal } from "../objects/portal.ts";
 
 export class LevelOne extends Scene {
@@ -28,35 +28,86 @@ export class LevelOne extends Scene {
         this.add(this.player2);
 
         // Parameters: x, y, width, height
+        
         // walls
-        this.add(new Floor(-28, 0, 5, 30));
-        this.add(new Floor(28, 0, 5, 30));
+        this.add(new Floor(-34, 0, 12, 30));
+        this.add(new Floor(58, 0, 12, 30));
+        
         // floor
         this.add(new Floor(0, 40, 30, 30));
-        // platforms
-        this.add(new Floor(2, 6, 4, 2));
-        this.add(new Floor(7, 1, 4, 2));
+        this.add(new Floor(56, 40, 20, 30));
+        
+        // ground platforms
+        this.add(new Floor(-15, -2, 4, 2));
+        this.add(new Floor(8, -2, 6, 2));
+        this.add(new Floor(35, -2, 3, 2));
+        this.add(new Floor(35, -14, 3, 2));
 
         // Finish
         this.add(new Finish(700, 308));
+        
         // Portal
         this.add(new Portal(-300, 280));
 
-        this.add(new Box(500, 500));
+        this.add(new Box(192, -648));
 
-        const coloredPlatform1 = new Platform(-200, 100, 100, 20, 1,
-            180, 30, new Vector(0.5, -2)); // wit voor speler 1
-        const coloredPlatform2 = new Platform(-400, 100, 100, 20, 2,
-            180, 30, new Vector(0.5, -2)); // zwart voor speler 2
 
-        this.add(coloredPlatform1);
-        this.add(coloredPlatform2);
+        /** 
+         * Platforms
+         */
 
-        const movingPlatform = new ElevatorPlatform(500, 100, 100, 20, 1,
-            180, 30, new Vector(0.5, -2), -100);
-        this.add(movingPlatform);
+        const alwaysPlatform = new Platform(
+            -250, -50, 100, 20, // spawnposX, spawnposY, width (unused), height (unused) 
+            PlatformType.PurpleHorizontalStationary, // what type of sprite gets rendered, but that doesn't really matter
+            186, 60, new Vector(0.5, 0.5), // width, height, offset
+            new Vector(-250, -50), // start
+            new Vector(-50, -50), // end, this means you can do diagonal movement as well.
+            96, // movement speed
+            MovementMode.Always, // Movement mode is either [Always], [PressurePlate], or [PressurePlateReturn].
+            2000, // Pause for 2 seconds at each end
+            [1, 2] // Player 1 and 2 both get a boost on this platform. This is either set to [], [1], [2], or [1, 2]
+        );
+        this.add(alwaysPlatform);
 
-        this.add(new PressurePlate(600, 306, movingPlatform));
+
+
+        const platePlatform = new Platform(
+            544, -50, 100, 20,
+            PlatformType.YellowHorizontalStationary,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(544, -50),
+            new Vector(928, -50),
+            192,
+            MovementMode.PressurePlate, // Needs a pressure plate to make it move
+            0,
+            []
+        );
+        this.add(platePlatform);
+
+        // In case it needs a pressure plate to move:
+        const plate1 = new PressurePlate(256, -142, platePlatform); // positionX, positionY, name platform.
+        this.add(plate1);
+
+
+        
+        const returnPlatform = new Platform(
+            1344, -48, 100, 20,
+            PlatformType.PurpleVerticalStationary,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(1344, -48),
+            new Vector(1344, -384),
+            96,
+            MovementMode.PressurePlateReturn,
+            0, // Gets ignored because of PressurePlateReturn mode
+            []
+        );
+        this.add(returnPlatform);
+        const plate2 = new PressurePlate(1120, -142, returnPlatform);
+        this.add(plate2);
+        const plate3 = new PressurePlate(1120, -526, returnPlatform);
+        this.add(plate3);
+
+
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
@@ -73,8 +124,8 @@ export class LevelOne extends Scene {
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
             console.log("Pls");
-            this.player1.pos = new Vector(210, 550);
-            this.player2.pos = new Vector(270, 550);
+            this.player1.pos = new Vector(-512, 648);
+            this.player2.pos = new Vector(-448, 648);
         }
     }
 }

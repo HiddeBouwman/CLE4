@@ -36,7 +36,7 @@ export class Portal extends Actor {
             const player = event.other.owner as Player;
             
             // Teleport the player to a new position.
-            const teleportPos = new Vector(500, 100);
+            const teleportPos = new Vector(-480, 648);
             player.pos = teleportPos;
             
             // Debugging.
