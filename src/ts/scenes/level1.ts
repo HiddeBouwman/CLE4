@@ -14,7 +14,7 @@ export class LevelOne extends Scene {
     player1: Player;
     player2: Player;
     private cameraController: CameraController;
-    private parallax!: ParallaxBackgroundManager; // Achtergrond
+    private parallax!: ParallaxBackgroundManager; // Background
     constructor() {
         super();
     }
@@ -27,10 +27,10 @@ export class LevelOne extends Scene {
         this.add(this.player2);
 
         // Parameters: x, y, width, height
-        //walls
+        // walls
         this.add(new Floor(-28, 0, 5, 30));
         this.add(new Floor(28, 0, 5, 30));
-        //floor
+        // floor
         this.add(new Floor(0, 40, 30, 30));
         // platforms
         this.add(new Floor(2, 6, 4, 2));

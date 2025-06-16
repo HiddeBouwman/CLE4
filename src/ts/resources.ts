@@ -11,7 +11,7 @@ import {
 // voeg hier jouw eigen resources toe
 const Resources = {
   Fish: new ImageSource("images/fish.png"),
-  Floor: new ImageSource("images/floor.png"),
+  Floor: new ImageSource("images/ground.png"),
   Finish: new ImageSource("images/finish.png"),
   Portal: new ImageSource("images/portal.png"),
   Box: new ImageSource("images/box.png"),
