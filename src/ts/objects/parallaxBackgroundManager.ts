@@ -3,8 +3,8 @@ import { Resources } from "../resources";
 
 interface ParallaxLayerConfig {
     image: ImageSource;
-    speed: number; // 0 = stil, 1 = camera snelheid
-    z: number; // render volgorde
+    speed: number;
+    z: number;
 }
 
 export class ParallaxBackgroundManager {
@@ -34,7 +34,7 @@ export class ParallaxBackgroundManager {
             width: this.engine.drawWidth,
             height: this.engine.drawHeight,
             z,
-            anchor: Vector.Half, // Midden als referentiepunt
+            anchor: Vector.Half, // Midden als referentiepunt (werkt niet)
         });
         actor.graphics.use(image.toSprite());
         this.layers.push({ actor, speed });
@@ -45,15 +45,14 @@ export class ParallaxBackgroundManager {
         const screenCenter = new Vector(this.engine.drawWidth / 2, this.engine.drawHeight / 2);
 
         for (const { actor, speed } of this.layers) {
-            // Alleen horizontale parallax, altijd gecentreerd op het scherm
-            const offset = new Vector(-400, 150); // Pas eventueel aan
+            const offset = new Vector(-400, -300);
             const parallaxX = cam.pos.x * (1 - speed) + offset.x;
-            const parallaxY = cam.pos.y * (1 - speed) + offset.y;
+            const parallaxY = cam.pos.y * (0.9 - speed) + offset.y;
 
             actor.scale = Vector.One;
             actor.pos = new Vector(
                 screenCenter.x + parallaxX,
-                screenCenter.y + offset.y
+                screenCenter.y + parallaxY,
             );
         }
     }
