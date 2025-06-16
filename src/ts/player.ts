@@ -134,6 +134,7 @@ export class Player extends Actor {
             let jumpPower = this.jumpBoost ? 800 : 600;
             this.vel = new Vector(this.vel.x, -jumpPower);
             this.#onGround = false;
+            Resources.Jump.play();
         }
     }
 
