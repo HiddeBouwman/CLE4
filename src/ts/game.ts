@@ -18,7 +18,7 @@ export class Game extends Engine {
             displayMode: DisplayMode.FitScreen,
             physics: {
                 solver: SolverStrategy.Arcade,
-                gravity: new Vector(0, 800),
+                gravity: new Vector(0, 1200),
             }
         });
 

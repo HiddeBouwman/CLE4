@@ -52,11 +52,11 @@ export class LevelOne extends Scene {
         this.add(coloredPlatform1);
         this.add(coloredPlatform2);
 
-        const platform1 = new ElevatorPlatform(500, 100, 100, 20, 1,
+        const movingPlatform = new ElevatorPlatform(500, 100, 100, 20, 1,
             180, 30, new Vector(0.5, -2), -100);
-        this.add(platform1);
+        this.add(movingPlatform);
 
-        this.add(new PressurePlate(600, 321, platform1));
+        this.add(new PressurePlate(600, 321, movingPlatform));
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
