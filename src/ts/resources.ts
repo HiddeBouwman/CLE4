@@ -13,6 +13,7 @@ const Resources = {
   Fish: new ImageSource("images/fish.png"),
   Floor: new ImageSource("images/floor.png"),
   Finish: new ImageSource("images/finish.png"),
+  Portal: new ImageSource("images/portal.png"),
   Box: new ImageSource("images/box.png"),
   pressurePlate: new ImageSource("images/pressure-plate-base.png"),
   Platform: new ImageSource("images/testplatform.webp"),
