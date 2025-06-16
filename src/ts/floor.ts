@@ -52,6 +52,7 @@ export class Floor extends Actor {
         this.#myNineSlice = new NineSlice(myNineSliceConfig);
         this.graphics.use(this.#myNineSlice);
         this.scale = new Vector(2, 2);
+        this.addTag('ground')
 
         // Set anchor to top-left corner (0,0)
         // This makes the position coordinate represent the top-left of the sprite

@@ -6,7 +6,8 @@ import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
 import { PressurePlate } from "../objects/pressurePlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
-
+import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
+import { Platform } from "../objects/platform.ts";
 
 export class LevelOne extends Scene {
     floor: Floor;
@@ -35,11 +36,24 @@ export class LevelOne extends Scene {
         this.add(new Floor(2, 6, 4, 2));
         this.add(new Floor(7, 1, 4, 2));
 
-        this.add(new Finish(700, 500));
+        // For some reason can't be 500 when collition group is created but works for now.
+        this.add(new Finish(700, 308));
 
         this.add(new Box(500, 500));
 
-        this.add(new PressurePlate(100, 321));
+        const coloredPlatform1 = new Platform(-200, 100, 100, 20, 1,
+            180, 30, new Vector(0.5, -2)); // wit voor speler 1
+        const coloredPlatform2 = new Platform(-400, 100, 100, 20, 2,
+            180, 30, new Vector(0.5, -2)); // zwart voor speler 2
+
+        this.add(coloredPlatform1);
+        this.add(coloredPlatform2);
+
+        const platform1 = new ElevatorPlatform(500, 100, 100, 20, 1,
+            180, 30, new Vector(0.5, -2), -100);
+        this.add(platform1);
+
+        this.add(new PressurePlate(600, 321, platform1));
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd

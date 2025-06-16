@@ -10,7 +10,8 @@ export class Box extends Actor {
         });
         this.graphics.use(Resources.Box.toSprite());
         this.pos = new Vector(x, y)
-        this.collider.useBoxCollider(70, 70);
+        this.collider.useCircleCollider(32);
+        this.addTag('ground')
 
         this.body.mass = 1000; 
         this.body.friction = 0;
