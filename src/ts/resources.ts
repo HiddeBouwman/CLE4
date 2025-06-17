@@ -14,6 +14,8 @@ const Resources = {
   Floor: new ImageSource("images/ground.png"),
   Finish: new ImageSource("images/finish.png"),
   Portal: new ImageSource("images/portal.png"),
+  SpikeTrap: new ImageSource("images/spikeBallTrap.webp"),
+  SpikeBall: new ImageSource("images/spikeBall.png"),
   Teleport: new Sound("sounds/teleport.mp3"),
   Jump: new Sound("sounds/jump.wav"),
   finishMSG: new Sound("sounds/finishMSG.wav"),
