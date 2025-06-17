@@ -19,8 +19,9 @@ import { CollisionGroup } from "./collision.ts";
  */
 export class Floor extends Actor {
     #myNineSlice: NineSlice;
+    boostForPlayers: number[]; // Boost option
 
-    constructor(x: number, y: number, width: number, height: number) {
+    constructor(x: number, y: number, width: number, height: number, boostForPlayers: number[] = []) {
         super(
             {
                 width: width * 32 - 23,
@@ -59,5 +60,12 @@ export class Floor extends Actor {
         // this.anchor = new Vector(0, 0);
         this.pos = new Vector(x * 32, y * 32);
         this.body.collisionType = CollisionType.Fixed;
+
+        this.boostForPlayers = boostForPlayers; // Zet boost spelers
     }
+}
+
+// Utility functie om te checken of een floor boost geeft aan een speler
+export function isBoostFloorForPlayer(floor: Floor, playerNumber: number): boolean {
+    return floor.boostForPlayers.includes(playerNumber);
 }

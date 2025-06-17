@@ -4,6 +4,7 @@ import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
 import { Platform, PlatformType, isBoostPlatformForPlayer } from "./objects/platform.ts";
 import { Box } from "./objects/box.ts"
+import { Floor, isBoostFloorForPlayer } from "./floor.ts";
 
 type PlayerControls = {
     left: Keys;
@@ -90,6 +91,7 @@ export class Player extends Actor {
                 this.#onGround = true;
             }
         }
+        // Boost on platform
         if (other.owner instanceof Platform) {
             // Detect if player is on a platform
             if (side === Side.Bottom) {
@@ -112,6 +114,19 @@ export class Player extends Actor {
         if (other.owner instanceof Box && side === Side.Bottom) {
             this.vel = new Vector(this.vel.x, 0); // Stop val
             this.#onGround = true;
+        }
+        // Boost on floor
+        if (other.owner instanceof Floor) {
+            if (isBoostFloorForPlayer(other.owner, this.playerNumber)) {
+                console.log(
+                    `Speler ${this.playerNumber} krijgt BOOST op floor`
+                );
+                this.speedBoost = true;
+                this.jumpBoost = true;
+            } else {
+                // Optioneel: loggen als geen boost
+                // console.log(`Speler ${this.playerNumber} GEEN boost op floor`);
+            }
         }
     }
     onCollisionEnd(
@@ -146,6 +161,15 @@ export class Player extends Actor {
                 console.log(
                     `Speler ${this.playerNumber} verliest BOOST op platformtype:`,
                     PlatformType[other.owner.platformType]
+                );
+                this.speedBoost = false;
+                this.jumpBoost = false;
+            }
+        }
+        if (other.owner instanceof Floor) {
+            if (isBoostFloorForPlayer(other.owner, this.playerNumber)) {
+                console.log(
+                    `Speler ${this.playerNumber} verliest BOOST op floor`
                 );
                 this.speedBoost = false;
                 this.jumpBoost = false;

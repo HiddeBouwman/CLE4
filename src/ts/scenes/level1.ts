@@ -40,7 +40,7 @@ export class LevelOne extends Scene {
         
         // floor
         this.add(new Floor(0, 40, 30, 30));
-        this.add(new Floor(56, 40, 20, 30));
+        this.add(new Floor(56, 40, 20, 30, [1, 2])); // the numbers [1, 2] are for boosting. Can either be left out, [1], [2], or [1, 2]
         
         // ground platforms
         this.add(new Floor(-15, -2, 4, 2));
