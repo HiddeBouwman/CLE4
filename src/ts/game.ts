@@ -14,6 +14,7 @@ export class Game extends Engine {
             height: 600,
             maxFps: 60,
             pixelArt: true,
+            // pixelRatio: 1,
             suppressHiDPIScaling: true,
             displayMode: DisplayMode.FitScreen,
             physics: {
@@ -23,7 +24,7 @@ export class Game extends Engine {
         });
 
         this.backgroundColor = Color.fromHex("#5fb2e9");
-        this.showDebug(true)
+        // this.showDebug(true)
 
         // Start game
         this.start(ResourceLoader).then(() => this.#startGame());
