@@ -23,8 +23,8 @@ export class Floor extends Actor {
     constructor(x: number, y: number, width: number, height: number) {
         super(
             {
-                width: width * 32 - 20,
-                height: height * 32 - 18,
+                width: width * 32 - 23,
+                height: height * 32 - 23,
                 collisionType: CollisionType.Fixed,
                 collisionGroup: CollisionGroup.Ground
             },

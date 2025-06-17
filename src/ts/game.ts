@@ -14,6 +14,7 @@ export class Game extends Engine {
             height: 600,
             maxFps: 60,
             pixelArt: true,
+            // pixelRatio: 1,
             suppressHiDPIScaling: true,
             displayMode: DisplayMode.FitScreen,
             physics: {

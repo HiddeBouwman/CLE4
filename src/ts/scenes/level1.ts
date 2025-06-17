@@ -4,6 +4,7 @@ import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
+import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
 import { PressurePlate } from "../objects/pressureplate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
@@ -54,6 +55,9 @@ export class LevelOne extends Scene {
         this.add(new Portal(-300, 280));
 
         this.add(new Box(192, -648));
+
+        // trap
+        this.add(new SpikeBallTrap(192, 108));
 
 
         /** 
