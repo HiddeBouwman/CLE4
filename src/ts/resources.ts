@@ -23,6 +23,8 @@ const Resources = {
   Walking: new Sound("sounds/run.mp3"),
   Push: new Sound("sounds/push.mp3"),
   buttonSound: new Sound("sounds/button.mp3"),
+  deathSound1: new Sound("sounds/deathsound.mp3"),
+  deathSound2: new Sound("sounds/deathsound2.mp3"),
 
   Box: new ImageSource("images/box.png"),
   pressurePlateBase: new ImageSource("images/objects/pressure-plate/pressure-plate-base.png"),
