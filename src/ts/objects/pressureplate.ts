@@ -9,7 +9,7 @@ export class PressurePlate extends Actor {
     protected plateSprite: Actor;
     protected _activeCount = 0;
 
-    constructor(x: number, y: number, targetPlatform: IMovablePlatform) {
+    constructor(x: number, y: number, targetPlatform: IMovablePlatform, sprite) {
         super({
             width: 100,
             height: 100,
@@ -17,7 +17,9 @@ export class PressurePlate extends Actor {
             z: 5
         });
 
-        this.graphics.use(Resources.pressurePlateBase.toSprite());
+        if (sprite) {
+            this.graphics.use(sprite);
+        }
         this.pos = new Vector(x, y);
 
         this.plateSprite = new Actor({
