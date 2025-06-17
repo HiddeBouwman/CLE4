@@ -120,6 +120,16 @@ export class LevelOne extends Scene {
     onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
         this.parallax.update();
+        // --- Death zone check ---
+    const deathY = 1000; // Pas deze waarde aan naar wens
+
+    if (this.player1.pos.y > deathY) {
+        Resources.deathSound1.play();
+        engine.goToScene("level1");
+        } else if (this.player2.pos.y > deathY) {
+            Resources.deathSound2.play();
+            engine.goToScene("level1");
+        }
     }
 
     onActivate() {
