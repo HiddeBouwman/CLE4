@@ -66,14 +66,15 @@ export class LevelOne extends Scene {
 
         const alwaysPlatform = new Platform(
             -250, -50, 100, 20, // spawnposX, spawnposY, width (unused), height (unused) 
-            PlatformType.PurpleHorizontalStationary, // what type of sprite gets rendered, but that doesn't really matter
+            PlatformType.PurpleYellowPlatform, // what type of sprite gets rendered, but that doesn't really matter
             186, 60, new Vector(0.5, 0.5), // width, height, offset
             new Vector(-250, -50), // start
             new Vector(-50, -50), // end, this means you can do diagonal movement as well.
             96, // movement speed
             MovementMode.Always, // Movement mode is either [Always], [PressurePlate], or [PressurePlateReturn].
             2000, // Pause for 2 seconds at each end
-            [1, 2] // Player 1 and 2 both get a boost on this platform. This is either set to [], [1], [2], or [1, 2]
+            [1, 2], // Player 1 and 2 both get a boost on this platform. This is either set to [], [1], [2], or [1, 2].
+            new Vector(2, 2) // Makes the sprite have twice the width, and twice the height.
         );
         this.add(alwaysPlatform);
 
@@ -81,14 +82,15 @@ export class LevelOne extends Scene {
 
         const platePlatform = new Platform(
             544, -50, 100, 20,
-            PlatformType.YellowHorizontalStationary,
+            PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
             new Vector(544, -50),
             new Vector(928, -50),
             192,
             MovementMode.PressurePlate, // Needs a pressure plate to make it move
             0,
-            []
+            [],
+            new Vector(2, 2)
         );
         this.add(platePlatform);
 
@@ -100,14 +102,15 @@ export class LevelOne extends Scene {
         
         const returnPlatform = new Platform(
             1344, -48, 100, 20,
-            PlatformType.PurpleVerticalStationary,
+            PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
             new Vector(1344, -48),
             new Vector(1344, -384),
             96,
             MovementMode.PressurePlateReturn,
             0, // Gets ignored because of PressurePlateReturn mode
-            []
+            [],
+            new Vector(2, 2)
         );
         this.add(returnPlatform);
         const plate2 = new PressurePlate(1120, -142, returnPlatform);
