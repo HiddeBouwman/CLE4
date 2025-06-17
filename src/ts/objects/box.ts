@@ -66,7 +66,7 @@ export class Box extends Actor {
             this.pushSoundTimer -= delta;
             if (this.pushSoundTimer <= 0) {
                 Resources.Push.play();
-                this.pushSoundTimer = 1000;
+                this.pushSoundTimer = 500; // elke 0.5 seconde
             }
         } else {
             this.pushSoundTimer = 0;
