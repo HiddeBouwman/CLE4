@@ -6,6 +6,7 @@ import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
 import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
 import { PressurePlate } from "../objects/pressureplate.ts";
+import { DefaultPlate } from "../objects/defaultPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform, PlatformType, MovementMode } from "../objects/platform.ts";
@@ -95,7 +96,7 @@ export class LevelOne extends Scene {
         this.add(platePlatform);
 
         // In case it needs a pressure plate to move:
-        const plate1 = new PressurePlate(256, -142, platePlatform); // positionX, positionY, name platform.
+        const plate1 = new DefaultPlate(256, -142, platePlatform); // positionX, positionY, name platform.
         this.add(plate1);
 
 
@@ -113,9 +114,9 @@ export class LevelOne extends Scene {
             new Vector(2, 2)
         );
         this.add(returnPlatform);
-        const plate2 = new PressurePlate(1120, -142, returnPlatform);
+        const plate2 = new DefaultPlate(1120, -142, returnPlatform);
         this.add(plate2);
-        const plate3 = new PressurePlate(1120, -526, returnPlatform);
+        const plate3 = new DefaultPlate(1120, -526, returnPlatform);
         this.add(plate3);
 
 
