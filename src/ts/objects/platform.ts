@@ -2,17 +2,22 @@ import { Actor, CollisionType, Vector } from "excalibur";
 import { Resources } from "../resources.ts";
 
 export enum PlatformType {
-    NeutralPlatform,
-    YellowHorizontalStationary,
+    DefaultPlatform,
+    PurplePlatform,
+    YellowPlatform,
+    PurpleYellowPlatform
+
+    // NeutralPlatform,
+    // YellowHorizontalStationary,
     // YellowHorizontalLeft,
     // YellowHorizontalRight,
-    YellowVerticalStationary,
+    // YellowVerticalStationary,
     // YellowVerticalUp,
     // YellowVerticalDown,
-    PurpleHorizontalStationary,
+    // PurpleHorizontalStationary,
     // PurpleHorizontalLeft,
     // PurpleHorizontalRight,
-    PurpleVerticalStationary,
+    // PurpleVerticalStationary,
     // PurpleVerticalUp,
     // PurpleVerticalDown
 }
@@ -25,17 +30,22 @@ export enum MovementMode {
 
 // Maps platform types to their corresponding sprites
 const PlatformSpriteMap = {
-    [PlatformType.NeutralPlatform]: Resources.NeutralPlatform,
-    [PlatformType.YellowHorizontalStationary]: Resources.YellowPlatformHorizontalStationary,
+    [PlatformType.DefaultPlatform]: Resources.DefaultPlatform,
+    [PlatformType.PurplePlatform]: Resources.PurplePlatform,
+    [PlatformType.YellowPlatform]: Resources.YellowPlatform,
+    [PlatformType.PurpleYellowPlatform]: Resources.PurpleYellowPlatform
+
+    // [PlatformType.NeutralPlatform]: Resources.NeutralPlatform,
+    // [PlatformType.YellowHorizontalStationary]: Resources.YellowPlatformHorizontalStationary,
     // [PlatformType.YellowHorizontalLeft]: Resources.YellowPlatformHorizontalLeft,
     // [PlatformType.YellowHorizontalRight]: Resources.YellowPlatformHorizontalRight,
-    [PlatformType.YellowVerticalStationary]: Resources.YellowPlatformVerticalStationary,
+    // [PlatformType.YellowVerticalStationary]: Resources.YellowPlatformVerticalStationary,
     // [PlatformType.YellowVerticalUp]: Resources.YellowPlatformVerticalUp,
     // [PlatformType.YellowVerticalDown]: Resources.YellowPlatformVerticalDown,
-    [PlatformType.PurpleHorizontalStationary]: Resources.PurplePlatformHorizontalStationary,
+    // [PlatformType.PurpleHorizontalStationary]: Resources.PurplePlatformHorizontalStationary,
     // [PlatformType.PurpleHorizontalLeft]: Resources.PurplePlatformHorizontalLeft,
     // [PlatformType.PurpleHorizontalRight]: Resources.PurplePlatformHorizontalRight,
-    [PlatformType.PurpleVerticalStationary]: Resources.PurplePlatformVerticalStationary,
+    // [PlatformType.PurpleVerticalStationary]: Resources.PurplePlatformVerticalStationary,
     // [PlatformType.PurpleVerticalUp]: Resources.PurplePlatformVerticalUp,
     // [PlatformType.PurpleVerticalDown]: Resources.PurplePlatformVerticalDown
 };
@@ -55,6 +65,7 @@ export class Platform extends Actor {
     private _pauseTimer: number = 0; // Internal timer for pausing
     boostForPlayers: number[];
     private _activePressurePlates: number = 0; // Tracks active pressure plates
+    spriteScale: Vector;
 
     constructor(
         x: number, // starting position
@@ -70,7 +81,8 @@ export class Platform extends Actor {
         speed: number = 100, // movement speed
         movementMode: MovementMode = MovementMode.Always, // Default = Always, other options are PressurePlate or PressurePlateReturn
         pauseDuration: number = 0, // in ms
-        boostForPlayers: number[] = [] // Default = none, other options are [1], [2], or [1, 2]
+        boostForPlayers: number[] = [], // Default = none, other options are [1], [2], or [1, 2]
+        spriteScale: Vector = new Vector(1, 1) // Ability to change sprite scale if needed
     ) {
         super({
             width,
@@ -83,8 +95,10 @@ export class Platform extends Actor {
         this.platformType = platformType;
         this.pos = new Vector(x, y);
         this.addTag('ground');
+        this.spriteScale = spriteScale;
 
         const sprite = PlatformSpriteMap[platformType].toSprite();
+        sprite.scale = this.spriteScale; // Apply scale to sprite if changed with spriteScale value.
         this.graphics.use(sprite);
 
         this.start = start ?? new Vector(x, y);
