@@ -239,13 +239,9 @@ export class Player extends Actor {
         });
 
 
-        this.revive();
+        this.unkill();
         const key = (this.scene as any).levelKey || "level1";
         engine.goToScene(key);
-    }
-
-    revive() {
-        this.unkill();
     }
 
     onPreUpdate(engine, delta) {
