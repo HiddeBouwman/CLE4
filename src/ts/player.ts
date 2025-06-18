@@ -20,6 +20,7 @@ import {
 } from "./objects/platform.ts";
 import { Box } from "./objects/box.ts";
 import { Floor, isBoostFloorForPlayer } from "./floor.ts";
+import { SpikeBall } from "./objects/spikeBall.ts";
 
 type PlayerControls = {
     left: Keys;
@@ -115,6 +116,10 @@ export class Player extends Actor {
         contact: CollisionContact,
     ): void {
         const otherBody = other.owner.get(BodyComponent);
+        if (other.owner instanceof SpikeBall) {
+            this.kill();
+            console.log(`Player ${this.playerNumber} died to a spike ball!`);
+        }
         if (
             otherBody?.collisionType === CollisionType.Fixed ||
             otherBody?.collisionType === CollisionType.Active

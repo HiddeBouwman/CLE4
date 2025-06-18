@@ -9,13 +9,18 @@ export class SpikeBall extends Actor {
             height: 64,
             collisionType: CollisionType.Active,
         });
-        this.scale = new Vector(1, 1);
+        this.scale = new Vector(0.03, 0.03);
         this.pos = new Vector(x, y);
         this.graphics.use(Resources.SpikeBall.toSprite());
+        this.collider.useCircleCollider(530, new Vector(0.5, 0.5));
         this.body.bounciness = 0.8;
     }
 
-    onInitialize(engine: Engine) {
+    oninInitialize() { 
        
+    }
+
+    hitSomething(event) {
+        
     }
 }
