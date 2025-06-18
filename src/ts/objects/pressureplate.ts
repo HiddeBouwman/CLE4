@@ -1,8 +1,6 @@
 import { Actor, Vector, Shape, CompositeCollider, CollisionType, PolygonCollider } from "excalibur";
 import { Resources } from "../resources";
 import { IMovablePlatform } from "./platform";
-import { Box } from "./box";
-import { Player } from "../player";
 
 export class PressurePlate extends Actor {
     protected targetPlatform: IMovablePlatform;

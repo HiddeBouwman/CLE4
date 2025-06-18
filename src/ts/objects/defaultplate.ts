@@ -3,10 +3,9 @@ import { IMovablePlatform } from "./platform";
 import { Resources } from "../resources";
 import { Player } from "../player";
 import { Box } from "./box";
-import { Engine } from "excalibur";
 
 export class DefaultPlate extends PressurePlate {
-    constructor(x: number, y: number, targetPlatform: IMovablePlatform, sprite) {
+    constructor(x: number, y: number, targetPlatform: IMovablePlatform) {
         super(
             x,
             y,
