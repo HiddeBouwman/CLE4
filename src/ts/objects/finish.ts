@@ -12,8 +12,8 @@ export class Finish extends Actor {
 
     constructor(x: number, y: number) {
         super({ 
-            width: 10, 
-            height: 100, 
+            width: 2, 
+            height: 20, 
             collisionGroup: CollisionGroup.Finish
         })
         
@@ -25,7 +25,7 @@ export class Finish extends Actor {
         this.body.friction = 1
         this.body.mass = 0
         
-        this.graphics.use(Resources.Finish.toSprite());
+        this.graphics.use(Resources.Door.toSprite());
     }
 
     onInitialize(engine) {

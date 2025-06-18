@@ -1,13 +1,11 @@
 import { Actor, Vector, Shape, CompositeCollider, CollisionType, PolygonCollider } from "excalibur";
 import { Resources } from "../resources";
-import { IMovablePlatform } from "./platform";
 
 export class PressurePlate extends Actor {
-    protected targetPlatform: IMovablePlatform;
     protected plateSprite: Actor;
     protected _activeCount = 0;
 
-    constructor(x: number, y: number, targetPlatform: IMovablePlatform, sprite) {
+    constructor(x: number, y: number, sprite) {
         super({
             width: 100,
             height: 100,
@@ -50,7 +48,6 @@ export class PressurePlate extends Actor {
         ]);
         this.collider.set(composite);
 
-        this.targetPlatform = targetPlatform;
         this.addTag('ground');
     }
 }
