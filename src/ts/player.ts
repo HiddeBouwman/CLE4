@@ -117,7 +117,7 @@ export class Player extends Actor {
     ): void {
         const otherBody = other.owner.get(BodyComponent);
         if (other.owner instanceof SpikeBall) {
-            this.kill();
+            this.die(this.scene!.engine);
             console.log(`Player ${this.playerNumber} died to a spike ball!`);
         }
         if (
@@ -226,6 +226,21 @@ export class Player extends Actor {
             this.#onGround = false;
             Resources.Jump.play();
         }
+    }
+
+    die(engine: Engine) {
+        this.kill();
+        this.scene!.actors.forEach(actor => {
+        if (actor instanceof SpikeBall) {
+            actor.kill();
+        }
+    });
+        this.revive();
+        engine.goToScene("level1");
+    }
+
+    revive() {
+        this.unkill();
     }
 
     onPreUpdate(engine, delta) {
