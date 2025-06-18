@@ -27,6 +27,10 @@ export class LevelOne extends Scene {
 
         Resources.Menu.stop();
 
+        // Finish
+        this.add(new Finish(700, 302));
+        // Portal
+        this.add(new Portal(-300, 301));
         //add players, finish and floor to scene
         this.player1 = new Player(7 * 32, 14 * 32, 1);
         this.player2 = new Player(9 * 32, 14 * 32, 2);
@@ -49,11 +53,7 @@ export class LevelOne extends Scene {
         this.add(new Floor(35, -2, 3, 2));
         this.add(new Floor(35, -14, 3, 2));
 
-        // Finish
-        this.add(new Finish(700, 308));
         
-        // Portal
-        this.add(new Portal(-300, 280));
 
         this.add(new Box(192, -648));
 

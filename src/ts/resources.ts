@@ -10,13 +10,15 @@ import {
 
 // voeg hier jouw eigen resources toe
 const Resources = {
-  Fish: new ImageSource("images/fish.png"),
   Floor: new ImageSource("images/ground.png"),
-  Finish: new ImageSource("images/finish.png"),
-  Portal: new ImageSource("images/portal.png"),
+  // Finish: new ImageSource("images/finish.png"),
+  Portal: new ImageSource("images/Portal.png"),
+  Door: new ImageSource("images/Door.png"),
+
   SpikeTrap: new ImageSource("images/spikeBallTrap.webp"),
   SpikeBall: new ImageSource("images/spikeBall.png"),
   CharacterSheet: new ImageSource("images/Character.png"),
+  // Sound
   Teleport: new Sound("sounds/teleport.mp3"),
   Jump: new Sound("sounds/jump.wav"),
   finishMSG: new Sound("sounds/finishMSG.wav"),

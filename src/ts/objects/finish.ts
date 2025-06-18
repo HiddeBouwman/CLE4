@@ -25,7 +25,7 @@ export class Finish extends Actor {
         this.body.friction = 1
         this.body.mass = 0
         
-        this.graphics.use(Resources.Finish.toSprite());
+        this.graphics.use(Resources.Door.toSprite());
     }
 
     onInitialize(engine) {
