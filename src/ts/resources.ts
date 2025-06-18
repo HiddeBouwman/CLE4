@@ -12,7 +12,7 @@ import {
 const Resources = {
   Floor: new ImageSource("images/ground.png"),
   // Finish: new ImageSource("images/finish.png"),
-  Portal: new ImageSource("images/Portal.png"),
+  Portal: new ImageSource("images/portal.png"),
   Door: new ImageSource("images/Door.png"),
 
   SpikeTrap: new ImageSource("images/spikeBallTrap.webp"),

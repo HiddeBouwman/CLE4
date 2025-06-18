@@ -3,6 +3,8 @@ import { Resources } from "../resources.ts";
 import { Player } from "../player.ts";
 
 export class SpikeBall extends Actor {
+    frameCounter
+
     constructor(x, y) {
         super({
             width: 64,
@@ -14,13 +16,18 @@ export class SpikeBall extends Actor {
         this.graphics.use(Resources.SpikeBall.toSprite());
         this.collider.useCircleCollider(530, new Vector(0.5, 0.5));
         this.body.bounciness = 0.8;
+        this.frameCounter = 0
     }
 
-    oninInitialize() { 
-       
-    }
-
-    hitSomething(event) {
+    oninInitialize() {
         
     }
+
+    onPostUpdate() {
+        this.frameCounter++;
+        if (this.frameCounter > 300) { 
+            this.kill();
+        }
+    }
+
 }

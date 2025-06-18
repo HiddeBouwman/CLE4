@@ -38,7 +38,7 @@ export class TrapPlate extends PressurePlate {
         });
     }
 
-    onPostUpdate(engine) {
+    onPostUpdate() {
         this.frameCounter++
     }
 }
