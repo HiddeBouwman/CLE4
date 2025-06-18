@@ -3,7 +3,6 @@ import { FontSource, ImageFiltering, ImageSource, Loader, Resource, Sound } from
 
 // voeg hier jouw eigen resources toe
 const Resources = {
-
 // Audio
   // Player audio
   Walking: new Sound("sounds/run.mp3"),
@@ -27,6 +26,7 @@ const Resources = {
 
 // Sprites
   // Player
+  CharacterSheet: new ImageSource("images/Character.png"),
   Fish: new ImageSource("images/fish.png"),
 
 
