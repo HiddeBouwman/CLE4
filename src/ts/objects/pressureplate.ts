@@ -17,7 +17,7 @@ export class PressurePlate extends Actor {
             z: 5
         });
 
-        this.graphics.use(Resources.pressurePlateBase.toSprite());
+        this.graphics.use(Resources.pressurePlateGreenBase.toSprite());
         this.pos = new Vector(x, y);
 
         this.plateSprite = new Actor({
