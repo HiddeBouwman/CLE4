@@ -58,7 +58,7 @@ export class LevelOne extends Scene {
         this.add(new Box(192, -648));
 
         // traps
-        const trap1 = new SpikeBallTrap(198, 108);
+        const trap1 = new SpikeBallTrap(198, 8);
         this.add(trap1);
 
         // trap plates
