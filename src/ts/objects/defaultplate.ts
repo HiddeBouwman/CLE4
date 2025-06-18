@@ -10,7 +10,7 @@ export class DefaultPlate extends PressurePlate {
             x,
             y,
             targetPlatform,
-            Resources.pressurePlateBase.toSprite(),
+            Resources.pressurePlateGreenBase.toSprite(),
         );
     }
 
