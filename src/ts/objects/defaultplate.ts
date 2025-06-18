@@ -6,16 +6,18 @@ import { Box } from "./box";
 import { Engine } from "excalibur";
 
 export class DefaultPlate extends PressurePlate {
-    constructor(x: number, y: number, targetPlatform: IMovablePlatform, sprite) {
+    protected targetPlatform: IMovablePlatform;
+
+    constructor(x: number, y: number, targetPlatform: IMovablePlatform) {
         super(
             x,
             y,
-            targetPlatform,
             Resources.pressurePlateBase.toSprite(),
         );
+        this.targetPlatform = targetPlatform;
     }
 
-    onInitialize(engine) {
+    onInitialize(engine: Engine) {
         // When something starts colliding with the plate
         this.on("collisionstart", (evt) => {
             const other = evt.other.owner;
