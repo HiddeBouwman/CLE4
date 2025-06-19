@@ -146,7 +146,7 @@ export class Player extends Actor {
             });
             this.#idleAnimation = new Animation({
                 frames: [
-                    { graphic: sprite0, duration: 1000 },
+                    { graphic: sprite0, duration: 2010 },
                     { graphic: sprite1, duration: 100 },
                     { graphic: sprite2, duration: 100 },
                 ],
@@ -183,7 +183,7 @@ export class Player extends Actor {
             });
             this.#idleAnimation = new Animation({
                 frames: [
-                    { graphic: sprite0, duration: 1000 },
+                    { graphic: sprite0, duration: 2000 },
                     { graphic: sprite1, duration: 100 },
                     { graphic: sprite2, duration: 100 },
                 ],
