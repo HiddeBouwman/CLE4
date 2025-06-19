@@ -62,7 +62,11 @@ export class Portal extends Actor {
             
             // Debugging.
             console.log(`${player.playerNumber === 1 ? "Player 1" : "Player 2"} teleported!`);
-            Resources.Teleport.play();
+            if (Math.random() < 0.5) {
+                Resources.Teleport.play();
+            } else {
+                Resources.Teleport2.play();
+            }
 
         }
     }
