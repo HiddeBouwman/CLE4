@@ -11,6 +11,7 @@ import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { MovementMode, PlatformType } from "../objects/platform.ts";
 import { MovingPlatform } from "../objects/MovingPlatform.ts";
+import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
 import { Portal } from "../objects/portal.ts";
 import { Block } from "../objects/block.ts";
 
@@ -60,7 +61,8 @@ export class LevelOne extends Scene {
 
 
 
-        this.add(new Box(192, -648));
+        const box1 = new Box(192, -648);
+        this.add(box1);;
 
         // traps
         const trap1 = new SpikeBallTrap(198, 8);
@@ -90,7 +92,7 @@ export class LevelOne extends Scene {
 
 
 
-        const platePlatform = new MovingPlatform(
+        const platePlatform = new TwoPlatePlatform(
             544, -50, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
@@ -105,8 +107,10 @@ export class LevelOne extends Scene {
         this.add(platePlatform);
 
         // In case it needs a pressure plate to move:
-        const plate1 = new DefaultPlate(256, -138, platePlatform);
+        const plate1 = new DefaultPlate(256, -130, platePlatform, box1); // positionX, positionY, name platform.
         this.add(plate1);
+        const plate = new DefaultPlate(330, -130, platePlatform, box1); // positionX, positionY, name platform.
+        this.add(plate);
 
 
 
@@ -137,9 +141,8 @@ export class LevelOne extends Scene {
     onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
         this.parallax.update();
-        console.log("update.")
 
-        
+
         // --- Death zone check ---
         const deathY = 1000; // Pas deze waarde aan naar wens
 
@@ -162,6 +165,8 @@ export class LevelOne extends Scene {
             console.log("Pls");
             this.player1.pos = new Vector(-512, 648);
             this.player2.pos = new Vector(-448, 648);
+            Resources.finishMSG.stop();
+
         }
     }
 }
