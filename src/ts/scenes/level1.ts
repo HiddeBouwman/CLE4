@@ -137,7 +137,6 @@ export class LevelOne extends Scene {
     onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
         this.parallax.update();
-        console.log("update.")
 
         
         // --- Death zone check ---
@@ -162,6 +161,8 @@ export class LevelOne extends Scene {
             console.log("Pls");
             this.player1.pos = new Vector(-512, 648);
             this.player2.pos = new Vector(-448, 648);
+            Resources.finishMSG.stop();
+
         }
     }
 }
