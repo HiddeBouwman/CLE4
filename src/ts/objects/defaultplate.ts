@@ -7,14 +7,17 @@ import { Engine } from "excalibur";
 
 export class DefaultPlate extends PressurePlate {
     protected targetPlatform: IMovablePlatform;
+    private targetBox: Box;
 
-    constructor(x: number, y: number, targetPlatform: IMovablePlatform) {
+
+    constructor(x: number, y: number, targetPlatform: IMovablePlatform, targetBox: Box) {
         super(
             x,
             y,
             Resources.pressurePlateGreenBase.toSprite(),
         );
         this.targetPlatform = targetPlatform;
+            this.targetBox = targetBox;
 
         if (this.plateSprite) {
             this.plateSprite.graphics.use(Resources.PressurePlateGreen.toSprite());
@@ -25,7 +28,7 @@ export class DefaultPlate extends PressurePlate {
         this.on("collisionstart", (evt) => {
             if ((evt.contact?.colliderB as any)?.activator) {
                 const other = evt.other.owner;
-                if (other && (other instanceof Player || other instanceof Box)) {
+                if (other && (other instanceof Player || other === this.targetBox)) {
                     this._activeCount++;
                     if (this._activeCount === 1) {
                         Resources.Button.play();
