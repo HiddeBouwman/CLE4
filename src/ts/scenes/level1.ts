@@ -63,6 +63,8 @@ export class LevelOne extends Scene {
 
         const box1 = new Box(192, -648);
         this.add(box1);;
+        const box2 = new Box(1100, -142);
+        this.add(box2);;
 
         // traps
         const trap1 = new SpikeBallTrap(198, 8);
@@ -127,9 +129,9 @@ export class LevelOne extends Scene {
             new Vector(2, 2)
         );
         this.add(returnPlatform);
-        const plate2 = new DefaultPlate(1120, -142, returnPlatform);
+        const plate2 = new DefaultPlate(1120, -142, returnPlatform, box2);
         this.add(plate2);
-        const plate3 = new DefaultPlate(1120, -526, returnPlatform);
+        const plate3 = new DefaultPlate(1120, -526, returnPlatform, box2);
         this.add(plate3);
 
 
