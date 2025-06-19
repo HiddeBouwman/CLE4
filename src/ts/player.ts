@@ -265,7 +265,8 @@ export class Player extends Actor {
             (other.owner instanceof AlwaysMovingPlatform ||
                 other.owner instanceof PressurePlatePlatform ||
                 other.owner instanceof PressurePlateReturnPlatform ||
-                other.owner instanceof TwoPlatePlatform)
+                other.owner instanceof TwoPlatePlatform) &&
+            side === Side.Bottom // <-- alleen als je OP het platform landt!
         ) {
             const platform = other.owner as AnyMovingPlatform;
             if (isBoostPlatformForPlayer(platform, this.playerNumber)) {

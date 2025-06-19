@@ -40,7 +40,7 @@ export class Platform extends Actor {
 
         this.collider.useBoxCollider(colliderWidth, colliderHeight, colliderOffset);
         this.platformType = platformType;
-        this.pos = new Vector(x, y);
+        this.pos = new Vector(x * 32, y * 32);
         this.addTag('ground');
         this.spriteScale = spriteScale;
         this.boostForPlayers = boostForPlayers;

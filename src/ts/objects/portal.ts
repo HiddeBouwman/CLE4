@@ -20,7 +20,7 @@ export class Portal extends Actor {
         })
         
         this.scale = new Vector(0.7, 0.7)
-        this.pos = new Vector(x, y)
+        this.pos = new Vector(x * 32, y * 32);
         this.body.useGravity = false 
         const portalSpritesheet = SpriteSheet.fromImageSource({
             image: Resources.Portal,

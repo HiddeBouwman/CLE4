@@ -10,7 +10,7 @@ export class TwoPlatePlatform extends Platform implements IMovablePlatform {
     private _pauseTimer: number = 0; // Internal timer for pausing
     private _pressureActive: boolean = false;
     private _activePressurePlates: number = 0; // Tracks active pressure plates
-    private requiredPlates: number = 2;
+    private requiredPlates: number;
 
     constructor(
         x: number, // starting position
@@ -26,13 +26,15 @@ export class TwoPlatePlatform extends Platform implements IMovablePlatform {
         speed: number = 100, // movement speed
         pauseDuration: number = 0, // in ms
         boostForPlayers: number[] = [], // Default = none, other options are [1], [2], or [1, 2]
-        spriteScale: Vector = new Vector(1, 1) // Ability to change sprite scale if needed
+        spriteScale: Vector = new Vector(1, 1), // Ability to change sprite scale if needed
+        requiredPlates: number = 2 // <-- nieuw, optioneel
     ) {
         super(x, y, width, height, platformType, colliderWidth, colliderHeight, colliderOffset, spriteScale, boostForPlayers);
-        this.start = start;
-        this.end = end;
+        this.start = new Vector(start.x * 32, start.y * 32);
+        this.end = new Vector(end.x * 32, end.y * 32);
         this.speed = speed;
         this.pauseDuration = pauseDuration;
+        this.requiredPlates = Math.max(2, requiredPlates); // <-- always minimum of 2
     }
 
     // Called by pressure plates when activated

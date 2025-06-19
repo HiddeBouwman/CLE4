@@ -6,7 +6,7 @@ import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
 import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
 import { TrapPlate } from "../objects/trapPlate.ts";
-import { DefaultPlate } from "../objects/defaultPlate.ts";
+import { DefaultPlate } from "../objects/defaultplate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { PlatformType } from "../objects/platform.ts"; 
@@ -17,6 +17,7 @@ import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
 
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
 import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
+import { PressurePlate } from "../objects/pressureplate.ts";
 
 import { Resources } from "../resources.ts";
 
@@ -36,7 +37,7 @@ export class LevelOne extends Scene {
         // Finish
         this.add(new Finish(700, 302));
         // Portal
-        this.add(new Portal(-300, 301));
+        this.add(new Portal(-10, 9.5));
         //add players, finish and floor to scene
         this.player1 = new Player(7 * 32, 14 * 32, 1);
         this.player2 = new Player(9 * 32, 14 * 32, 2);
@@ -62,11 +63,13 @@ export class LevelOne extends Scene {
         this.add(new Block(-250, -400, 8000));
         // this.add(new Block(-300, 300, 2000));
 
+        
 
+        
 
-        const box1 = new Box(192, -648);
+        const box1 = new Box(6, -21);
         this.add(box1);;
-        const box2 = new Box(1100, -142);
+        const box2 = new Box(35, 5);
         this.add(box2);;
 
         // traps
@@ -82,11 +85,11 @@ export class LevelOne extends Scene {
          */
 
         const alwaysPlatform = new AlwaysMovingPlatform(
-            -250, -50, 100, 20,
+            -8, -2, 100, 20,
             PlatformType.PurpleYellowPlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(-250, -50),
-            new Vector(-50, -50),
+            new Vector(-8, -2),
+            new Vector(-1, -2),
             96,
             2000,
             [1, 2],
@@ -97,40 +100,41 @@ export class LevelOne extends Scene {
 
 
         const platePlatform = new TwoPlatePlatform(
-            544, -50, 100, 20,
+            17, -2, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(544, -50),
-            new Vector(928, -50),
+            new Vector(17, -2),
+            new Vector(29, -10),
             192, // speed
             0, // pauseDuration
             [], // boostForPlayers
-            new Vector(2, 2)
+            new Vector(2, 2),
+            2 // requires two plates (can be set to more than 2 plates)
         );
         this.add(platePlatform);
 
         // In case it needs a pressure plate to move:
-        const plate1 = new DefaultPlate(256, -138, platePlatform, box1);
+        const plate1 = new DefaultPlate(256, -130, platePlatform, box1);
         this.add(plate1);
-        const plate = new DefaultPlate(330, -130, platePlatform, box1); // positionX, positionY, name platform.
+        const plate = new DefaultPlate(320, -130, platePlatform, box1);
         this.add(plate);
 
 
 
         const returnPlatform = new PressurePlateReturnPlatform(
-            1344, -48, 100, 20,
+            42, -2, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(1344, -48),
-            new Vector(1344, -384),
+            new Vector(42, -2),
+            new Vector(42, -12),
             96,
             [],
             new Vector(2, 2)
         );
         this.add(returnPlatform);
-        const plate2 = new DefaultPlate(1120, -142, returnPlatform, box2);
+        const plate2 = new DefaultPlate(1120, -136, returnPlatform, box2);
         this.add(plate2);
-        const plate3 = new DefaultPlate(1120, -526, returnPlatform, box2);
+        const plate3 = new DefaultPlate(1120, -520, returnPlatform, box2);
         this.add(plate3);
 
 

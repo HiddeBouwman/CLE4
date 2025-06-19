@@ -6,7 +6,7 @@ import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
 import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
 import { TrapPlate } from "../objects/trapPlate.ts";
-import { DefaultPlate } from "../objects/defaultPlate.ts";
+import { DefaultPlate } from "../objects/defaultplate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform, PlatformType } from "../objects/platform.ts";

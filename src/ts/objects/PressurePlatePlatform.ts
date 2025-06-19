@@ -27,8 +27,8 @@ export class PressurePlatePlatform extends Platform implements IMovablePlatform 
         spriteScale: Vector = new Vector(1, 1)
     ) {
         super(x, y, width, height, platformType, colliderWidth, colliderHeight, colliderOffset, spriteScale, boostForPlayers);
-        this.start = startPos;
-        this.end = endPos;
+        this.start = new Vector(startPos.x * 32, startPos.y * 32);
+        this.end = new Vector(endPos.x * 32, endPos.y * 32);
         this.speed = speed;
         this.pauseDuration = pauseDuration;
     }

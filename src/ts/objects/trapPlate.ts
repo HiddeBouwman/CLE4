@@ -22,6 +22,7 @@ export class TrapPlate extends PressurePlate {
         if (this.plateSprite) {
             this.plateSprite.graphics.use(Resources.PressurePlateOrange.toSprite());
         }
+        this.addTag('pressurePlate');
     }
 
     onInitialize(engine: Engine) {

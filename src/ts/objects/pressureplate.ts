@@ -1,4 +1,4 @@
-import { Actor, Vector, Shape, CompositeCollider, CollisionType, PolygonCollider } from "excalibur";
+import { Actor, Vector, Shape, CollisionType } from "excalibur";
 import { Resources } from "../resources";
 
 export class PressurePlate extends Actor {
@@ -26,31 +26,12 @@ export class PressurePlate extends Actor {
         this.plateSprite.graphics.use(Resources.PressurePlateGreen.toSprite());
         this.addChild(this.plateSprite);
 
-        // Alleen de box collider krijgt een activator-tag
-        const boxCollider = Shape.Box(48, 14, Vector.Half, new Vector(0, 24));
-        (boxCollider as any).activator = true; // custom property
-
-        const points1 = [
-            new Vector(-32, 32),
-            new Vector(-24, 32),
-            new Vector(-24, 20)
-        ];
-        const rampCollider1 = new PolygonCollider({ points: points1 });
-
-        const points2 = [
-            new Vector(32, 32),
-            new Vector(24, 32),
-            new Vector(24, 20)
-        ];
-        const rampCollider2 = new PolygonCollider({ points: points2 });
-
-        const composite = new CompositeCollider([
-            boxCollider,
-            rampCollider1,
-            rampCollider2
-        ]);
-        this.collider.set(composite);
+        // Alleen een simpele box-collider, geen composite/polygonen meer!
+        const boxCollider = Shape.Box(56, 1, Vector.Half, new Vector(0, 21));
+        (boxCollider as any).activator = true; // custom property voor activatie
+        this.collider.set(boxCollider);
 
         this.addTag('ground');
+        this.addTag('pressureplate');
     }
 }

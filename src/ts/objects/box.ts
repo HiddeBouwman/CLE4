@@ -27,7 +27,7 @@ export class Box extends Actor {
             collisionType: CollisionType.Active,
         });
         this.graphics.use(Resources.Box.toSprite());
-        this.pos = new Vector(x, y);
+        this.pos = new Vector(x * 32, y * 32);
         this.collider.set(this.#roundedbox);
         this.addTag("ground");
 
