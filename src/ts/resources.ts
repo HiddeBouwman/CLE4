@@ -55,7 +55,9 @@ const Resources = {
 
   // Game audio (background music etc.)
   Menu: new Sound("sounds/game/level1.wav"),
-  finishMSG: new Sound("sounds/game/finishMSG.wav"),
+  finishMSG: new Sound("sounds/player/yippeee.mp3"),
+  FinishMC: new Sound("sounds/objects/finish.wav"),
+  gameMusic: new Sound("sounds/game/gameMusic.mp3"),
 
 
 // Sprites
@@ -69,6 +71,10 @@ const Resources = {
 
   // Box
   Box: new ImageSource("images/box.png"),
+
+
+  // Block
+  Block: new ImageSource("images/block.png"),
 
 
   // Pressure plate
@@ -102,7 +108,6 @@ const Resources = {
 
 
   // Other stage objects
-  Finish: new ImageSource("images/finish.png"),
   Door: new ImageSource("images/door.png"),
 
 

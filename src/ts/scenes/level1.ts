@@ -9,8 +9,11 @@ import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
-import { Platform, PlatformType, MovementMode } from "../objects/platform.ts";
+import { MovementMode, PlatformType } from "../objects/platform.ts";
+import { MovingPlatform } from "../objects/MovingPlatform.ts";
 import { Portal } from "../objects/portal.ts";
+import { Block } from "../objects/block.ts";
+
 import { Resources } from "../resources.ts";
 
 export class LevelOne extends Scene {
@@ -25,8 +28,6 @@ export class LevelOne extends Scene {
     }
 
     onInitialize(engine: Engine) {
-
-        Resources.Menu.stop();
 
         // Finish
         this.add(new Finish(700, 302));
@@ -53,6 +54,9 @@ export class LevelOne extends Scene {
         this.add(new Floor(8, -2, 6, 2));
         this.add(new Floor(35, -2, 3, 2));
         this.add(new Floor(35, -14, 3, 2));
+        this.add(new Block(-300, -250, 5000));
+        this.add(new Block(-250, -400, 8000));
+        // this.add(new Block(-300, 300, 2000));
 
 
 
@@ -70,7 +74,7 @@ export class LevelOne extends Scene {
          * Platforms
          */
 
-        const alwaysPlatform = new Platform(
+        const alwaysPlatform = new MovingPlatform(
             -250, -50, 100, 20, // spawnposX, spawnposY, width (unused), height (unused) 
             PlatformType.PurpleYellowPlatform, // what type of sprite gets rendered, but that doesn't really matter
             186, 60, new Vector(0.5, 0.5), // width, height, offset
@@ -86,7 +90,7 @@ export class LevelOne extends Scene {
 
 
 
-        const platePlatform = new Platform(
+        const platePlatform = new MovingPlatform(
             544, -50, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
@@ -106,7 +110,7 @@ export class LevelOne extends Scene {
 
 
 
-        const returnPlatform = new Platform(
+        const returnPlatform = new MovingPlatform(
             1344, -48, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
@@ -133,6 +137,9 @@ export class LevelOne extends Scene {
     onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
         this.parallax.update();
+        console.log("update.")
+
+        
         // --- Death zone check ---
         const deathY = 1000; // Pas deze waarde aan naar wens
 
@@ -147,6 +154,8 @@ export class LevelOne extends Scene {
 
     onActivate() {
         console.log("level 1 loaded");
+        Resources.gameMusic.loop = true;
+        Resources.gameMusic.play();
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {

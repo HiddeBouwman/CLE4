@@ -1,5 +1,7 @@
 import {
     Actor,
+    Animation,
+    AnimationStrategy,
     BodyComponent,
     CollisionType,
     CompositeCollider,
@@ -8,17 +10,17 @@ import {
     Shape,
     Side,
     Sprite,
+    SpriteSheet,
     Vector,
 } from "excalibur";
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
-import {
-    isBoostPlatformForPlayer,
-    Platform,
-    PlatformType,
-} from "./objects/platform.ts";
+import { MovingPlatform } from "./objects/MovingPlatform.ts";
+import { PlatformType, isBoostPlatformForPlayer } from "./objects/platform.ts";
 import { Box } from "./objects/box.ts";
+import { Block } from "./objects/block.ts";
+
 import { Floor, isBoostFloorForPlayer } from "./floor.ts";
 import { SpikeBall } from "./objects/spikeBall.ts";
 
@@ -27,6 +29,7 @@ type PlayerControls = {
     right: Keys;
     up: Keys;
     down: Keys;
+    reset: Keys;
 };
 
 export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
@@ -35,12 +38,15 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         right: Keys.D,
         up: Keys.W,
         down: Keys.S,
+        reset: Keys.R
     },
     player2: {
         left: Keys.Left,
         right: Keys.Right,
         up: Keys.Up,
         down: Keys.Down,
+        reset: Keys.R
+
     },
 };
 
@@ -56,7 +62,7 @@ export class Player extends Actor {
         Shape.Box(15, 15),
         Shape.Circle(8, new Vector(0, 7)),
     ]);
-    private _carrierPlatform: Platform | null = null; // Assigns player to a platform (in order to "stick to it")
+    private _carrierPlatform: MovingPlatform | null = null; // Assigns player to a platform (in order to "stick to it")
     private _pendingCarrierDelta: Vector = Vector.Zero;
     private _lastEngine: Engine | null = null;
     private _lastDelta: number = 16;
@@ -64,6 +70,13 @@ export class Player extends Actor {
     private lastXSpeed: number = 0;
     private idleCooldown: number = 0;
     private lastYVelocity: number = 0;
+
+    #spriteSheet: SpriteSheet;
+    #idleAnimation: Animation;
+    #walkAnimation: Animation;
+
+    private initialX: number;
+    private initialY: number;
 
     constructor(x: number, y: number, playerNumber: number) {
         super(
@@ -81,31 +94,54 @@ export class Player extends Actor {
         this.scale = new Vector(2, 2);
         this.pos = new Vector(x, y);
 
+        //Store initial position
+        this.initialX = x;
+        this.initialY = y;
+
         //Init player controls
         this.controls = playerNumber === 1
             ? Controls.player1
             : Controls.player2;
 
-        // Use graphics.
-        const player1Sprite = new Sprite({
+        this.#spriteSheet = SpriteSheet.fromImageSource({
             image: Resources.CharacterSheet,
-            sourceView: {
-                x: 32 * 1,
-                y: 32 * 0,
-                width: 32,
-                height: 32,
+            grid: {
+                rows: 4,
+                columns: 3,
+                spriteWidth: 32,
+                spriteHeight: 32,
             },
         });
-        const player2Sprite = new Sprite({
-            image: Resources.CharacterSheet,
-            sourceView: {
-                x: 32 * 1,
-                y: 32 * 2,
-                width: 32,
-                height: 32,
-            },
-        });
-        this.graphics.use(playerNumber == 1 ? player1Sprite : player2Sprite);
+
+        // Create animations using the sprite sheet - using indices (0-based)
+        let idleFrames: number[];
+        let walkFrames: number[];
+
+        if (playerNumber === 1) {
+            // Repeat frame 0 more often to make it appear longer in the animation
+            idleFrames = [0, 1, 2];
+            walkFrames = [3, 4, 5];
+        } else {
+            idleFrames = [6, 7, 8]; // Repeat frame 6 to emphasize the idle position
+            walkFrames = [9, 10, 11];
+        }
+
+        this.#idleAnimation = Animation.fromSpriteSheet(
+            this.#spriteSheet,
+            idleFrames,
+            300,
+            AnimationStrategy.PingPong,
+        );
+
+        this.#walkAnimation = Animation.fromSpriteSheet(
+            this.#spriteSheet,
+            walkFrames,
+            200,
+            AnimationStrategy.PingPong,
+        );
+
+        // Use idle animation as default
+        this.graphics.use(this.#idleAnimation);
 
         // Init physics
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
@@ -148,7 +184,7 @@ export class Player extends Actor {
             }
         }
         // Boost on platform
-        if (other.owner instanceof Platform) {
+        if (other.owner instanceof MovingPlatform) {
             // Detect if player is on a platform
             if (side === Side.Bottom) {
                 this._carrierPlatform = other.owner;
@@ -173,6 +209,11 @@ export class Player extends Actor {
             }
         }
         if (other.owner instanceof Box && side === Side.Bottom) {
+            this.vel = new Vector(this.vel.x, 0); // Stop val
+            this.#onGround = true;
+        }
+
+        if (other.owner instanceof Block && side === Side.Bottom) {
             this.vel = new Vector(this.vel.x, 0); // Stop val
             this.#onGround = true;
         }
@@ -211,7 +252,7 @@ export class Player extends Actor {
                 this.#onGround = false;
                 // Carry on platform momentum
                 if (
-                    other.owner instanceof Platform &&
+                    other.owner instanceof MovingPlatform &&
                     this._carrierPlatform === other.owner && this._lastDelta > 0
                 ) {
                     // velocity = deltaPos / (deltaTime in seconds)
@@ -223,7 +264,7 @@ export class Player extends Actor {
             }
         }
         // reset boost
-        if (other.owner instanceof Platform) {
+        if (other.owner instanceof MovingPlatform) {
             // If player leaves platform, unlink carrier
             if (this._carrierPlatform === other.owner) {
                 this._carrierPlatform = null;
@@ -272,7 +313,7 @@ export class Player extends Actor {
         engine.goToScene(key);
     }
 
-    onPreUpdate(engine, delta) {
+    onPreUpdate(engine: Engine, delta: number) {
         this._lastEngine = engine;
         this._lastDelta = delta;
 
@@ -283,6 +324,7 @@ export class Player extends Actor {
         if (kb.isHeld(this.controls.left)) {
             xspeed = -1;
         }
+
         if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
         }
@@ -323,6 +365,11 @@ export class Player extends Actor {
             this.jump();
         }
 
+        // Reset action.
+        if (kb.wasPressed(this.controls.reset)) {
+            this.resetPosition();
+        }
+
         // Acceleration
         const maxSpeed = this.speedBoost ? 600 : 300; // first number is with speed boost from platform, second number is regular speed
         const acceleration = this.#onGround ? 8000 : 4000; // pixels/sec^2 ? lmao idk (first number is ground speed, second number is air speed)
@@ -347,6 +394,22 @@ export class Player extends Actor {
             if (Math.abs(this.vel.x) < 1) this.vel = new Vector(0, this.vel.y);
         }
 
+        // Switch between animations based on movement
+        if (Math.abs(this.vel.x) > 50) {
+            // If moving, use walk animation
+            if (this.graphics.current !== this.#walkAnimation) {
+                this.graphics.use(this.#walkAnimation);
+            }
+            // when moving right (positive x), do flip
+            this.graphics.flipHorizontal = this.vel.x > 0;
+        } else {
+            // If idle, use idle animation
+            if (this.graphics.current !== this.#idleAnimation) {
+                this.graphics.use(this.#idleAnimation);
+                this.graphics.flipHorizontal = false; // Reset flip when idle
+            }
+        }
+
         // Platform carrier functionality
         if (this._carrierPlatform) {
             this._pendingCarrierDelta = this._carrierPlatform.currentDelta;
@@ -356,6 +419,7 @@ export class Player extends Actor {
         // Save vertical velocity before physics update
         this.lastYVelocity = this.vel.y;
     }
+    
 
     onPostUpdate(engine, delta) {
         // Apply delta AFTER physics
@@ -369,6 +433,12 @@ export class Player extends Actor {
                 Resources.PlayerRun.play();
                 console.log("Walking sound started");
             }
+        }
+    }
+
+    private resetPosition(): void {
+        if (this._lastEngine) {
+            this._lastEngine.goToScene('level1');
         }
     }
 }
