@@ -48,7 +48,6 @@ export class Finish extends Actor {
             if (this.player1Present && this.player2Present) {
                 console.log("Both players at finish - switching scene!");
                 this.scene.engine.goToScene('menu');
-                Resources.finishMSG.play();
                  Resources.FinishMC.play();
 
             }

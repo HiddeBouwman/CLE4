@@ -29,8 +29,6 @@ export class LevelOne extends Scene {
 
     onInitialize(engine: Engine) {
 
-        Resources.Menu.stop();
-
         // Finish
         this.add(new Finish(700, 302));
         // Portal
@@ -139,6 +137,9 @@ export class LevelOne extends Scene {
     onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
         this.parallax.update();
+        console.log("update.")
+
+        
         // --- Death zone check ---
         const deathY = 1000; // Pas deze waarde aan naar wens
 
@@ -153,6 +154,8 @@ export class LevelOne extends Scene {
 
     onActivate() {
         console.log("level 1 loaded");
+        Resources.gameMusic.loop = true;
+        Resources.gameMusic.play();
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
