@@ -101,7 +101,7 @@ export class LevelOne extends Scene {
         this.add(platePlatform);
 
         // In case it needs a pressure plate to move:
-        const plate1 = new DefaultPlate(256, -142, platePlatform); // positionX, positionY, name platform.
+        const plate1 = new DefaultPlate(256, -138, platePlatform);
         this.add(plate1);
 
 
@@ -137,10 +137,10 @@ export class LevelOne extends Scene {
         const deathY = 1000; // Pas deze waarde aan naar wens
 
         if (this.player1.pos.y > deathY) {
-            Resources.deathSound1.play();
+            Resources.PlayerDeathSound1.play();
             engine.goToScene("level1");
         } else if (this.player2.pos.y > deathY) {
-            Resources.deathSound2.play();
+            Resources.PlayerDeathSound3.play();
             engine.goToScene("level1");
         }
     }

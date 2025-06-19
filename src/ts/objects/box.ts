@@ -18,6 +18,7 @@ export class Box extends Actor {
     private topPlatform: Actor;
     private isPushing: boolean = false;
     private pushSoundTimer: number = 0;
+    private wasPushing: boolean = false;
 
     constructor(x: number, y: number) {
         super({
@@ -43,35 +44,42 @@ export class Box extends Actor {
         });
         this.topPlatform.addTag("ground");
         this.addChild(this.topPlatform);
-
-        // Push sound bij duwen
-        this.on("collisionstart", (evt) => {
-            const other = evt.other.owner;
-            if (other instanceof Player) {
-                this.isPushing = true
-            }
-        });
-
-        this.on("collisionend", (evt) => {
-            const other = evt.other.owner;
-            if (other instanceof Player) {
-                this.isPushing = false
-            }
-        });
     }
 
-        // In je onPreUpdate:
     onPreUpdate(engine, delta) {
+        let pushing = false;
+        if (this.scene) { // null-check!
+            for (const actor of this.scene.actors) {
+                if (actor instanceof Player) {
+                    const dx = Math.abs(actor.pos.x - this.pos.x);
+                    const dy = Math.abs(actor.pos.y - this.pos.y);
+                    // Afstand en hoogte check (pas aan indien nodig)
+                    if (dx < 60 && dy < 60) {
+                        // Check of speler beweegt richting de box
+                        if (
+                            (actor.vel.x > 10 && actor.pos.x < this.pos.x) ||
+                            (actor.vel.x < -10 && actor.pos.x > this.pos.x)
+                        ) {
+                            pushing = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        this.isPushing = pushing;
+
         if (this.isPushing) {
             this.pushSoundTimer -= delta;
             if (this.pushSoundTimer <= 0) {
                 Resources.PlayerPush.play();
                 this.pushSoundTimer = 500; // elke 0.5 seconde
             }
-        } else {
+        }
+
+        if (!this.isPushing && this.wasPushing) {
             this.pushSoundTimer = 0;
         }
+        this.wasPushing = this.isPushing;
     }
-    
-
 }

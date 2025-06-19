@@ -3,21 +3,23 @@ import { FontSource, ImageFiltering, ImageSource, Loader, Resource, Sound } from
 // voeg hier jouw eigen resources toe
 const Resources = {
 
+// Every file that's in pseudocode is unused.
+
   // Audio
   // Player audio
-  Player1GetsBoosted: new Sound("sounds/player/player1GetsBoosted.mp3"),
-  Player2GetsBoosted: new Sound("sounds/player/player2GetsBoosted.mp3"),
+  Player1GetsBoosted: new Sound("sounds/player/player1GetsBoost.mp3"),
+  Player2GetsBoosted: new Sound("sounds/player/player2GetsBoost.mp3"),
   PlayerDeathSound1: new Sound("sounds/player/playerDeathSound1.mp3"),
-  PlayerDeathSound2: new Sound("sounds/player/playerDeathSound2.mp3"),
+  // PlayerDeathSound2: new Sound("sounds/player/playerDeathSound2.mp3"),
   PlayerDeathSound3: new Sound("sounds/player/playerDeathSound3.mp3"),
+  // PlayerDeathSound4: new Sound("sounds/player/playerDeathSound4.mp3"),
   PlayerIdle1: new Sound("sounds/player/playerIdle1.mp3"),
   PlayerIdle2: new Sound("sounds/player/playerIdle2.mp3"),
   PlayerIdle3: new Sound("sounds/player/playerIdle3.mp3"),
   PlayerIdle4: new Sound("sounds/player/playerIdle4.mp3"),
   PlayerIdle5: new Sound("sounds/player/playerIdle5.mp3"),
   PlayerIdle6: new Sound("sounds/player/playerIdle6.mp3"),
-  PlayerIdle7: new Sound("sounds/player/playerIdle7.mp3"),
-  PlayerJump: new Sound("sounds/player/playerJump.mp3"),
+  PlayerJump: new Sound("sounds/player/playerJump.wav"),
   PlayerLand1: new Sound("sounds/player/playerLand1.mp3"),
   PlayerLand2: new Sound("sounds/player/playerLand2.mp3"),
   PlayerLandSoft1: new Sound("sounds/player/playerLandSoft1.mp3"),

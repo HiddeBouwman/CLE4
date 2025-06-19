@@ -3,6 +3,8 @@ import { PressurePlate } from "./pressureplate";
 import { Resources } from "../resources";
 import { Player } from "../player";
 import { SpikeBallTrap } from "./spikeBallTrap";
+import { Box } from "./box";
+import { SpikeBall } from "./spikeBall";
 
 export class TrapPlate extends PressurePlate {
     private trap: SpikeBallTrap;
@@ -24,19 +26,22 @@ export class TrapPlate extends PressurePlate {
 
     onInitialize(engine: Engine) {
         this.on("collisionstart", (evt) => {
-            if (evt.other.owner instanceof Player) {
+            if ((evt.contact?.colliderB as any)?.activator) {
                 Resources.Button.play();
                 if (this.frameCounter > 120) {
                     this.trap.activate(engine);
                     this.frameCounter = 0;
                 }
-
                 this.plateSprite.graphics.use(Resources.PressurePlateOrangeActivated.toSprite());
             }
         });
 
         this.on("collisionend", (evt) => {
-            if (evt.other.owner instanceof Player) {
+            if (
+                evt.other.owner instanceof Player ||
+                evt.other.owner instanceof Box ||
+                evt.other.owner instanceof SpikeBall
+            ) {
                 this.plateSprite.graphics.use(Resources.PressurePlateOrange.toSprite());
             }
         });

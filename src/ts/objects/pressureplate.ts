@@ -26,7 +26,10 @@ export class PressurePlate extends Actor {
         this.plateSprite.graphics.use(Resources.PressurePlateGreen.toSprite());
         this.addChild(this.plateSprite);
 
-        // Polygons for hitbox
+        // Alleen de box collider krijgt een activator-tag
+        const boxCollider = Shape.Box(48, 14, Vector.Half, new Vector(0, 24));
+        (boxCollider as any).activator = true; // custom property
+
         const points1 = [
             new Vector(-32, 32),
             new Vector(-24, 32),
@@ -42,7 +45,7 @@ export class PressurePlate extends Actor {
         const rampCollider2 = new PolygonCollider({ points: points2 });
 
         const composite = new CompositeCollider([
-            Shape.Box(48, 12, Vector.Half, new Vector(0, 26)),
+            boxCollider,
             rampCollider1,
             rampCollider2
         ]);

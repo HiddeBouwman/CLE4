@@ -22,32 +22,30 @@ export class DefaultPlate extends PressurePlate {
     }
 
     onInitialize(engine: Engine) {
-        // When something starts colliding with the plate
         this.on("collisionstart", (evt) => {
-            const other = evt.other.owner;
-            if (other && (other instanceof Player || other instanceof Box)) {
-                this._activeCount++;
-                // If this is the first object, activate the plate
-                if (this._activeCount === 1) {
-                    // Use new method for multi-plate support
-                    Resources.Button.play();
-                    if (typeof this.targetPlatform.registerPressurePlateActivated === "function") {
-                        this.targetPlatform.registerPressurePlateActivated();
-                    } else {
-                        this.targetPlatform.startMoving();
+            if ((evt.contact?.colliderB as any)?.activator) {
+                const other = evt.other.owner;
+                if (other && (other instanceof Player || other instanceof Box)) {
+                    this._activeCount++;
+                    if (this._activeCount === 1) {
+                        Resources.Button.play();
+                        if (typeof this.targetPlatform.registerPressurePlateActivated === "function") {
+                            this.targetPlatform.registerPressurePlateActivated();
+                        } else {
+                            this.targetPlatform.startMoving();
+                        }
+                        this.plateSprite.graphics.use(Resources.PressurePlateGreenActivated.toSprite());
                     }
-                    this.plateSprite.graphics.use(Resources.PressurePlateGreenActivated.toSprite());
                 }
             }
         });
 
-        // When something stops colliding with the plate
         this.on("collisionend", (evt) => {
+            // evt.contact bestaat hier niet, dus check alleen het type van het object
             const other = evt.other.owner;
             if (other && (other instanceof Player || other instanceof Box)) {
                 this._activeCount = Math.max(0, this._activeCount - 1);
                 if (this._activeCount === 0) {
-                    // Use new method for multi-plate support
                     if (typeof this.targetPlatform.registerPressurePlateDeactivated === "function") {
                         this.targetPlatform.registerPressurePlateDeactivated();
                     } else {

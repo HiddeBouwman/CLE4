@@ -60,6 +60,10 @@ export class Player extends Actor {
     private _pendingCarrierDelta: Vector = Vector.Zero;
     private _lastEngine: Engine | null = null;
     private _lastDelta: number = 16;
+    private idleTimer: number = 0;
+    private lastXSpeed: number = 0;
+    private idleCooldown: number = 0;
+    private lastYVelocity: number = 0;
 
     constructor(x: number, y: number, playerNumber: number) {
         super(
@@ -122,10 +126,24 @@ export class Player extends Actor {
             console.log(`Player ${this.playerNumber} died to a spike ball!`);
         }
         if (
-            otherBody?.collisionType === CollisionType.Fixed ||
-            otherBody?.collisionType === CollisionType.Active
+            other.owner.get(BodyComponent)?.collisionType === CollisionType.Fixed ||
+            other.owner.get(BodyComponent)?.collisionType === CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
+                // Landing sound with hard landing
+                if (this.lastYVelocity > 750) { // Change this value for sensitivity
+                    const landSounds = [
+                        Resources.PlayerLand1,
+                        Resources.PlayerLand2,
+                    ];
+                    landSounds[Math.floor(Math.random() * landSounds.length)].play();
+                } else if (this.lastYVelocity <= 750) {
+                    const softLandSounds = [
+                        Resources.PlayerLandSoft1,
+                        Resources.PlayerLandSoft2,
+                    ]
+                    softLandSounds[Math.floor(Math.random() * softLandSounds.length)].play();
+                }
                 this.#onGround = true;
             }
         }
@@ -142,6 +160,11 @@ export class Player extends Actor {
                 );
                 this.speedBoost = true;
                 this.jumpBoost = true;
+                if (this.playerNumber === 1) {
+                    Resources.Player1GetsBoosted.play();
+                } else if (this.playerNumber === 2) {
+                    Resources.Player2GetsBoosted.play();
+                }
             } else {
                 console.log(
                     `Speler ${this.playerNumber} GEEN boost op platformtype:`,
@@ -161,6 +184,11 @@ export class Player extends Actor {
                 );
                 this.speedBoost = true;
                 this.jumpBoost = true;
+                if (this.playerNumber === 1) {
+                    Resources.Player1GetsBoosted.play();
+                } else if (this.playerNumber === 2) {
+                    Resources.Player2GetsBoosted.play();
+                }
             } else {
                 // Optioneel: loggen als geen boost
                 // console.log(`Speler ${this.playerNumber} GEEN boost op floor`);
@@ -259,6 +287,37 @@ export class Player extends Actor {
             xspeed = 1;
         }
 
+        // Idle detection
+        if (xspeed === 0 && Math.abs(this.vel.x) < 1) {
+            this.idleTimer += delta;
+            if (this.idleTimer > 20000 && this.idleCooldown <= 0) { // Stand still for twenty seconds
+                // Play random idle sound
+                if (this.playerNumber === 1) {
+                    const idleSounds = [
+                        Resources.PlayerIdle1,
+                        Resources.PlayerIdle2,
+                        Resources.PlayerIdle3,
+                    ];
+                    idleSounds[Math.floor(Math.random() * idleSounds.length)].play();
+                } else if (this.playerNumber === 2) {
+                    const idleSounds = [
+                        Resources.PlayerIdle4,
+                        Resources.PlayerIdle5,
+                        Resources.PlayerIdle6,
+                    ];
+                    idleSounds[Math.floor(Math.random() * idleSounds.length)].play();
+                }
+                this.idleCooldown = 10000; // 10 seconds cooldown for next idle sound
+            }
+        } else {
+            this.idleTimer = 0;
+            this.idleCooldown = 0;
+        }
+
+        if (this.idleCooldown > 0) {
+            this.idleCooldown -= delta;
+        }
+
         // Jump controls
         if (kb.wasPressed(this.controls.up) && this.#onGround) {
             this.jump();
@@ -294,6 +353,8 @@ export class Player extends Actor {
         } else {
             this._pendingCarrierDelta = Vector.Zero;
         }
+        // Save vertical velocity before physics update
+        this.lastYVelocity = this.vel.y;
     }
 
     onPostUpdate(engine, delta) {
