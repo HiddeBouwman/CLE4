@@ -409,6 +409,10 @@ export class Player extends Actor {
                 this.graphics.flipHorizontal = false; // Reset flip when idle
             }
         }
+        // When player is falling (positive y velocity), set onGround to false
+        if (this.vel.y > 100) {
+            this.#onGround = false;
+        }
 
         // Platform carrier functionality
         if (this._carrierPlatform) {
