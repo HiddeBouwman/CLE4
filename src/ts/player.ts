@@ -225,7 +225,7 @@ export class Player extends Actor {
             let jumpPower = this.jumpBoost ? 800 : 600;
             this.vel = new Vector(this.vel.x, -jumpPower);
             this.#onGround = false;
-            Resources.Jump.play();
+            Resources.PlayerJump.play();
         }
     }
 
@@ -305,7 +305,7 @@ export class Player extends Actor {
             this.walkSoundTimer -= delta;
             if (this.walkSoundTimer <= 0) {
                 this.walkSoundTimer = 300;
-                Resources.Walking.play();
+                Resources.PlayerRun.play();
                 console.log("Walking sound started");
             }
         }
