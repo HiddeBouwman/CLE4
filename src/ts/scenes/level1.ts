@@ -14,6 +14,7 @@ import { Portal } from "../objects/portal.ts";
 import { Resources } from "../resources.ts";
 
 export class LevelOne extends Scene {
+    public levelKey = "level1";
     floor: Floor;
     player1: Player;
     player2: Player;

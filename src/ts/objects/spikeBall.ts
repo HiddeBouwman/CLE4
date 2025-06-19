@@ -20,6 +20,7 @@ export class SpikeBall extends Actor {
         this.frameCounter = 0
     }
 
+    //set collision based results depending on the object
     onInitialize(engine: Engine) {
         this.on("collisionstart", (evt) => {
             if (evt.other.owner instanceof Floor) {
@@ -30,12 +31,14 @@ export class SpikeBall extends Actor {
             }
         });
 
+        //reset vertical velocity if it is too low
         if (Math.abs(this.vel.y) < 0.01) {
             this.body.applyLinearImpulse(new Vector(Math.random() * 100 - 50, -9000));
-            // y has (almost) stopped moving
         }
     }
 
+
+    //count frames and kill ball after 5 seconds
     onPostUpdate() {
         this.frameCounter++;
         if (this.frameCounter > 300) {
