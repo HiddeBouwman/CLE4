@@ -20,6 +20,8 @@ import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatf
 import { PressurePlate } from "../objects/pressureplate.ts";
 
 import { Resources } from "../resources.ts";
+import { Fire } from "../objects/fire.ts";
+import { FireWall } from "../objects/fireWall";
 
 export class LevelOne extends Scene {
     public levelKey = "level1";
@@ -70,14 +72,7 @@ export class LevelOne extends Scene {
         const box1 = new Box(6, -21);
         this.add(box1);;
         const box2 = new Box(35, 5);
-        this.add(box2);;
-
-        // traps
-        const trap1 = new SpikeBallTrap(198, 8);
-        this.add(trap1);
-
-        // trap plates
-        this.add(new TrapPlate(190, 310, trap1)); // positionX, positionY, trap
+        this.add(box2);
 
 
         /** 
@@ -138,6 +133,29 @@ export class LevelOne extends Scene {
         this.add(plate3);
 
 
+        /*
+        * Stage Hazards
+        */
+
+        // traps
+        const trap1 = new SpikeBallTrap(198, 8);
+        this.add(trap1);
+
+        // trap plates
+        this.add(new TrapPlate(190, 310, trap1)); // positionX, positionY, trap
+
+
+        // Fire
+        this.add(new Fire(-4, -5)); // place the fire on gridposition (12, -5)
+       
+        // Place a wall of fire from (15, -5) to (20, -5) (Horizontal)
+        this.add(new FireWall(15, -5, 20, -5));
+
+        // Or vertical:
+        this.add(new FireWall(10, 8, 10, 10));
+
+        // Or diagonal:
+        this.add(new FireWall(20, 8, 18, 10));
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
