@@ -28,7 +28,8 @@ export class LevelOne extends Scene {
 
     onInitialize(engine: Engine) {
 
-        Resources.Menu.stop();
+        Resources.gameMusic.play();
+
 
         // Finish
         this.add(new Finish(700, 302));

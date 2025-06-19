@@ -53,8 +53,9 @@ const Resources = {
 
   // Game audio (background music etc.)
   Menu: new Sound("sounds/game/level1.wav"),
-  finishMSG: new Sound("sounds/game/yippeeee.mp3"),
-    FinishMC: new Sound("sounds/game/finish.wav"),
+  finishMSG: new Sound("sounds/player/yippeee.mp3"),
+  FinishMC: new Sound("sounds/objects/finish.wav"),
+  gameMusic: new Sound("sounds/game/gameMusic.mp3"),
 
 
 // Sprites
