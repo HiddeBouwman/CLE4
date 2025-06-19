@@ -1,5 +1,7 @@
 import {
     Actor,
+    Animation,
+    AnimationStrategy,
     BodyComponent,
     CollisionType,
     CompositeCollider,
@@ -8,6 +10,7 @@ import {
     Shape,
     Side,
     Sprite,
+    SpriteSheet,
     Vector,
 } from "excalibur";
 import type { Collider, CollisionContact, Engine } from "excalibur";
@@ -60,6 +63,10 @@ export class Player extends Actor {
     private _lastEngine: Engine | null = null;
     private _lastDelta: number = 16;
 
+    #spriteSheet: SpriteSheet;
+    #idleAnimation: Animation;
+    #walkAnimation: Animation;
+
     constructor(x: number, y: number, playerNumber: number) {
         super(
             {
@@ -81,26 +88,45 @@ export class Player extends Actor {
             ? Controls.player1
             : Controls.player2;
 
-        // Use graphics.
-        const player1Sprite = new Sprite({
+        this.#spriteSheet = SpriteSheet.fromImageSource({
             image: Resources.CharacterSheet,
-            sourceView: {
-                x: 32 * 1,
-                y: 32 * 0,
-                width: 32,
-                height: 32,
+            grid: {
+                rows: 4,
+                columns: 3,
+                spriteWidth: 32,
+                spriteHeight: 32,
             },
         });
-        const player2Sprite = new Sprite({
-            image: Resources.CharacterSheet,
-            sourceView: {
-                x: 32 * 1,
-                y: 32 * 2,
-                width: 32,
-                height: 32,
-            },
-        });
-        this.graphics.use(playerNumber == 1 ? player1Sprite : player2Sprite);
+
+        // Create animations using the sprite sheet - using indices (0-based)
+        let idleFrames: number[];
+        let walkFrames: number[];
+
+        if (playerNumber === 1) {
+            // Repeat frame 0 more often to make it appear longer in the animation
+            idleFrames = [0, 1, 2];
+            walkFrames = [3, 4, 5];
+        } else {
+            idleFrames = [6, 7, 8]; // Repeat frame 6 to emphasize the idle position
+            walkFrames = [9, 10, 11];
+        }
+
+        this.#idleAnimation = Animation.fromSpriteSheet(
+            this.#spriteSheet,
+            idleFrames,
+            300,
+            AnimationStrategy.PingPong,
+        );
+
+        this.#walkAnimation = Animation.fromSpriteSheet(
+            this.#spriteSheet,
+            walkFrames,
+            200,
+            AnimationStrategy.PingPong,
+        );
+
+        // Use idle animation as default
+        this.graphics.use(this.#idleAnimation);
 
         // Init physics
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
@@ -265,6 +291,22 @@ export class Player extends Actor {
             // No input: brake
             this.vel = new Vector(this.vel.x * friction, this.vel.y);
             if (Math.abs(this.vel.x) < 1) this.vel = new Vector(0, this.vel.y);
+        }
+
+        // Switch between animations based on movement
+        if (Math.abs(this.vel.x) > 50) {
+            // If moving, use walk animation
+            if (this.graphics.current !== this.#walkAnimation) {
+                this.graphics.use(this.#walkAnimation);
+            }
+            // when moving right (positive x), do flip
+            this.graphics.flipHorizontal = this.vel.x > 0;
+        } else {
+            // If idle, use idle animation
+            if (this.graphics.current !== this.#idleAnimation) {
+                this.graphics.use(this.#idleAnimation);
+                this.graphics.flipHorizontal = false; // Reset flip when idle
+            }
         }
 
         // Platform carrier functionality
