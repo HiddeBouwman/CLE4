@@ -53,7 +53,8 @@ const Resources = {
 
   // Game audio (background music etc.)
   Menu: new Sound("sounds/game/level1.wav"),
-  finishMSG: new Sound("sounds/game/finishMSG.wav"),
+  finishMSG: new Sound("sounds/game/yippeeee.mp3"),
+    FinishMC: new Sound("sounds/game/finish.wav"),
 
 
 // Sprites
@@ -104,7 +105,6 @@ const Resources = {
 
 
   // Other stage objects
-  Finish: new ImageSource("images/finish.png"),
   Door: new ImageSource("images/door.png"),
 
 
