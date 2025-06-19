@@ -49,6 +49,8 @@ export class Finish extends Actor {
                 console.log("Both players at finish - switching scene!");
                 this.scene.engine.goToScene('menu');
                  Resources.FinishMC.play();
+                 Resources.gameMusic.stop();
+
 
             }
         }
