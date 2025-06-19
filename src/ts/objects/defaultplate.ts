@@ -15,6 +15,10 @@ export class DefaultPlate extends PressurePlate {
             Resources.pressurePlateGreenBase.toSprite(),
         );
         this.targetPlatform = targetPlatform;
+
+        if (this.plateSprite) {
+            this.plateSprite.graphics.use(Resources.PressurePlateGreen.toSprite());
+        }
     }
 
     onInitialize(engine: Engine) {
@@ -26,7 +30,7 @@ export class DefaultPlate extends PressurePlate {
                 // If this is the first object, activate the plate
                 if (this._activeCount === 1) {
                     // Use new method for multi-plate support
-                    Resources.buttonSound.play();
+                    Resources.Button.play();
                     if (typeof this.targetPlatform.registerPressurePlateActivated === "function") {
                         this.targetPlatform.registerPressurePlateActivated();
                     } else {

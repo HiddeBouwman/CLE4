@@ -12,28 +12,32 @@ export class TrapPlate extends PressurePlate {
         super(
             x,
             y,
-            Resources.pressurePlateBase.toSprite(),
+            Resources.pressurePlateOrangeBase.toSprite(), // basis sprite
         );
         this.trap = trap;
-        this.frameCounter = 0
+        this.frameCounter = 0;
+
+        if (this.plateSprite) {
+            this.plateSprite.graphics.use(Resources.PressurePlateOrange.toSprite());
+        }
     }
 
     onInitialize(engine: Engine) {
         this.on("collisionstart", (evt) => {
             if (evt.other.owner instanceof Player) {
-                Resources.buttonSound.play();
+                Resources.Button.play();
                 if (this.frameCounter > 120) {
                     this.trap.activate(engine);
                     this.frameCounter = 0;
                 }
 
-                this.plateSprite.graphics.use(Resources.PressurePlateGreenActivated.toSprite());
+                this.plateSprite.graphics.use(Resources.PressurePlateOrangeActivated.toSprite());
             }
         });
 
         this.on("collisionend", (evt) => {
             if (evt.other.owner instanceof Player) {
-                this.plateSprite.graphics.use(Resources.PressurePlateGreen.toSprite());
+                this.plateSprite.graphics.use(Resources.PressurePlateOrange.toSprite());
             }
         });
     }
