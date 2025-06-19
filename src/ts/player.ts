@@ -310,14 +310,20 @@ export class Player extends Actor {
 
         this.unkill();
         const key = (this.scene as any).levelKey || "level1";
+        Resources.gameMusic.stop();
         engine.goToScene(key);
     }
 
     onPreUpdate(engine: Engine, delta: number) {
-        this._lastEngine = engine;
-        this._lastDelta = delta;
-
         let kb = engine.input.keyboard;
+
+        if (kb.wasPressed(this.controls.reset) && this.scene) {
+            // Stop current music
+            Resources.gameMusic.stop();
+            // Restart current level
+            engine.goToScene('level1');
+        }
+
         let xspeed = 0;
 
         // Movement controls
@@ -408,6 +414,10 @@ export class Player extends Actor {
                 this.graphics.use(this.#idleAnimation);
                 this.graphics.flipHorizontal = false; // Reset flip when idle
             }
+        }
+        // When player is falling (positive y velocity), set onGround to false
+        if (this.vel.y > 100) {
+            this.#onGround = false;
         }
 
         // Platform carrier functionality

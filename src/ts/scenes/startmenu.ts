@@ -39,7 +39,8 @@ export class StartMenu extends Scene {
 
         //register clicks on label
         button_level1.on('pointerup', () => {
-            engine.goToScene('level3');
+            engine.goToScene('level1');
+            Resources.FinishMC.stop();
         });
         this.add(button_level1);
     }
