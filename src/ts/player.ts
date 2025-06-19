@@ -17,6 +17,7 @@ import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
 import { MovingPlatform } from "./objects/MovingPlatform.ts";
+import { TwoPlatePlatform } from "./objects/twoPlatePlatform.ts";
 import { isBoostPlatformForPlayer, PlatformType } from "./objects/platform.ts";
 import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
@@ -222,9 +223,9 @@ export class Player extends Actor {
         }
         if (
             other.owner.get(BodyComponent)?.collisionType ===
-                CollisionType.Fixed ||
+            CollisionType.Fixed ||
             other.owner.get(BodyComponent)?.collisionType ===
-                CollisionType.Active
+            CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
                 // Landing sound with hard landing
@@ -248,9 +249,11 @@ export class Player extends Actor {
             }
         }
         // Boost on platform
-        if (other.owner instanceof MovingPlatform) {
+        if (other.owner instanceof MovingPlatform || other.owner instanceof TwoPlatePlatform) {
             // Detect if player is on a platform
             if (side === Side.Bottom) {
+                //
+                // @ts-expect-error: Type 'MovingPlatform | TwoPlatePlatform' is not assignable to type 'MovingPlatform | null'.
                 this._carrierPlatform = other.owner;
             }
             if (isBoostPlatformForPlayer(other.owner, this.playerNumber)) {

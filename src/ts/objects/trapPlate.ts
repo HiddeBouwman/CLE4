@@ -28,19 +28,21 @@ export class TrapPlate extends PressurePlate {
         this.on("collisionstart", (evt) => {
             if ((evt.contact?.colliderB as any)?.activator) {
                 Resources.Button.play();
-                if (this.frameCounter > 120) {
-                    this.trap.activate(engine);
-                    this.frameCounter = 0;
+                if (evt.other.owner instanceof Player ||
+                    evt.other.owner instanceof Box) {
+                    if (this.frameCounter > 120) {
+                        this.trap.activate(engine);
+                        this.frameCounter = 0;
+                    }
+                    this.plateSprite.graphics.use(Resources.PressurePlateOrangeActivated.toSprite());
                 }
-                this.plateSprite.graphics.use(Resources.PressurePlateOrangeActivated.toSprite());
             }
         });
 
         this.on("collisionend", (evt) => {
             if (
                 evt.other.owner instanceof Player ||
-                evt.other.owner instanceof Box ||
-                evt.other.owner instanceof SpikeBall
+                evt.other.owner instanceof Box
             ) {
                 this.plateSprite.graphics.use(Resources.PressurePlateOrange.toSprite());
             }
