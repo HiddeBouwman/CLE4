@@ -102,9 +102,9 @@ export class LevelOne extends Scene {
             186, 60, new Vector(0.5, 0.5),
             new Vector(544, -50),
             new Vector(928, -50),
-            192,
-            0,
-            [],
+            192, // speed
+            0, // pauseDuration
+            [], // boostForPlayers
             new Vector(2, 2)
         );
         this.add(platePlatform);

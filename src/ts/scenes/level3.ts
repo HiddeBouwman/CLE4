@@ -9,10 +9,11 @@ import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
-import { Platform, PlatformType, MovementMode } from "../objects/platform.ts";
+import { Platform, PlatformType } from "../objects/platform.ts";
 import { Portal } from "../objects/portal.ts";
 import { Resources } from "../resources.ts";
-import { MovingPlatform } from "../objects/MovingPlatform.ts";
+import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
+import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
 
 export class LevelThree extends Scene {
     public levelKey = "level3";
@@ -53,14 +54,13 @@ export class LevelThree extends Scene {
         this.add(new Floor(82, 1, 5, 4));
 
         //special platforms
-        const alwaysPlatform = new MovingPlatform(
+        const alwaysPlatform = new AlwaysMovingPlatform(
             160, 100, 100, 20, // spawnposX, spawnposY, width (unused), height (unused) 
             PlatformType.PurpleYellowPlatform, // what type of sprite gets rendered, but that doesn't really matter
             186, 30, new Vector(0.5, 0.5), // width, height, offset
             new Vector(160, 100), // start
             new Vector(950, 100), // end, this means you can do diagonal movement as well.
             96, // movement speed
-            MovementMode.Always, // Movement mode is either [Always], [PressurePlate], or [PressurePlateReturn].
             2000, // Pause for 2 seconds at each end
             [1, 2], // Player 1 and 2 both get a boost on this platform. This is either set to [], [1], [2], or [1, 2].
             new Vector(2, 2) // Makes the sprite have twice the width, and twice the height.
@@ -68,14 +68,13 @@ export class LevelThree extends Scene {
         this.add(alwaysPlatform);
 
 
-        const platePlatform = new MovingPlatform(
+        const platePlatform = new PressurePlatePlatform(
             1250, 200, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
             new Vector(1250, 300),
             new Vector(1250, -200),
             192,
-            MovementMode.PressurePlate, // Needs a pressure plate to make it move
             0,
             [],
             new Vector(2, 2)
@@ -83,8 +82,13 @@ export class LevelThree extends Scene {
         this.add(platePlatform);
 
         // In case it needs a pressure plate to move:
-        const plate1 = new DefaultPlate(960, 180, platePlatform); // positionX, positionY, name platform.
-        const plate2 = new DefaultPlate(1550, -100, platePlatform); // positionX, positionY, name platform.
+        // You need to pass a Box as the fourth argument. Replace 'null' with the actual Box if needed.
+        const boxForPlate1 = new Box(970, 180);
+        const boxForPlate2 = new Box(1560, -100);
+        this.add(boxForPlate1);
+        this.add(boxForPlate2);
+        const plate1 = new DefaultPlate(960, 180, platePlatform, boxForPlate1); // positionX, positionY, platform, targetBox
+        const plate2 = new DefaultPlate(1550, -100, platePlatform, boxForPlate2); // positionX, positionY, platform, targetBox
         this.add(plate1);
         this.add(plate2)
 
@@ -109,10 +113,10 @@ export class LevelThree extends Scene {
         const deathY = 1000; // Pas deze waarde aan naar wens
 
         if (this.player1.pos.y > deathY) {
-            Resources.deathSound1.play();
+            Resources.PlayerDeathSound1.play();
             engine.goToScene("level1");
         } else if (this.player2.pos.y > deathY) {
-            Resources.deathSound2.play();
+            Resources.PlayerDeathSound3.play();
             engine.goToScene("level1");
         }
     }

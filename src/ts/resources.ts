@@ -61,7 +61,7 @@ const Resources = {
 
 // Sprites
   // Player
-  CharacterSheet: new ImageSource("images/character.png"),
+  CharacterSheet: new ImageSource("images/Character.png"),
 
   // Floor
   Floor: new ImageSource("images/ground.png"),
