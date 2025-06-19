@@ -5,14 +5,18 @@ import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
 import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
+import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform, PlatformType, MovementMode } from "../objects/platform.ts";
 import { Portal } from "../objects/portal.ts";
+import { Block } from "../objects/block.ts";
+
 import { Resources } from "../resources.ts";
 
 export class LevelOne extends Scene {
+    public levelKey = "level1";
     floor: Floor;
     player1: Player;
     player2: Player;
@@ -23,8 +27,6 @@ export class LevelOne extends Scene {
     }
 
     onInitialize(engine: Engine) {
-
-        Resources.Menu.stop();
 
         // Finish
         this.add(new Finish(700, 302));
@@ -37,27 +39,34 @@ export class LevelOne extends Scene {
         this.add(this.player2);
 
         // Parameters: x, y, width, height
-        
+
         // walls
         this.add(new Floor(-34, 0, 12, 30));
         this.add(new Floor(58, 0, 12, 30));
-        
+
         // floor
         this.add(new Floor(0, 40, 30, 30));
         this.add(new Floor(56, 40, 20, 30, [1, 2])); // the numbers [1, 2] are for boosting. Can either be left out, [1], [2], or [1, 2]
-        
+
         // ground platforms
         this.add(new Floor(-15, -2, 4, 2));
         this.add(new Floor(8, -2, 6, 2));
         this.add(new Floor(35, -2, 3, 2));
         this.add(new Floor(35, -14, 3, 2));
+        this.add(new Block(-300, -250, 5000));
+        this.add(new Block(-250, -400, 8000));
+        // this.add(new Block(-300, 300, 2000));
 
-        
+
 
         this.add(new Box(192, -648));
 
-        // trap
-        this.add(new SpikeBallTrap(192, 108));
+        // traps
+        const trap1 = new SpikeBallTrap(198, 8);
+        this.add(trap1);
+
+        // trap plates
+        this.add(new TrapPlate(190, 310, trap1)); // positionX, positionY, trap
 
 
         /** 
@@ -99,7 +108,7 @@ export class LevelOne extends Scene {
         this.add(plate1);
 
 
-        
+
         const returnPlatform = new Platform(
             1344, -48, 100, 20,
             PlatformType.DefaultPlatform,
@@ -127,12 +136,15 @@ export class LevelOne extends Scene {
     onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
         this.parallax.update();
-        // --- Death zone check ---
-    const deathY = 1000; // Pas deze waarde aan naar wens
+        console.log("update.")
 
-    if (this.player1.pos.y > deathY) {
-        Resources.deathSound1.play();
-        engine.goToScene("level1");
+        
+        // --- Death zone check ---
+        const deathY = 1000; // Pas deze waarde aan naar wens
+
+        if (this.player1.pos.y > deathY) {
+            Resources.deathSound1.play();
+            engine.goToScene("level1");
         } else if (this.player2.pos.y > deathY) {
             Resources.deathSound2.play();
             engine.goToScene("level1");
@@ -141,6 +153,8 @@ export class LevelOne extends Scene {
 
     onActivate() {
         console.log("level 1 loaded");
+        Resources.gameMusic.loop = true;
+        Resources.gameMusic.play();
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {

@@ -22,13 +22,17 @@ import {
     PlatformType,
 } from "./objects/platform.ts";
 import { Box } from "./objects/box.ts";
+import { Block } from "./objects/block.ts";
+
 import { Floor, isBoostFloorForPlayer } from "./floor.ts";
+import { SpikeBall } from "./objects/spikeBall.ts";
 
 type PlayerControls = {
     left: Keys;
     right: Keys;
     up: Keys;
     down: Keys;
+    reset: Keys;
 };
 
 export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
@@ -37,12 +41,15 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         right: Keys.D,
         up: Keys.W,
         down: Keys.S,
+        reset: Keys.R
     },
     player2: {
         left: Keys.Left,
         right: Keys.Right,
         up: Keys.Up,
         down: Keys.Down,
+        reset: Keys.R
+
     },
 };
 
@@ -67,6 +74,9 @@ export class Player extends Actor {
     #idleAnimation: Animation;
     #walkAnimation: Animation;
 
+    private initialX: number;
+    private initialY: number;
+
     constructor(x: number, y: number, playerNumber: number) {
         super(
             {
@@ -82,6 +92,10 @@ export class Player extends Actor {
         //important requirements for a Actor
         this.scale = new Vector(2, 2);
         this.pos = new Vector(x, y);
+
+        //Store initial position
+        this.initialX = x;
+        this.initialY = y;
 
         //Init player controls
         this.controls = playerNumber === 1
@@ -141,6 +155,11 @@ export class Player extends Actor {
         contact: CollisionContact,
     ): void {
         const otherBody = other.owner.get(BodyComponent);
+        if (other.owner instanceof SpikeBall) {
+            //if player die reset level
+            this.die(this.scene!.engine);
+            console.log(`Player ${this.playerNumber} died to a spike ball!`);
+        }
         if (
             otherBody?.collisionType === CollisionType.Fixed ||
             otherBody?.collisionType === CollisionType.Active
@@ -170,6 +189,11 @@ export class Player extends Actor {
             }
         }
         if (other.owner instanceof Box && side === Side.Bottom) {
+            this.vel = new Vector(this.vel.x, 0); // Stop val
+            this.#onGround = true;
+        }
+
+        if (other.owner instanceof Block && side === Side.Bottom) {
             this.vel = new Vector(this.vel.x, 0); // Stop val
             this.#onGround = true;
         }
@@ -245,11 +269,26 @@ export class Player extends Actor {
             let jumpPower = this.jumpBoost ? 800 : 600;
             this.vel = new Vector(this.vel.x, -jumpPower);
             this.#onGround = false;
-            Resources.Jump.play();
+            Resources.PlayerJump.play();
         }
     }
 
-    onPreUpdate(engine, delta) {
+    //player handles death and level reset
+    die(engine: Engine) {
+        this.kill();
+        this.scene!.actors.forEach(actor => {
+            if (actor instanceof SpikeBall) {
+                actor.kill();
+            }
+        });
+
+
+        this.unkill();
+        const key = (this.scene as any).levelKey || "level1";
+        engine.goToScene(key);
+    }
+
+    onPreUpdate(engine: Engine, delta: number) {
         this._lastEngine = engine;
         this._lastDelta = delta;
 
@@ -267,6 +306,11 @@ export class Player extends Actor {
         // Jump controls
         if (kb.wasPressed(this.controls.up) && this.#onGround) {
             this.jump();
+        }
+
+        // Reset action.
+        if (kb.wasPressed(this.controls.reset)) {
+            this.resetPosition();
         }
 
         // Acceleration
@@ -316,6 +360,7 @@ export class Player extends Actor {
             this._pendingCarrierDelta = Vector.Zero;
         }
     }
+    
 
     onPostUpdate(engine, delta) {
         // Apply delta AFTER physics
@@ -326,9 +371,15 @@ export class Player extends Actor {
             this.walkSoundTimer -= delta;
             if (this.walkSoundTimer <= 0) {
                 this.walkSoundTimer = 300;
-                Resources.Walking.play();
+                Resources.PlayerRun.play();
                 console.log("Walking sound started");
             }
+        }
+    }
+
+    private resetPosition(): void {
+        if (this._lastEngine) {
+            this._lastEngine.goToScene('level1');
         }
     }
 }
