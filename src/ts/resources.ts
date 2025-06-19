@@ -52,7 +52,6 @@ const Resources = {
   // Push: new Sound("sounds/push.mp3"),
   // Teleport: new Sound("sounds/teleport.mp3"),
 
-
   // Game audio (background music etc.)
   Menu: new Sound("sounds/game/level1.wav"),
   finishMSG: new Sound("sounds/player/yippeee.mp3"),
@@ -62,20 +61,16 @@ const Resources = {
 
 // Sprites
   // Player
-  CharacterSheet: new ImageSource("images/Character.png"),
-
+  CharacterSheet: new ImageSource("images/character.png"),
 
   // Floor
   Floor: new ImageSource("images/ground.png"),
 
-
   // Box
   Box: new ImageSource("images/box.png"),
 
-
   // Block
   Block: new ImageSource("images/block.png"),
-
 
   // Pressure plate
   pressurePlateGreenBase: new ImageSource("images/objects/pressure-plate/pressure-plate-green/pressure-plate-green-base.png"),
@@ -90,22 +85,18 @@ const Resources = {
   PressurePlateWeigted: new ImageSource("images/objects/pressure-plate/pressure-plate-weighted/pressure-plate-weighted.png"),
   PressurePlateWeigtedActivated: new ImageSource("images/objects/pressure-plate/pressure-plate-weighted/pressure-plate-weighted-activated.png"),
 
-
   // Platform
   DefaultPlatform: new ImageSource("images/objects/moving-platform/default-platform.png"),
   PurplePlatform: new ImageSource("images/objects/moving-platform/purple-platforms/purple-platform.png"),
   YellowPlatform: new ImageSource("images/objects/moving-platform/yellow-platforms/yellow-platform.png"),
   PurpleYellowPlatform: new ImageSource("images/objects/moving-platform/purple-yellow-platform.png"),
 
-
   // Teleport
   Portal: new ImageSource("images/portal.png"),
-
 
   // Spikes
   SpikeTrap: new ImageSource("images/spikeBallTrap.webp"),
   SpikeBall: new ImageSource("images/spikeBall.png"),
-
 
   // Other stage objects
   Door: new ImageSource("images/door.png"),

@@ -9,10 +9,12 @@ import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
-import { PlatformType } from "../objects/platform.ts";
+import { PlatformType } from "../objects/platform.ts"; 
+import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
 import { Portal } from "../objects/portal.ts";
 import { Block } from "../objects/block.ts";
 import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
+
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
 import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
 
@@ -62,7 +64,10 @@ export class LevelOne extends Scene {
 
 
 
-        this.add(new Box(192, -648));
+        const box1 = new Box(192, -648);
+        this.add(box1);;
+        const box2 = new Box(1100, -142);
+        this.add(box2);;
 
         // traps
         const trap1 = new SpikeBallTrap(198, 8);
@@ -91,7 +96,7 @@ export class LevelOne extends Scene {
 
 
 
-        const platePlatform = new PressurePlatePlatform(
+        const platePlatform = new TwoPlatePlatform(
             544, -50, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
@@ -103,8 +108,12 @@ export class LevelOne extends Scene {
             new Vector(2, 2)
         );
         this.add(platePlatform);
-        const plate1 = new DefaultPlate(256, -138, platePlatform);
+
+        // In case it needs a pressure plate to move:
+        const plate1 = new DefaultPlate(256, -138, platePlatform, box1);
         this.add(plate1);
+        const plate = new DefaultPlate(330, -130, platePlatform, box1); // positionX, positionY, name platform.
+        this.add(plate);
 
 
 
@@ -119,9 +128,9 @@ export class LevelOne extends Scene {
             new Vector(2, 2)
         );
         this.add(returnPlatform);
-        const plate2 = new DefaultPlate(1120, -142, returnPlatform);
+        const plate2 = new DefaultPlate(1120, -142, returnPlatform, box2);
         this.add(plate2);
-        const plate3 = new DefaultPlate(1120, -526, returnPlatform);
+        const plate3 = new DefaultPlate(1120, -526, returnPlatform, box2);
         this.add(plate3);
 
 
@@ -133,9 +142,8 @@ export class LevelOne extends Scene {
     onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
         this.parallax.update();
-        console.log("update.")
 
-        
+
         // --- Death zone check ---
         const deathY = 1000; // Pas deze waarde aan naar wens
 
@@ -159,6 +167,8 @@ export class LevelOne extends Scene {
             console.log("Pls");
             this.player1.pos = new Vector(-512, 648);
             this.player2.pos = new Vector(-448, 648);
+            Resources.finishMSG.stop();
+
         }
     }
 }
