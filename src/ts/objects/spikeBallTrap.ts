@@ -1,6 +1,6 @@
 import { Actor, CollisionType, Vector, Engine } from "excalibur";
 import { Resources } from "../resources.ts";
-import { Player } from "../player.ts";
+import { SpikeBall } from "./spikeBall.ts";
 
 export class SpikeBallTrap extends Actor {
     constructor(x, y) {
@@ -17,7 +17,14 @@ export class SpikeBallTrap extends Actor {
         this.addTag("ground");
     }
 
-    onInitialize(engine: Engine) {
-        
+
+    //create 3 spike balls right under trap
+    activate(engine: Engine) {
+        console.log("Spike balls dropped from the trap:");
+        for (let i = 0; i < 3; i++) {
+            const spikeBall = new SpikeBall(this.pos.x + i * 40 - 40, this.pos.y + 60); 
+            engine.add(spikeBall);
+        }
     }
+
 }

@@ -6,11 +6,22 @@ import { Box } from "./box";
 import { Engine } from "excalibur";
 
 export class DefaultPlate extends PressurePlate {
+    protected targetPlatform: IMovablePlatform;
+
     constructor(x: number, y: number, targetPlatform: IMovablePlatform) {
-        super(x, y, targetPlatform);
+        super(
+            x,
+            y,
+            Resources.pressurePlateGreenBase.toSprite(),
+        );
+        this.targetPlatform = targetPlatform;
+
+        if (this.plateSprite) {
+            this.plateSprite.graphics.use(Resources.PressurePlateGreen.toSprite());
+        }
     }
 
-     onInitialize(engine) {
+    onInitialize(engine: Engine) {
         // When something starts colliding with the plate
         this.on("collisionstart", (evt) => {
             const other = evt.other.owner;
@@ -19,7 +30,7 @@ export class DefaultPlate extends PressurePlate {
                 // If this is the first object, activate the plate
                 if (this._activeCount === 1) {
                     // Use new method for multi-plate support
-                    Resources.buttonSound.play();
+                    Resources.Button.play();
                     if (typeof this.targetPlatform.registerPressurePlateActivated === "function") {
                         this.targetPlatform.registerPressurePlateActivated();
                     } else {

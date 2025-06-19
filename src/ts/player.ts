@@ -1,10 +1,26 @@
-import { Actor, BodyComponent, CollisionType, CompositeCollider, DegreeOfFreedom, Keys, Shape, Side, Vector } from "excalibur";
+import {
+    Actor,
+    BodyComponent,
+    CollisionType,
+    CompositeCollider,
+    DegreeOfFreedom,
+    Keys,
+    Shape,
+    Side,
+    Sprite,
+    Vector,
+} from "excalibur";
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
-import { Platform, PlatformType, isBoostPlatformForPlayer } from "./objects/platform.ts";
-import { Box } from "./objects/box.ts"
+import {
+    isBoostPlatformForPlayer,
+    Platform,
+    PlatformType,
+} from "./objects/platform.ts";
+import { Box } from "./objects/box.ts";
 import { Floor, isBoostFloorForPlayer } from "./floor.ts";
+import { SpikeBall } from "./objects/spikeBall.ts";
 
 type PlayerControls = {
     left: Keys;
@@ -36,15 +52,14 @@ export class Player extends Actor {
     playerNumber: number;
     walkSoundTimer: number = 0;
     #capsule = new CompositeCollider([
-        Shape.Circle(10, new Vector(0, -20)),
-        Shape.Box(40, 40),
-        Shape.Circle(10, new Vector(0, 20)),
+        Shape.Circle(8, new Vector(0, -5)),
+        Shape.Box(15, 15),
+        Shape.Circle(8, new Vector(0, 7)),
     ]);
     private _carrierPlatform: Platform | null = null; // Assigns player to a platform (in order to "stick to it")
     private _pendingCarrierDelta: Vector = Vector.Zero;
     private _lastEngine: Engine | null = null;
     private _lastDelta: number = 16;
-
 
     constructor(x: number, y: number, playerNumber: number) {
         super(
@@ -59,7 +74,7 @@ export class Player extends Actor {
         this.playerNumber = playerNumber;
 
         //important requirements for a Actor
-        this.scale = new Vector(0.5, 0.5);
+        this.scale = new Vector(2, 2);
         this.pos = new Vector(x, y);
 
         //Init player controls
@@ -68,12 +83,30 @@ export class Player extends Actor {
             : Controls.player2;
 
         // Use graphics.
-        this.graphics.use(Resources.Fish.toSprite());
+        const player1Sprite = new Sprite({
+            image: Resources.CharacterSheet,
+            sourceView: {
+                x: 32 * 1,
+                y: 32 * 0,
+                width: 32,
+                height: 32,
+            },
+        });
+        const player2Sprite = new Sprite({
+            image: Resources.CharacterSheet,
+            sourceView: {
+                x: 32 * 1,
+                y: 32 * 2,
+                width: 32,
+                height: 32,
+            },
+        });
+        this.graphics.use(playerNumber == 1 ? player1Sprite : player2Sprite);
 
         // Init physics
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
-        this.collider.set(this.#capsule)
+        this.collider.set(this.#capsule);
     }
 
     onCollisionStart(
@@ -83,6 +116,11 @@ export class Player extends Actor {
         contact: CollisionContact,
     ): void {
         const otherBody = other.owner.get(BodyComponent);
+        if (other.owner instanceof SpikeBall) {
+            //if player die reset level
+            this.die(this.scene!.engine);
+            console.log(`Player ${this.playerNumber} died to a spike ball!`);
+        }
         if (
             otherBody?.collisionType === CollisionType.Fixed ||
             otherBody?.collisionType === CollisionType.Active
@@ -100,14 +138,14 @@ export class Player extends Actor {
             if (isBoostPlatformForPlayer(other.owner, this.playerNumber)) {
                 console.log(
                     `Speler ${this.playerNumber} krijgt BOOST op platformtype:`,
-                    PlatformType[other.owner.platformType]
+                    PlatformType[other.owner.platformType],
                 );
                 this.speedBoost = true;
                 this.jumpBoost = true;
             } else {
                 console.log(
                     `Speler ${this.playerNumber} GEEN boost op platformtype:`,
-                    PlatformType[other.owner.platformType]
+                    PlatformType[other.owner.platformType],
                 );
             }
         }
@@ -119,7 +157,7 @@ export class Player extends Actor {
         if (other.owner instanceof Floor) {
             if (isBoostFloorForPlayer(other.owner, this.playerNumber)) {
                 console.log(
-                    `Speler ${this.playerNumber} krijgt BOOST op floor`
+                    `Speler ${this.playerNumber} krijgt BOOST op floor`,
                 );
                 this.speedBoost = true;
                 this.jumpBoost = true;
@@ -144,9 +182,14 @@ export class Player extends Actor {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
                 this.#onGround = false;
                 // Carry on platform momentum
-                if (other.owner instanceof Platform && this._carrierPlatform === other.owner && this._lastDelta > 0) {
+                if (
+                    other.owner instanceof Platform &&
+                    this._carrierPlatform === other.owner && this._lastDelta > 0
+                ) {
                     // velocity = deltaPos / (deltaTime in seconds)
-                    const platformVelocity = other.owner.currentDelta.scale(1000 / this._lastDelta);
+                    const platformVelocity = other.owner.currentDelta.scale(
+                        1000 / this._lastDelta,
+                    );
                     this.vel = this.vel.add(platformVelocity);
                 }
             }
@@ -160,7 +203,7 @@ export class Player extends Actor {
             if (isBoostPlatformForPlayer(other.owner, this.playerNumber)) {
                 console.log(
                     `Speler ${this.playerNumber} verliest BOOST op platformtype:`,
-                    PlatformType[other.owner.platformType]
+                    PlatformType[other.owner.platformType],
                 );
                 this.speedBoost = false;
                 this.jumpBoost = false;
@@ -169,7 +212,7 @@ export class Player extends Actor {
         if (other.owner instanceof Floor) {
             if (isBoostFloorForPlayer(other.owner, this.playerNumber)) {
                 console.log(
-                    `Speler ${this.playerNumber} verliest BOOST op floor`
+                    `Speler ${this.playerNumber} verliest BOOST op floor`,
                 );
                 this.speedBoost = false;
                 this.jumpBoost = false;
@@ -182,8 +225,23 @@ export class Player extends Actor {
             let jumpPower = this.jumpBoost ? 800 : 600;
             this.vel = new Vector(this.vel.x, -jumpPower);
             this.#onGround = false;
-            Resources.Jump.play();
+            Resources.PlayerJump.play();
         }
+    }
+
+    //player handles death and level reset
+    die(engine: Engine) {
+        this.kill();
+        this.scene!.actors.forEach(actor => {
+            if (actor instanceof SpikeBall) {
+                actor.kill();
+            }
+        });
+
+
+        this.unkill();
+        const key = (this.scene as any).levelKey || "level1";
+        engine.goToScene(key);
     }
 
     onPreUpdate(engine, delta) {
@@ -216,10 +274,13 @@ export class Player extends Actor {
             this.vel = new Vector(
                 // v = v + a * t * direction, but clamp to maxSpeed
                 Math.max(
-                    Math.min(this.vel.x + xspeed * acceleration * (delta / 1000), maxSpeed),
-                    -maxSpeed
+                    Math.min(
+                        this.vel.x + xspeed * acceleration * (delta / 1000),
+                        maxSpeed,
+                    ),
+                    -maxSpeed,
                 ),
-                this.vel.y
+                this.vel.y,
             );
         } else {
             // No input: brake
@@ -241,10 +302,10 @@ export class Player extends Actor {
             this.pos = this.pos.add(this._pendingCarrierDelta);
         }
         if (this.#onGround && Math.abs(this.vel.x) > 0.1) {
-           this.walkSoundTimer -= delta;
+            this.walkSoundTimer -= delta;
             if (this.walkSoundTimer <= 0) {
                 this.walkSoundTimer = 300;
-                Resources.Walking.play();
+                Resources.PlayerRun.play();
                 console.log("Walking sound started");
             }
         }
