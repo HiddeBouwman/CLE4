@@ -9,7 +9,8 @@ import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
-import { Platform, PlatformType, MovementMode } from "../objects/platform.ts";
+import { MovementMode, PlatformType } from "../objects/platform.ts";
+import { MovingPlatform } from "../objects/MovingPlatform.ts";
 import { Portal } from "../objects/portal.ts";
 import { Block } from "../objects/block.ts";
 
@@ -75,7 +76,7 @@ export class LevelOne extends Scene {
          * Platforms
          */
 
-        const alwaysPlatform = new Platform(
+        const alwaysPlatform = new MovingPlatform(
             -250, -50, 100, 20, // spawnposX, spawnposY, width (unused), height (unused) 
             PlatformType.PurpleYellowPlatform, // what type of sprite gets rendered, but that doesn't really matter
             186, 60, new Vector(0.5, 0.5), // width, height, offset
@@ -91,7 +92,7 @@ export class LevelOne extends Scene {
 
 
 
-        const platePlatform = new Platform(
+        const platePlatform = new MovingPlatform(
             544, -50, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
@@ -111,7 +112,7 @@ export class LevelOne extends Scene {
 
 
 
-        const returnPlatform = new Platform(
+        const returnPlatform = new MovingPlatform(
             1344, -48, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),

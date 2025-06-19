@@ -13,11 +13,8 @@ import {
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
-import {
-    isBoostPlatformForPlayer,
-    Platform,
-    PlatformType,
-} from "./objects/platform.ts";
+import { MovingPlatform } from "./objects/MovingPlatform.ts";
+import { PlatformType, isBoostPlatformForPlayer } from "./objects/platform.ts";
 import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
 
@@ -62,7 +59,7 @@ export class Player extends Actor {
         Shape.Box(15, 15),
         Shape.Circle(8, new Vector(0, 7)),
     ]);
-    private _carrierPlatform: Platform | null = null; // Assigns player to a platform (in order to "stick to it")
+    private _carrierPlatform: MovingPlatform | null = null; // Assigns player to a platform (in order to "stick to it")
     private _pendingCarrierDelta: Vector = Vector.Zero;
     private _lastEngine: Engine | null = null;
     private _lastDelta: number = 16;
@@ -143,7 +140,7 @@ export class Player extends Actor {
             }
         }
         // Boost on platform
-        if (other.owner instanceof Platform) {
+        if (other.owner instanceof MovingPlatform) {
             // Detect if player is on a platform
             if (side === Side.Bottom) {
                 this._carrierPlatform = other.owner;
@@ -201,7 +198,7 @@ export class Player extends Actor {
                 this.#onGround = false;
                 // Carry on platform momentum
                 if (
-                    other.owner instanceof Platform &&
+                    other.owner instanceof MovingPlatform &&
                     this._carrierPlatform === other.owner && this._lastDelta > 0
                 ) {
                     // velocity = deltaPos / (deltaTime in seconds)
@@ -213,7 +210,7 @@ export class Player extends Actor {
             }
         }
         // reset boost
-        if (other.owner instanceof Platform) {
+        if (other.owner instanceof MovingPlatform) {
             // If player leaves platform, unlink carrier
             if (this._carrierPlatform === other.owner) {
                 this._carrierPlatform = null;
@@ -273,6 +270,7 @@ export class Player extends Actor {
         if (kb.isHeld(this.controls.left)) {
             xspeed = -1;
         }
+
         if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
         }
