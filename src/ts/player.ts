@@ -310,6 +310,7 @@ export class Player extends Actor {
 
         this.unkill();
         const key = (this.scene as any).levelKey || "level1";
+        Resources.gameMusic.stop();
         engine.goToScene(key);
     }
 
