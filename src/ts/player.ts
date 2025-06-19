@@ -17,7 +17,7 @@ import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
 import { MovingPlatform } from "./objects/MovingPlatform.ts";
-import { PlatformType, isBoostPlatformForPlayer } from "./objects/platform.ts";
+import { isBoostPlatformForPlayer, PlatformType } from "./objects/platform.ts";
 import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
 
@@ -38,15 +38,14 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         right: Keys.D,
         up: Keys.W,
         down: Keys.S,
-        reset: Keys.R
+        reset: Keys.R,
     },
     player2: {
         left: Keys.Left,
         right: Keys.Right,
         up: Keys.Up,
         down: Keys.Down,
-        reset: Keys.R
-
+        reset: Keys.R,
     },
 };
 
@@ -118,20 +117,80 @@ export class Player extends Actor {
         let walkFrames: number[];
 
         if (playerNumber === 1) {
-            // Repeat frame 0 more often to make it appear longer in the animation
-            idleFrames = [0, 1, 2];
+            const sprite0 = new Sprite({
+                image: Resources.CharacterSheet,
+                sourceView: {
+                    x: 32 * 0,
+                    y: 0,
+                    width: 32,
+                    height: 32,
+                },
+            });
+            const sprite1 = new Sprite({
+                image: Resources.CharacterSheet,
+                sourceView: {
+                    x: 32 * 1,
+                    y: 0,
+                    width: 32,
+                    height: 32,
+                },
+            });
+            const sprite2 = new Sprite({
+                image: Resources.CharacterSheet,
+                sourceView: {
+                    x: 32 * 2,
+                    y: 0,
+                    width: 32,
+                    height: 32,
+                },
+            });
+            this.#idleAnimation = new Animation({
+                frames: [
+                    { graphic: sprite0, duration: 2010 },
+                    { graphic: sprite1, duration: 100 },
+                    { graphic: sprite2, duration: 100 },
+                ],
+                strategy: AnimationStrategy.PingPong,
+            });
             walkFrames = [3, 4, 5];
         } else {
-            idleFrames = [6, 7, 8]; // Repeat frame 6 to emphasize the idle position
+            const sprite0 = new Sprite({
+                image: Resources.CharacterSheet,
+                sourceView: {
+                    x: 32 * 0,
+                    y: 32 * 2,
+                    width: 32,
+                    height: 32,
+                },
+            });
+            const sprite1 = new Sprite({
+                image: Resources.CharacterSheet,
+                sourceView: {
+                    x: 32 * 1,
+                    y: 32 * 2,
+                    width: 32,
+                    height: 32,
+                },
+            });
+            const sprite2 = new Sprite({
+                image: Resources.CharacterSheet,
+                sourceView: {
+                    x: 32 * 2,
+                    y: 32 * 2,
+                    width: 32,
+                    height: 32,
+                },
+            });
+            this.#idleAnimation = new Animation({
+                frames: [
+                    { graphic: sprite0, duration: 2000 },
+                    { graphic: sprite1, duration: 100 },
+                    { graphic: sprite2, duration: 100 },
+                ],
+                strategy: AnimationStrategy.PingPong,
+            });
             walkFrames = [9, 10, 11];
         }
-
-        this.#idleAnimation = Animation.fromSpriteSheet(
-            this.#spriteSheet,
-            idleFrames,
-            300,
-            AnimationStrategy.PingPong,
-        );
 
         this.#walkAnimation = Animation.fromSpriteSheet(
             this.#spriteSheet,
@@ -162,8 +221,10 @@ export class Player extends Actor {
             console.log(`Player ${this.playerNumber} died to a spike ball!`);
         }
         if (
-            other.owner.get(BodyComponent)?.collisionType === CollisionType.Fixed ||
-            other.owner.get(BodyComponent)?.collisionType === CollisionType.Active
+            other.owner.get(BodyComponent)?.collisionType ===
+                CollisionType.Fixed ||
+            other.owner.get(BodyComponent)?.collisionType ===
+                CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
                 // Landing sound with hard landing
@@ -172,13 +233,16 @@ export class Player extends Actor {
                         Resources.PlayerLand1,
                         Resources.PlayerLand2,
                     ];
-                    landSounds[Math.floor(Math.random() * landSounds.length)].play();
+                    landSounds[Math.floor(Math.random() * landSounds.length)]
+                        .play();
                 } else if (this.lastYVelocity <= 750) {
                     const softLandSounds = [
                         Resources.PlayerLandSoft1,
                         Resources.PlayerLandSoft2,
-                    ]
-                    softLandSounds[Math.floor(Math.random() * softLandSounds.length)].play();
+                    ];
+                    softLandSounds[
+                        Math.floor(Math.random() * softLandSounds.length)
+                    ].play();
                 }
                 this.#onGround = true;
             }
@@ -301,12 +365,11 @@ export class Player extends Actor {
     //player handles death and level reset
     die(engine: Engine) {
         this.kill();
-        this.scene!.actors.forEach(actor => {
+        this.scene!.actors.forEach((actor) => {
             if (actor instanceof SpikeBall) {
                 actor.kill();
             }
         });
-
 
         this.unkill();
         const key = (this.scene as any).levelKey || "level1";
@@ -346,14 +409,16 @@ export class Player extends Actor {
                         Resources.PlayerIdle2,
                         Resources.PlayerIdle3,
                     ];
-                    idleSounds[Math.floor(Math.random() * idleSounds.length)].play();
+                    idleSounds[Math.floor(Math.random() * idleSounds.length)]
+                        .play();
                 } else if (this.playerNumber === 2) {
                     const idleSounds = [
                         Resources.PlayerIdle4,
                         Resources.PlayerIdle5,
                         Resources.PlayerIdle6,
                     ];
-                    idleSounds[Math.floor(Math.random() * idleSounds.length)].play();
+                    idleSounds[Math.floor(Math.random() * idleSounds.length)]
+                        .play();
                 }
                 this.idleCooldown = 10000; // 10 seconds cooldown for next idle sound
             }
@@ -429,7 +494,6 @@ export class Player extends Actor {
         // Save vertical velocity before physics update
         this.lastYVelocity = this.vel.y;
     }
-    
 
     onPostUpdate(engine, delta) {
         // Apply delta AFTER physics
@@ -448,7 +512,7 @@ export class Player extends Actor {
 
     private resetPosition(): void {
         if (this._lastEngine) {
-            this._lastEngine.goToScene('level1');
+            this._lastEngine.goToScene("level1");
         }
     }
 }
