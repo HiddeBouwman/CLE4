@@ -16,13 +16,22 @@ import {
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
-import { MovingPlatform } from "./objects/MovingPlatform.ts";
 import { PlatformType, isBoostPlatformForPlayer } from "./objects/platform.ts";
+import { AlwaysMovingPlatform } from "./objects/AlwaysMovingPlatform.ts";
+import { PressurePlatePlatform } from "./objects/PressurePlatePlatform.ts";
+import { PressurePlateReturnPlatform } from "./objects/PressurePlateReturnPlatform.ts";
+import { SpikeBall } from "./objects/spikeBall.ts";
+import { Floor, isBoostFloorForPlayer } from "./floor.ts"
 import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
 
-import { Floor, isBoostFloorForPlayer } from "./floor.ts";
-import { SpikeBall } from "./objects/spikeBall.ts";
+// Type voor elk bewegend platform
+type AnyMovingPlatform = AlwaysMovingPlatform | PressurePlatePlatform | PressurePlateReturnPlatform;
+function isMovingPlatform(owner: any): owner is AnyMovingPlatform {
+    return owner instanceof AlwaysMovingPlatform ||
+           owner instanceof PressurePlatePlatform ||
+           owner instanceof PressurePlateReturnPlatform;
+}
 
 type PlayerControls = {
     left: Keys;
@@ -62,7 +71,7 @@ export class Player extends Actor {
         Shape.Box(15, 15),
         Shape.Circle(8, new Vector(0, 7)),
     ]);
-    private _carrierPlatform: MovingPlatform | null = null; // Assigns player to a platform (in order to "stick to it")
+    private _carrierPlatform: AnyMovingPlatform | null = null; // Assigns player to a platform (in order to "stick to it")
     private _pendingCarrierDelta: Vector = Vector.Zero;
     private _lastEngine: Engine | null = null;
     private _lastDelta: number = 16;
@@ -77,6 +86,8 @@ export class Player extends Actor {
 
     private initialX: number;
     private initialY: number;
+
+    private lastBoostSource: Actor | null = null;
 
     constructor(x: number, y: number, playerNumber: number) {
         super(
@@ -184,28 +195,50 @@ export class Player extends Actor {
             }
         }
         // Boost on platform
-        if (other.owner instanceof MovingPlatform) {
-            // Detect if player is on a platform
-            if (side === Side.Bottom) {
-                this._carrierPlatform = other.owner;
-            }
-            if (isBoostPlatformForPlayer(other.owner, this.playerNumber)) {
-                console.log(
-                    `Speler ${this.playerNumber} krijgt BOOST op platformtype:`,
-                    PlatformType[other.owner.platformType],
-                );
+        if (
+            other.owner &&
+            (other.owner instanceof AlwaysMovingPlatform ||
+             other.owner instanceof PressurePlatePlatform ||
+             other.owner instanceof PressurePlateReturnPlatform)
+        ) {
+            const platform = other.owner as AnyMovingPlatform;
+            if (isBoostPlatformForPlayer(platform, this.playerNumber)) {
                 this.speedBoost = true;
                 this.jumpBoost = true;
+                this.lastBoostSource = platform;
                 if (this.playerNumber === 1) {
                     Resources.Player1GetsBoosted.play();
                 } else if (this.playerNumber === 2) {
                     Resources.Player2GetsBoosted.play();
                 }
             } else {
-                console.log(
-                    `Speler ${this.playerNumber} GEEN boost op platformtype:`,
-                    PlatformType[other.owner.platformType],
-                );
+                // Land on not-boost platform, check if player needs to discard boost.
+                if (this.lastBoostSource && (this.speedBoost || this.jumpBoost)) {
+                    this.speedBoost = false;
+                    this.jumpBoost = false;
+                    this.lastBoostSource = null;
+                }
+            }
+            this._carrierPlatform = platform;
+            // Gebruik platform.currentDelta, platform.platformType, etc.
+        }
+        // Boost on floor
+        if (other.owner instanceof Floor && side === Side.Bottom) {
+            if (isBoostFloorForPlayer(other.owner, this.playerNumber)) {
+                this.speedBoost = true;
+                this.jumpBoost = true;
+                this.lastBoostSource = other.owner;
+                if (this.playerNumber === 1) {
+                    Resources.Player1GetsBoosted.play();
+                } else if (this.playerNumber === 2) {
+                    Resources.Player2GetsBoosted.play();
+                }
+            } else {
+                if (this.lastBoostSource && (this.speedBoost || this.jumpBoost)) {
+                    this.speedBoost = false;
+                    this.jumpBoost = false;
+                    this.lastBoostSource = null;
+                }
             }
         }
         if (other.owner instanceof Box && side === Side.Bottom) {
@@ -216,24 +249,6 @@ export class Player extends Actor {
         if (other.owner instanceof Block && side === Side.Bottom) {
             this.vel = new Vector(this.vel.x, 0); // Stop val
             this.#onGround = true;
-        }
-        // Boost on floor
-        if (other.owner instanceof Floor) {
-            if (isBoostFloorForPlayer(other.owner, this.playerNumber)) {
-                console.log(
-                    `Speler ${this.playerNumber} krijgt BOOST op floor`,
-                );
-                this.speedBoost = true;
-                this.jumpBoost = true;
-                if (this.playerNumber === 1) {
-                    Resources.Player1GetsBoosted.play();
-                } else if (this.playerNumber === 2) {
-                    Resources.Player2GetsBoosted.play();
-                }
-            } else {
-                // Optioneel: loggen als geen boost
-                // console.log(`Speler ${this.playerNumber} GEEN boost op floor`);
-            }
         }
     }
     onCollisionEnd(
@@ -252,7 +267,8 @@ export class Player extends Actor {
                 this.#onGround = false;
                 // Carry on platform momentum
                 if (
-                    other.owner instanceof MovingPlatform &&
+                    other.owner &&
+                    isMovingPlatform(other.owner) &&
                     this._carrierPlatform === other.owner && this._lastDelta > 0
                 ) {
                     // velocity = deltaPos / (deltaTime in seconds)
@@ -264,7 +280,10 @@ export class Player extends Actor {
             }
         }
         // reset boost
-        if (other.owner instanceof MovingPlatform) {
+        if (
+            other.owner &&
+            isMovingPlatform(other.owner)
+        ) {
             // If player leaves platform, unlink carrier
             if (this._carrierPlatform === other.owner) {
                 this._carrierPlatform = null;
@@ -439,6 +458,12 @@ export class Player extends Actor {
     private resetPosition(): void {
         if (this._lastEngine) {
             this._lastEngine.goToScene('level1');
+        }
+    }
+
+    updateCarrierPlatform() {
+        if (this._carrierPlatform) {
+            console.log("currentDelta:", this._carrierPlatform.currentDelta);
         }
     }
 }

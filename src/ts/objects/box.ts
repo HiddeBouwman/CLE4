@@ -53,9 +53,7 @@ export class Box extends Actor {
                 if (actor instanceof Player) {
                     const dx = Math.abs(actor.pos.x - this.pos.x);
                     const dy = Math.abs(actor.pos.y - this.pos.y);
-                    // Afstand en hoogte check (pas aan indien nodig)
                     if (dx < 60 && dy < 60) {
-                        // Check of speler beweegt richting de box
                         if (
                             (actor.vel.x > 10 && actor.pos.x < this.pos.x) ||
                             (actor.vel.x < -10 && actor.pos.x > this.pos.x)
@@ -69,6 +67,20 @@ export class Box extends Actor {
         }
         this.isPushing = pushing;
 
+        // --- BoxMove sound logic ---
+        if (this.isPushing) {
+            if (Resources.BoxMove.isPlaying() === false) {
+                Resources.BoxMove.loop = true;
+                Resources.BoxMove.play();
+            }
+        } else {
+            if (Resources.BoxMove.isPlaying()) {
+                Resources.BoxMove.stop();
+            }
+        }
+        // --- Einde BoxMove sound logic ---
+
+        // PlayerPush geluid blijft zoals het was (optioneel)
         if (this.isPushing) {
             this.pushSoundTimer -= delta;
             if (this.pushSoundTimer <= 0) {

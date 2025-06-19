@@ -23,6 +23,13 @@ export class SpikeBall extends Actor {
     //set collision based results depending on the object
     onInitialize(engine: Engine) {
         this.on("collisionstart", (evt) => {
+            // Speel MetalSlam af bij elke botsing met Floor of TrapPlate, als de spikeball een beetje valt
+            if (
+                (evt.other.owner instanceof Floor || evt.other.owner instanceof TrapPlate) &&
+                Math.abs(this.vel.y) > 20 // lagere drempel, zodat het vaker afspeelt
+            ) {
+                Resources.MetalSlam.play();
+            }
             if (evt.other.owner instanceof Floor) {
                 this.body.applyLinearImpulse(new Vector(Math.random() * 100 - 50, -9000));
             }
