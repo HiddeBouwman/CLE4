@@ -11,6 +11,8 @@ import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform, PlatformType, MovementMode } from "../objects/platform.ts";
 import { Portal } from "../objects/portal.ts";
+import { Block } from "../objects/block.ts";
+
 import { Resources } from "../resources.ts";
 
 export class LevelOne extends Scene {
@@ -53,6 +55,9 @@ export class LevelOne extends Scene {
         this.add(new Floor(8, -2, 6, 2));
         this.add(new Floor(35, -2, 3, 2));
         this.add(new Floor(35, -14, 3, 2));
+        this.add(new Block(-300, -250, 5000));
+        this.add(new Block(-250, -400, 8000));
+        // this.add(new Block(-300, 300, 2000));
 
 
 

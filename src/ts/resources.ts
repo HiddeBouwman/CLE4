@@ -69,6 +69,10 @@ const Resources = {
   Box: new ImageSource("images/box.png"),
 
 
+  // Block
+  Block: new ImageSource("images/block.png"),
+
+
   // Pressure plate
   pressurePlateGreenBase: new ImageSource("images/objects/pressure-plate/pressure-plate-green/pressure-plate-green-base.png"),
   PressurePlateGreen: new ImageSource("images/objects/pressure-plate/pressure-plate-green/pressure-plate-green.png"),

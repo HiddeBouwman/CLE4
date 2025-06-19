@@ -19,6 +19,8 @@ import {
     PlatformType,
 } from "./objects/platform.ts";
 import { Box } from "./objects/box.ts";
+import { Block } from "./objects/block.ts";
+
 import { Floor, isBoostFloorForPlayer } from "./floor.ts";
 import { SpikeBall } from "./objects/spikeBall.ts";
 
@@ -27,6 +29,7 @@ type PlayerControls = {
     right: Keys;
     up: Keys;
     down: Keys;
+    reset: Keys;
 };
 
 export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
@@ -35,12 +38,15 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         right: Keys.D,
         up: Keys.W,
         down: Keys.S,
+        reset: Keys.R
     },
     player2: {
         left: Keys.Left,
         right: Keys.Right,
         up: Keys.Up,
         down: Keys.Down,
+        reset: Keys.R
+
     },
 };
 
@@ -61,6 +67,9 @@ export class Player extends Actor {
     private _lastEngine: Engine | null = null;
     private _lastDelta: number = 16;
 
+    private initialX: number;
+    private initialY: number;
+
     constructor(x: number, y: number, playerNumber: number) {
         super(
             {
@@ -76,6 +85,10 @@ export class Player extends Actor {
         //important requirements for a Actor
         this.scale = new Vector(2, 2);
         this.pos = new Vector(x, y);
+
+        //Store initial position
+        this.initialX = x;
+        this.initialY = y;
 
         //Init player controls
         this.controls = playerNumber === 1
@@ -150,6 +163,11 @@ export class Player extends Actor {
             }
         }
         if (other.owner instanceof Box && side === Side.Bottom) {
+            this.vel = new Vector(this.vel.x, 0); // Stop val
+            this.#onGround = true;
+        }
+
+        if (other.owner instanceof Block && side === Side.Bottom) {
             this.vel = new Vector(this.vel.x, 0); // Stop val
             this.#onGround = true;
         }
@@ -244,7 +262,7 @@ export class Player extends Actor {
         engine.goToScene(key);
     }
 
-    onPreUpdate(engine, delta) {
+    onPreUpdate(engine: Engine, delta: number) {
         this._lastEngine = engine;
         this._lastDelta = delta;
 
@@ -262,6 +280,11 @@ export class Player extends Actor {
         // Jump controls
         if (kb.wasPressed(this.controls.up) && this.#onGround) {
             this.jump();
+        }
+
+        // Reset action.
+        if (kb.wasPressed(this.controls.reset)) {
+            this.resetPosition();
         }
 
         // Acceleration
@@ -295,6 +318,7 @@ export class Player extends Actor {
             this._pendingCarrierDelta = Vector.Zero;
         }
     }
+    
 
     onPostUpdate(engine, delta) {
         // Apply delta AFTER physics
@@ -308,6 +332,12 @@ export class Player extends Actor {
                 Resources.PlayerRun.play();
                 console.log("Walking sound started");
             }
+        }
+    }
+
+    private resetPosition(): void {
+        if (this._lastEngine) {
+            this._lastEngine.goToScene('level1');
         }
     }
 }
