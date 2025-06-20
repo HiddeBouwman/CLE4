@@ -66,7 +66,7 @@ export class StartMenu extends Scene {
 
         //register clicks on label
         button_level1.on('pointerup', () => {
-            engine.goToScene('backwardslevel');
+            engine.goToScene('level1');
             Resources.FinishMC.stop();
         });
 

@@ -59,19 +59,19 @@ export class BackwardsLevel extends Scene {
         )
         this.add(yellowPlatform1);
 
-        const neutralPlatform1 = new PressurePlateReturnPlatform(
+        const purplePlatform2 = new PressurePlateReturnPlatform(
             -6, -5, 100, 20,
-            PlatformType.DefaultPlatform,
+            PlatformType.PurplePlatform,
             186, 60, new Vector(0.5, 0.5),
             new Vector(-6, -5),
             new Vector(-1, -5),
             192,
-            [],
+            [1],
             new Vector(2, 2)
         )
-        this.add(neutralPlatform1);
-        const neutralPlate1 = new DefaultPlate(-3 * 32, -7 * 32, 0, neutralPlatform1);
-        this.add(neutralPlate1);
+        this.add(purplePlatform2);
+        const purplePlate2 = new DefaultPlate(-3 * 32, -7 * 32, 0, purplePlatform2);
+        this.add(purplePlate2);
 
 
 

@@ -97,7 +97,7 @@ export class LevelThree extends Scene {
 
         const plateDoublePlatform = new PressurePlatePlatform(
             40, 5, 100, 20,
-            PlatformType.DefaultPlatform,
+            PlatformType.YellowPlatform,
             186, 60, new Vector(0.5, 0.5),
             new Vector(40, 5),
             new Vector(40, -5),
@@ -110,7 +110,7 @@ export class LevelThree extends Scene {
 
         const pressurePlatePlatform = new PressurePlatePlatform(
             30, -25, 100, 20,
-            PlatformType.DefaultPlatform,
+            PlatformType.PurplePlatform,
             186, 60, new Vector(0.5, 0.5),
             new Vector(5, -25),
             new Vector(5, -25),
@@ -137,7 +137,7 @@ export class LevelThree extends Scene {
 
 
 
-        const platformPlate = new DefaultPlate(0, 320, 0, pressurePlatePlatform, boxForPressurePlate);
+        const platformPlate = new DefaultPlate(0, 320, 0, pressurePlatePlatform2ndFloor, boxForPressurePlate);
 
         this.add(platformPlate);
         this.add(boxForPressurePlate)
