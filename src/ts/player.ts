@@ -89,6 +89,9 @@ export class Player extends Actor {
 
     private lastBoostSource: Actor | null = null;
 
+    private isDead: boolean = false;
+    private respawnTimeout: any = null;
+
     constructor(x: number, y: number, playerNumber: number) {
         super(
             {
@@ -386,20 +389,41 @@ export class Player extends Actor {
 
     //player handles death and level reset
     die(engine: Engine) {
-        this.kill();
-        this.scene!.actors.forEach((actor) => {
-            if (actor instanceof SpikeBall) {
-                actor.kill();
-            }
-        });
+        if (this.isDead) return; // voorkom dubbele dood
+        this.isDead = true;
+        this.graphics.opacity = 0; // Maak speler onzichtbaar
+        this.vel = Vector.Zero;    // Stop beweging
+        this.acc = Vector.Zero;
+        this.body.useGravity = false; // Zet zwaartekracht uit
+        this.actions.clearActions(); // Stop alle acties
 
-        this.unkill();
-        const key = (this.scene as any).levelKey || "level1";
-        Resources.gameMusic.stop();
-        engine.goToScene(key);
+        // Respawn na 1 seconde (1000 ms)
+        this.respawnTimeout = setTimeout(() => {
+            this.respawn();
+        }, 1000);
+    }
+
+    respawn() {
+        this.isDead = false;
+        this.pos = new Vector(this.initialX, this.initialY); // Terug naar spawn
+        this.vel = Vector.Zero; // Reset snelheid
+        this.acc = Vector.Zero;
+        this.body.useGravity = true; // Zet zwaartekracht weer aan
+        this.graphics.opacity = 1; // Zorg dat speler zichtbaar is
+        // Log de spawnpositie in de console
+        console.log(`Player ${this.playerNumber} respawned at (${this.initialX}, ${this.initialY})`);
+        // Optioneel: tijdelijke onkwetsbaarheid of animatie
     }
 
     onPreUpdate(engine: Engine, delta: number) {
+        if (this.isDead) {
+            // Blokkeer alle beweging en input
+            this.vel = Vector.Zero;
+            this.acc = Vector.Zero;
+            this.actions.clearActions();
+            return;
+        }
+
         let kb = engine.input.keyboard;
 
         if (kb.wasPressed(this.controls.reset) && this.scene) {
@@ -518,6 +542,12 @@ export class Player extends Actor {
     }
 
     onPostUpdate(engine, delta) {
+        if (this.isDead) {
+            // Blokkeer alle beweging
+            this.vel = Vector.Zero;
+            this.acc = Vector.Zero;
+            return;
+        }
         // Apply delta AFTER physics
         if (!this._pendingCarrierDelta.equals(Vector.Zero)) {
             this.pos = this.pos.add(this._pendingCarrierDelta);
@@ -542,5 +572,12 @@ export class Player extends Actor {
         if (this._carrierPlatform) {
             console.log("currentDelta:", this._carrierPlatform.currentDelta);
         }
+    }
+
+    setSpawn(x: number, y: number) {
+        this.initialX = x;
+        this.initialY = y;
+        // Log de nieuwe spawnpositie in de console
+        console.log(`Player ${this.playerNumber} spawn set to (${x}, ${y})`);
     }
 }
