@@ -187,7 +187,7 @@ export class LevelOne extends Scene {
         console.log("level 1 loaded");
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
-        Resources.gameMusic.volume = 0.3;
+        Resources.gameMusic.volume = 0.1;
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {

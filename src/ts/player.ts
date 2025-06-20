@@ -60,7 +60,7 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
 };
 
 export class Player extends Actor {
-    #onGround: boolean = false;
+    #onGround: boolean = true;
     controls: PlayerControls;
     speedBoost: boolean = false;
     jumpBoost: boolean = false;
