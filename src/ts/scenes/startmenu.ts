@@ -80,6 +80,8 @@ export class StartMenu extends Scene {
         //register clicks on label
         button_dressingRoom.on('pointerup', () => {
             engine.goToScene('dressingRoom');
+
+            console.log("A");
             // Resources.FinishMC.stop();
         });
 

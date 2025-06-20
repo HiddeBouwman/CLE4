@@ -6,6 +6,8 @@ import { StartMenu } from './scenes/startmenu.ts';
 import { LevelOne } from './scenes/level1.ts';
 import { LevelTwo } from './scenes/level2.ts';
 import { LevelThree } from './scenes/level3.ts';
+import { player1 } from './scenes/player1.ts';
+import { player2 } from './scenes/player2.ts';
 import { dressingRoom } from './scenes/dressingroom.ts';
 import { BackwardsLevel } from "./scenes/backwardslevel.ts";
 
@@ -28,7 +30,7 @@ export class Game extends Engine {
         });
 
         this.backgroundColor = Color.fromHex("#5fb2e9");
-        this.showDebug(true)
+        // this.showDebug(true)
 
         // Start game
         this.start(ResourceLoader).then(() => this.#startGame());
@@ -47,6 +49,8 @@ export class Game extends Engine {
         this.add('level1', new LevelOne());
         this.add('level2', new LevelTwo());
         this.add('level3', new LevelThree());
+        this.add('player1', new player1());
+        this.add('player2', new player2());
         this.add('dressingRoom', new dressingRoom());
         this.add('backwardslevel', new BackwardsLevel());
         this.goToScene('menu');

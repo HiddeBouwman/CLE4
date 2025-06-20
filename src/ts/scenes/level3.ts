@@ -201,7 +201,6 @@ export class LevelThree extends Scene {
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
-            console.log("Pls");
             this.player1.pos = new Vector(-512, 648);
             this.player2.pos = new Vector(-448, 648);
         }
