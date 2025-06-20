@@ -59,6 +59,22 @@ export class BackwardsLevel extends Scene {
         )
         this.add(yellowPlatform1);
 
+        const neutralPlatform1 = new PressurePlateReturnPlatform(
+            -6, -5, 100, 20,
+            PlatformType.DefaultPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(-6, -5),
+            new Vector(-1, -5),
+            192,
+            [],
+            new Vector(2, 2)
+        )
+        this.add(neutralPlatform1);
+        const neutralPlate1 = new DefaultPlate(-3 * 32, -7 * 32, 0, neutralPlatform1);
+        this.add(neutralPlate1);
+
+
+
         // Stage hazards
         //this.add(new Fire(-24, -5));
         this.add(new FireWall(-3.5, 7.6, -8.5, 7.6));
@@ -66,7 +82,7 @@ export class BackwardsLevel extends Scene {
         // Timer blocks
 
         // Portals
-        this.add(new Portal(4, -2.5, new Vector(-1 * 32, -5 * 32)));
+        this.add(new Portal(5, -2.5, new Vector(-1 * 32, -6 * 32)));
 
         // Finish
         //this.add(new Finish(700, 302));
@@ -87,12 +103,14 @@ export class BackwardsLevel extends Scene {
         // Section 1
         this.add(new Floor(2, -12, 2, 16))
         this.add(new Floor(16, -5, 8, 20))
+        this.add(new Floor(-12, 4, 2, 14))
 
         // Floors
         // Section 1
         this.add(new Floor(0, 2, 4, 2))
-        this.add(new Floor(0, -5, 4, 2))
-        this.add(new Floor(3, 0, 3, 2))
+        this.add(new Floor(-0.5, -5, 4.5, 2))
+        this.add(new Floor(-10.5, -5, 3.5, 2))
+        this.add(new Floor(4, 0, 4, 2))
         this.add(new Floor(0, 8, 4, 3))
         this.add(new Floor(-10, 7, 2, 7))
         this.add(new Floor(2, 16, 14, 9))
