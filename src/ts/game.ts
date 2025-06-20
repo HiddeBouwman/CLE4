@@ -6,6 +6,7 @@ import { StartMenu } from './scenes/startmenu.ts';
 import { LevelOne } from './scenes/level1.ts';
 import { LevelTwo } from './scenes/level2.ts';
 import { LevelThree } from './scenes/level3.ts';
+import { dressingRoom } from './scenes/dressingroom.ts';
 import { BackwardsLevel } from "./scenes/backwardslevel.ts";
 
 export class Game extends Engine {
@@ -38,6 +39,7 @@ export class Game extends Engine {
         this.add('level1', new LevelOne());
         this.add('level2', new LevelTwo());
         this.add('level3', new LevelThree());
+        this.add('dressingRoom', new dressingRoom());
         this.add('backwardslevel', new BackwardsLevel());
         this.goToScene('menu');
     }

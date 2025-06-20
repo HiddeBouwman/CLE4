@@ -58,6 +58,7 @@ const Resources = {
   finishMSG: new Sound("sounds/player/yippeee.mp3"),
   FinishMC: new Sound("sounds/objects/finish.wav"),
   gameMusic: new Sound("sounds/game/gameMusic.mp3"),
+  changeSkin: new Sound("sounds/changeskin.mp3"),
 
 
 // Sprites
