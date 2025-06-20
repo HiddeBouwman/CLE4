@@ -7,6 +7,7 @@ import { Box } from "../objects/box.ts";
 import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
 import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultplate.ts";
+import { JumpPlate } from "../objects/jumpPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { PlatformType } from "../objects/platform.ts"; 
@@ -68,11 +69,15 @@ export class LevelOne extends Scene {
         
 
         
-
+        //boxes
         const box1 = new Box(6, -21);
         this.add(box1);;
         const box2 = new Box(35, 5);
         this.add(box2);
+
+        //jump plate test
+        const jumpPlate = new JumpPlate(6, 320, 900);
+        this.add(jumpPlate);
 
 
         /** 
@@ -109,9 +114,9 @@ export class LevelOne extends Scene {
         this.add(platePlatform);
 
         // In case it needs a pressure plate to move:
-        const plate1 = new DefaultPlate(256, -130, platePlatform, box1);
+        const plate1 = new DefaultPlate(256, -130, 0, platePlatform, box1);
         this.add(plate1);
-        const plate = new DefaultPlate(320, -130, platePlatform, box1);
+        const plate = new DefaultPlate(320, -130, 0, platePlatform, box1);
         this.add(plate);
 
 
@@ -127,9 +132,9 @@ export class LevelOne extends Scene {
             new Vector(2, 2)
         );
         this.add(returnPlatform);
-        const plate2 = new DefaultPlate(1120, -136, returnPlatform, box2);
+        const plate2 = new DefaultPlate(1120, -136, 0, returnPlatform, box2);
         this.add(plate2);
-        const plate3 = new DefaultPlate(1120, -520, returnPlatform, box2);
+        const plate3 = new DefaultPlate(1120, -520, 0, returnPlatform, box2);
         this.add(plate3);
 
 
@@ -142,7 +147,7 @@ export class LevelOne extends Scene {
         this.add(trap1);
 
         // trap plates
-        this.add(new TrapPlate(190, 310, trap1)); // positionX, positionY, trap
+        this.add(new TrapPlate(190, 310, 0, trap1)); // positionX, positionY, trap
 
 
         // Fire
@@ -182,7 +187,7 @@ export class LevelOne extends Scene {
         console.log("level 1 loaded");
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
-        Resources.gameMusic.volume = 0.3;
+        Resources.gameMusic.volume = 0.1;
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {

@@ -11,10 +11,11 @@ export class DefaultPlate extends PressurePlate {
     private _activeObjects = new Set<any>();
 
 
-    constructor(x: number, y: number, targetPlatform: IMovablePlatform, targetBox?: Box) { // targetBox optioneel
+    constructor(x: number, y: number, velocityBoost: number, targetPlatform: IMovablePlatform, targetBox?: Box) {
         super(
             x,
             y,
+            velocityBoost,
             Resources.pressurePlateGreenBase.toSprite(),
         );
         this.targetPlatform = targetPlatform;

@@ -4,8 +4,9 @@ import { Resources } from "../resources";
 export class PressurePlate extends Actor {
     protected plateSprite: Actor;
     protected _activeCount = 0;
+    public velocityBoost = 0;
 
-    constructor(x: number, y: number, sprite) {
+    constructor(x: number, y: number, velocityBoost: number, sprite) {
         super({
             width: 100,
             height: 100,
