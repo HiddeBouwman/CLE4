@@ -152,7 +152,7 @@ export class LevelOne extends Scene {
 
         // Fire
         this.add(new Fire(-4, -5)); // place the fire on gridposition (12, -5)
-       
+
         // Place a wall of fire from (15, -5) to (20, -5) (Horizontal)
         this.add(new FireWall(15, -5, 20, -5));
 
@@ -191,7 +191,6 @@ export class LevelOne extends Scene {
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
-            console.log("Pls");
             this.player1.pos = new Vector(-512, 648);
             this.player2.pos = new Vector(-448, 648);
             Resources.finishMSG.stop();
