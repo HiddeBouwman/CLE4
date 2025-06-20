@@ -114,9 +114,9 @@ export class LevelOne extends Scene {
         this.add(platePlatform);
 
         // In case it needs a pressure plate to move:
-        const plate1 = new DefaultPlate(256, -130, platePlatform, box1);
+        const plate1 = new DefaultPlate(256, -130, 0, platePlatform, box1);
         this.add(plate1);
-        const plate = new DefaultPlate(320, -130, platePlatform, box1);
+        const plate = new DefaultPlate(320, -130, 0, platePlatform, box1);
         this.add(plate);
 
 
@@ -132,9 +132,9 @@ export class LevelOne extends Scene {
             new Vector(2, 2)
         );
         this.add(returnPlatform);
-        const plate2 = new DefaultPlate(1120, -136, returnPlatform, box2);
+        const plate2 = new DefaultPlate(1120, -136, 0, returnPlatform, box2);
         this.add(plate2);
-        const plate3 = new DefaultPlate(1120, -520, returnPlatform, box2);
+        const plate3 = new DefaultPlate(1120, -520, 0, returnPlatform, box2);
         this.add(plate3);
 
 
