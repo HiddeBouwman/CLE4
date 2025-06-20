@@ -505,11 +505,25 @@ export class Player extends Actor {
             }
             // when moving right (positive x), do flip
             this.graphics.flipHorizontal = this.vel.x > 0;
+            
+            // Update cosmetic to walk animation with same flip
+            this.children.forEach(child => {
+                if (child instanceof Cosmetic) {
+                    child.switchCosmeticState(true, this.graphics.flipHorizontal);
+                }
+            });
         } else {
             // If idle, use idle animation
             if (this.graphics.current !== this.#idleAnimation) {
                 this.graphics.use(this.#idleAnimation);
                 this.graphics.flipHorizontal = false; // Reset flip when idle
+                
+                // Update cosmetic to idle animation
+                this.children.forEach(child => {
+                    if (child instanceof Cosmetic) {
+                        child.switchCosmeticState(false, false);
+                    }
+                });
             }
         }
         // When player is falling (positive y velocity), set onGround to false
