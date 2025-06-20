@@ -21,7 +21,6 @@ export class StartMenu extends Scene {
                 textAlign: TextAlign.Center
             })
         });
-        this.add(titleLabel);
 
         //button via label class
         const button_level1 = new Label({
@@ -85,6 +84,7 @@ export class StartMenu extends Scene {
         });
 
         // Add all buttons.
+        this.add(titleLabel);
         this.add(button_level1);
         this.add(button_level3);
         this.add(button_dressingRoom);
