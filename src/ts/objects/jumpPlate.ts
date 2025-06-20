@@ -1,23 +1,19 @@
 import { PressurePlate } from "./pressureplate";
-import { IMovablePlatform } from "./platform";
 import { Resources } from "../resources";
 import { Player } from "../player";
-import { Box } from "./box";
 import { Engine } from "excalibur";
 
-export class DefaultPlate extends PressurePlate {
-    protected targetPlatform: IMovablePlatform;
-    private targetBox: Box;
+export class JumpPlate extends PressurePlate {
+ 
 
-
-    constructor(x: number, y: number, targetPlatform: IMovablePlatform, targetBox: Box) {
+    constructor(x: number, y: number, velocityBoost: number) {
         super(
             x,
             y,
+            velocityBoost,
             Resources.pressurePlateGreenBase.toSprite(),
         );
-        this.targetPlatform = targetPlatform;
-            this.targetBox = targetBox;
+        this.velocityBoost = velocityBoost;
 
         if (this.plateSprite) {
             this.plateSprite.graphics.use(Resources.PressurePlateGreen.toSprite());
@@ -26,7 +22,17 @@ export class DefaultPlate extends PressurePlate {
 
     onInitialize(engine: Engine) {
         this.on("collisionstart", (evt) => {
-         
+            const other = evt.other.owner;
+            if (other instanceof Player) {
+                other.vel.y = -Math.abs(other.vel.y) - this.velocityBoost;
+            }
+        });
+
+        this.on("collisionend", (evt) => {
+            const other = evt.other.owner;
+            if (other instanceof Player) {
+
+            }
         });
     }
 }

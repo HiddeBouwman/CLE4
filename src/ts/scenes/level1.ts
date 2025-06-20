@@ -7,6 +7,7 @@ import { Box } from "../objects/box.ts";
 import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
 import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultplate.ts";
+import { JumpPlate } from "../objects/jumpPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { PlatformType } from "../objects/platform.ts"; 
@@ -68,11 +69,15 @@ export class LevelOne extends Scene {
         
 
         
-
+        //boxes
         const box1 = new Box(6, -21);
         this.add(box1);;
         const box2 = new Box(35, 5);
         this.add(box2);
+
+        //jump plate test
+        const jumpPlate = new JumpPlate(6, 320, 900);
+        this.add(jumpPlate);
 
 
         /** 
@@ -142,7 +147,7 @@ export class LevelOne extends Scene {
         this.add(trap1);
 
         // trap plates
-        this.add(new TrapPlate(190, 310, trap1)); // positionX, positionY, trap
+        this.add(new TrapPlate(190, 310, 0, trap1)); // positionX, positionY, trap
 
 
         // Fire

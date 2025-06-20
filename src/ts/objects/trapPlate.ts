@@ -10,10 +10,11 @@ export class TrapPlate extends PressurePlate {
     private trap: SpikeBallTrap;
     frameCounter
 
-    constructor(x: number, y: number, trap: SpikeBallTrap) {
+    constructor(x: number, y: number, velocityBoost: number, trap: SpikeBallTrap) {
         super(
             x,
             y,
+            velocityBoost,
             Resources.pressurePlateOrangeBase.toSprite(), // basis sprite
         );
         this.trap = trap;
