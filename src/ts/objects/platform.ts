@@ -75,6 +75,7 @@ export class Platform extends Actor {
 
         if (this._actuallyMoving && !this._wasActuallyMoving && playerNearby) {
             if (!this.startSoundPlaying) {
+                Resources.PlatformMoving.volume = 0.1
                 Resources.PlatformStartMoving.play();
                 this.startSoundPlaying = true;
                 this.movingSoundPlaying = false;
@@ -83,6 +84,7 @@ export class Platform extends Actor {
 
         if (this._actuallyMoving && playerNearby) {
             if (!Resources.PlatformMoving.isPlaying()) {
+                Resources.PlatformMoving.volume = 0.2
                 Resources.PlatformMoving.loop = true;
                 Resources.PlatformMoving.play();
                 this.movingSoundPlaying = true;
@@ -93,6 +95,7 @@ export class Platform extends Actor {
         }
 
         if (!this._actuallyMoving && this._wasActuallyMoving && playerNearby) {
+            Resources.PlatformStopMoving.volume = 0.2
             Resources.PlatformStopMoving.play();
             this.startSoundPlaying = false;
         }
