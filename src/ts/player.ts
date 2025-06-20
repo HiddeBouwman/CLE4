@@ -16,22 +16,26 @@ import {
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
 import { CollisionGroup } from "./collision.ts";
-import { PlatformType, isBoostPlatformForPlayer } from "./objects/platform.ts";
+import { isBoostPlatformForPlayer, PlatformType } from "./objects/platform.ts";
 import { AlwaysMovingPlatform } from "./objects/AlwaysMovingPlatform.ts";
 import { PressurePlatePlatform } from "./objects/PressurePlatePlatform.ts";
 import { PressurePlateReturnPlatform } from "./objects/PressurePlateReturnPlatform.ts";
 import { TwoPlatePlatform } from "./objects/twoPlatePlatform.ts";
 import { SpikeBall } from "./objects/spikeBall.ts";
-import { Floor, isBoostFloorForPlayer } from "./floor.ts"
+import { Floor, isBoostFloorForPlayer } from "./floor.ts";
 import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
+import { Cosmetic } from "./cosmetic.ts";
 
 // Type voor elk bewegend platform
-type AnyMovingPlatform = AlwaysMovingPlatform | PressurePlatePlatform | PressurePlateReturnPlatform;
+type AnyMovingPlatform =
+    | AlwaysMovingPlatform
+    | PressurePlatePlatform
+    | PressurePlateReturnPlatform;
 function isMovingPlatform(owner: any): owner is AnyMovingPlatform {
     return owner instanceof AlwaysMovingPlatform ||
-           owner instanceof PressurePlatePlatform ||
-           owner instanceof PressurePlateReturnPlatform;
+        owner instanceof PressurePlatePlatform ||
+        owner instanceof PressurePlateReturnPlatform;
 }
 
 type PlayerControls = {
@@ -60,7 +64,7 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
 };
 
 export class Player extends Actor {
-    #onGround: boolean = false;
+    #onGround: boolean = true;
     controls: PlayerControls;
     speedBoost: boolean = false;
     jumpBoost: boolean = false;
@@ -218,6 +222,8 @@ export class Player extends Actor {
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
         this.collider.set(this.#capsule);
+        
+        this.addChild(new Cosmetic(playerNumber));
     }
 
     onCollisionStart(
@@ -234,9 +240,9 @@ export class Player extends Actor {
         }
         if (
             other.owner.get(BodyComponent)?.collisionType ===
-            CollisionType.Fixed ||
+                CollisionType.Fixed ||
             other.owner.get(BodyComponent)?.collisionType ===
-            CollisionType.Active
+                CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
                 // Landing sound with hard landing
@@ -280,7 +286,9 @@ export class Player extends Actor {
                 }
             } else {
                 // Land on not-boost platform, check if player needs to discard boost.
-                if (this.lastBoostSource && (this.speedBoost || this.jumpBoost)) {
+                if (
+                    this.lastBoostSource && (this.speedBoost || this.jumpBoost)
+                ) {
                     this.speedBoost = false;
                     this.jumpBoost = false;
                     this.lastBoostSource = null;
@@ -301,7 +309,9 @@ export class Player extends Actor {
                     Resources.Player2GetsBoosted.play();
                 }
             } else {
-                if (this.lastBoostSource && (this.speedBoost || this.jumpBoost)) {
+                if (
+                    this.lastBoostSource && (this.speedBoost || this.jumpBoost)
+                ) {
                     this.speedBoost = false;
                     this.jumpBoost = false;
                     this.lastBoostSource = null;
@@ -406,7 +416,7 @@ export class Player extends Actor {
             // Stop current music
             Resources.gameMusic.stop();
             // Restart current level
-            engine.goToScene('level1');
+            engine.goToScene("level1");
         }
 
         let xspeed = 0;
