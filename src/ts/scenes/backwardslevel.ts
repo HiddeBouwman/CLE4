@@ -31,6 +31,52 @@ export class BackwardsLevel extends Scene {
     }
 
     onInitialize(engine: Engine) {
+        // Platforms
+        const purplePlatform1 = new PressurePlateReturnPlatform(
+            -6, 2, 100, 20,
+            PlatformType.PurplePlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(-6, 2),
+            new Vector (-6, 6),
+            48,
+            [1],
+            new Vector(2, 2)
+        )
+        this.add(purplePlatform1);
+        const purplePlate1 = new DefaultPlate(-10 * 32, 0 * 32, 0, purplePlatform1);
+        this.add(purplePlate1);
+
+        const yellowPlatform1 = new PressurePlatePlatform(
+            6, 7, 100, 20,
+            PlatformType.YellowPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(6, 7),
+            new Vector(6, 7),
+            48,
+            0,
+            [2],
+            new Vector(2, 2)
+        )
+        this.add(yellowPlatform1);
+
+        // Stage hazards
+        //this.add(new Fire(-24, -5));
+        this.add(new FireWall(-3.5, 7.6, -8.5, 7.6));
+
+        // Timer blocks
+
+        // Portals
+        this.add(new Portal(4, -2.5, new Vector(-1 * 32, -5 * 32)));
+
+        // Finish
+        //this.add(new Finish(700, 302));
+
+        // floor
+        this.add(new Floor(56, 40, 20, 30, [1, 2])); // the numbers [1, 2] are for boosting. Can either be left out, [1], [2], or [1, 2]
+
+        //this.add(new Block(-300, -250, 5000));
+        //this.add(new Block(-250, -400, 8000));
+
         //add players, finish and floor to scene
         this.player1 = new Player(0 * 32, 0 * 32, 1);
         this.player2 = new Player(0 * 32, 0 * 32, 2);
@@ -54,52 +100,6 @@ export class BackwardsLevel extends Scene {
         // Ceiling
         // Section 1
         this.add(new Floor(10, -10, 10, 7))
-
-        // Platforms
-        const purplePlatform1 = new PressurePlateReturnPlatform(
-            -6, 2, 100, 20,
-            PlatformType.PurplePlatform,
-            186, 60, new Vector(0.5, 0.5),
-            new Vector(-6, 2),
-            new Vector (-6, 6),
-            48,
-            [1],
-            new Vector(2, 2)
-        )
-        this.add(purplePlatform1);
-        const purplePlate1 = new DefaultPlate(-10 * 32, 0 * 32, purplePlatform1);
-        this.add(purplePlate1);
-
-        const yellowPlatform1 = new PressurePlatePlatform(
-            6, 7, 100, 20,
-            PlatformType.YellowPlatform,
-            186, 60, new Vector(0.5, 0.5),
-            new Vector(6, 7),
-            new Vector(6, 7),
-            48,
-            0,
-            [2],
-            new Vector(2, 2)
-        )
-        this.add(yellowPlatform1);
-
-        // Stage hazards
-        //this.add(new Fire(-24, -5));
-        this.add(new FireWall(-3.5, 7.6, -8.5, 7.6));
-
-        // Timer blocks
-
-        // Portals
-        this.add(new Portal(4, -2.5));
-
-        // Finish
-        //this.add(new Finish(700, 302));
-
-        // floor
-        this.add(new Floor(56, 40, 20, 30, [1, 2])); // the numbers [1, 2] are for boosting. Can either be left out, [1], [2], or [1, 2]
-
-        //this.add(new Block(-300, -250, 5000));
-        //this.add(new Block(-250, -400, 8000));
 
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
