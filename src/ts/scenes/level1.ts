@@ -185,6 +185,7 @@ export class LevelOne extends Scene {
 
     onActivate() {
         console.log("level 1 loaded");
+        // this doesnt work for some reaason.
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
         Resources.gameMusic.volume = 0.1;
@@ -194,7 +195,6 @@ export class LevelOne extends Scene {
             this.player1.pos = new Vector(-512, 648);
             this.player2.pos = new Vector(-448, 648);
             Resources.finishMSG.stop();
-
         }
     }
 }
