@@ -18,6 +18,7 @@ import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatf
 import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
 import { Block } from "../objects/block.ts"; 
 import { Portal } from "../objects/portal.ts";
+import { PortalExit } from "../objects/portalExit.ts";
 
 export class BackwardsLevel extends Scene {
     public levelKey = "backwarslevel";
@@ -73,37 +74,52 @@ export class BackwardsLevel extends Scene {
         const purplePlate2 = new DefaultPlate(-3 * 32, -7 * 32, 0, purplePlatform2);
         this.add(purplePlate2);
 
+        const yellowPlatform2 = new PressurePlateReturnPlatform(
+            -26, -8, 100, 20,
+            PlatformType.YellowPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(-26, -8),
+            new Vector(-30, -8),
+            96,
+            [2],
+            new Vector(2, 2)
+        )
+        this.add(yellowPlatform2);
+        const yellowPlate2 = new DefaultPlate(-21 * 32, -7 * 32, 0, yellowPlatform2);
+        this.add(yellowPlate2);
 
 
-        // Stage hazards
-        //this.add(new Fire(-24, -5));
-        this.add(new FireWall(-3.5, 7.6, -8.5, 7.6));
+
+        // Boxes
+        this.add(new Box(-13, -15))
 
         // Timer blocks
 
         // Portals
-        this.add(new Portal(5, -2.5, new Vector(-1 * 32, -6 * 32)));
+        const portalExitCoords = new Vector(-1 * 32, -6 * 32);
+        this.add(new Portal(5, -2.5, portalExitCoords));
+        this.add(new PortalExit(portalExitCoords.x, portalExitCoords.y - 48));
 
         // Finish
         //this.add(new Finish(700, 302));
 
         // floor
-        this.add(new Floor(56, 40, 20, 30, [1, 2])); // the numbers [1, 2] are for boosting. Can either be left out, [1], [2], or [1, 2]
+        // this.add(new Floor(56, 40, 20, 30, [1, 2])); // the numbers [1, 2] are for boosting. Can either be left out, [1], [2], or [1, 2]
 
         //this.add(new Block(-300, -250, 5000));
         //this.add(new Block(-250, -400, 8000));
 
+
+        // Stage hazards
+        //this.add(new Fire(-24, -5));
+        this.add(new FireWall(-3.5, 7.4, -8.5, 7.4, "up"));
+        this.add(new FireWall(-13, -4.6, -21, -4.6, "up"));
+        
         //add players, finish and floor to scene
         this.player1 = new Player(0 * 32, 0 * 32, 1);
         this.player2 = new Player(0 * 32, 0 * 32, 2);
         this.add(this.player1);
         this.add(this.player2);
-
-        // Walls
-        // Section 1
-        this.add(new Floor(2, -12, 2, 16))
-        this.add(new Floor(16, -5, 8, 20))
-        this.add(new Floor(-12, 4, 2, 14))
 
         // Floors
         // Section 1
@@ -114,10 +130,27 @@ export class BackwardsLevel extends Scene {
         this.add(new Floor(0, 8, 4, 3))
         this.add(new Floor(-10, 7, 2, 7))
         this.add(new Floor(2, 16, 14, 9))
+        this.add(new Floor(-1, -12, 4, 2))
+        this.add(new Floor(-8, -13, 2, 4))
+        this.add(new Floor(-11, -13, 5, 2))
+        this.add(new Floor(-22, -3, 2, 7))
+        this.add(new Floor(-17, 15, 7, 20))
+
 
         // Ceiling
         // Section 1
-        this.add(new Floor(10, -10, 10, 7))
+        this.add(new Floor(10, -20, 10, 17))
+        this.add(new Floor(-8, -25, 12, 6))
+        this.add(new Floor(-25, -28, 12, 6))
+        this.add(new Floor(-17, -24, 7, 8))
+
+
+        // Walls
+        // Section 1
+        this.add(new Floor(2, -12, 2, 16))
+        this.add(new Floor(16, -5, 8, 20))
+        this.add(new Floor(-12, 4, 2, 14))
+        this.add(new Floor(-30, -11, 2, 5))
 
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
@@ -153,8 +186,8 @@ export class BackwardsLevel extends Scene {
             this.player1.setSpawn(-32, 0);
             this.player2.setSpawn(0, 0);
 
-            this.player1.pos = new Vector(-32, 0);
-            this.player2.pos = new Vector(0, 0);
+            this.player1.pos = new Vector(-32, -384);
+            this.player2.pos = new Vector(0, -384);
             Resources.finishMSG.stop();
         }
     }

@@ -49,12 +49,26 @@ export class StartMenu extends Scene {
             }),
             color: Color.Black
         });
-       
+
+        //button via label class
+        const button_backwardslevel = new Label({
+            text: "Backwards Level",
+            x: engine.drawWidth / 2,
+            y: engine.drawHeight / 2 + 100,
+            font: new Font({
+                size: 32,
+                unit: FontUnit.Px,
+                color: Color.White,
+                textAlign: TextAlign.Center
+            }),
+            color: Color.Black
+        });
+        
         //  Dressing Room button.
         const button_dressingRoom = new Label({
             text: "Change skin",
             x: engine.drawWidth / 2,
-            y: engine.drawHeight / 2 + 100,
+            y: engine.drawHeight / 2 + 150,
             font: new Font({
                 size: 32,
                 unit: FontUnit.Px,
@@ -76,6 +90,11 @@ export class StartMenu extends Scene {
             Resources.FinishMC.stop();
         });
 
+        //register clicks on label
+        button_backwardslevel.on('pointerup', () => {
+            engine.goToScene('backwardslevel');
+            Resources.FinishMC.stop();
+        });
 
         //register clicks on label
         button_dressingRoom.on('pointerup', () => {
@@ -85,10 +104,12 @@ export class StartMenu extends Scene {
             // Resources.FinishMC.stop();
         });
 
+
         // Add all buttons.
         this.add(titleLabel);
         this.add(button_level1);
         this.add(button_level3);
+        this.add(button_backwardslevel);
         this.add(button_dressingRoom);
 
     }

@@ -96,12 +96,13 @@ const Resources = {
 
   // Teleport
   Portal: new ImageSource("images/portal.png"),
-  PortalExit: new ImageSource("images.portalExit.png"),
+  PortalExit: new ImageSource("images/portalExit.png"),
 
   // Spikes and hazards
   SpikeTrap: new ImageSource("images/spikeBallTrap.webp"),
   SpikeBall: new ImageSource("images/spikeBall.png"),
   Fire: new ImageSource("images/objects/fire.png"),
+  FireHorizontal: new ImageSource('images/objects/fireHorizontal.png'),
 
   // Other stage objects
   Door: new ImageSource("images/door.png"),
