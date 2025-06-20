@@ -1,10 +1,10 @@
 import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign, Sprite } from "excalibur";
 import { Resources } from "../resources.ts";
 
-export class dressingRoom extends Scene {
+export class player1 extends Scene {
     constructor() {
         super();
-        console.log("Dressing room");
+        console.log("Player 1 cosmetics");
     }
 
     onInitialize(engine) {
@@ -13,7 +13,7 @@ export class dressingRoom extends Scene {
 
         // Add title label at the top
         const titleLabel = new Label({
-            text: "Choose skin",
+            text: "Player 1 change your skin!",
             x: engine.drawWidth / 2,
             y: 100,
             font: new Font({
@@ -24,10 +24,10 @@ export class dressingRoom extends Scene {
             })
         });
 
-         const gameMenu_return = new Label({
+        const changePlayer_return = new Label({
             text: "Return to game menu!",
             x: engine.drawWidth / 2,
-            y: 60, 
+            y: 60,
             font: new Font({
                 size: 48,
                 unit: FontUnit.Px,
@@ -52,43 +52,19 @@ export class dressingRoom extends Scene {
         });
         player1Actor.graphics.use(player1Sprite);
 
-        // Player 2 sprite
-        const player2Sprite = Resources.CharacterSheet.toSprite();
-        player2Sprite.sourceView = {
-            x: 0,
-            y: 64,
-            width: 32,
-            height: 32
-        };
-        const player2Actor = new Actor({
-            x: engine.drawWidth / 2 + 60,
-            y: engine.drawHeight / 2,
-            width: 64,
-            height: 64
-        });
-        player2Actor.graphics.use(player2Sprite);
-
         // Add pointer event listeners
         player1Actor.on('pointerup', () => {
             console.log('player 1');
-            engine.goToScene('player1');
         });
 
-        player2Actor.on('pointerup', () => {
-            console.log('player 2');
-            engine.goToScene('player2');
+        // Add pointer event listeners
+        changePlayer_return.on('pointerup', () => {
+            console.log('return to select player');
+            engine.goToScene('dressingRoom');
         });
 
-          gameMenu_return.on('pointerup', () => {
-            console.log('return to game menu');
-            engine.goToScene('menu');
-        });
-
-        // Buttons
         this.add(player1Actor);
-        this.add(player2Actor);
         this.add(titleLabel);
-        this.add(gameMenu_return);
+        this.add(changePlayer_return);
     }
 }
-

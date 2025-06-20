@@ -223,7 +223,7 @@ export class Player extends Actor {
         this.body.bounciness = 0.1;
         this.collider.set(this.#capsule);
         
-        this.addChild(new Cosmetic(playerNumber));
+        // this.addChild(new Cosmetic(playerNumber));
     }
 
     onCollisionStart(

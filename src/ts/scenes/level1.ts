@@ -40,7 +40,7 @@ export class LevelOne extends Scene {
         // Finish
         this.add(new Finish(700, 302));
         // Portal
-        this.add(new Portal(-10, 9.5, new Vector(-480, 648)));
+        // this.add(new Portal(-10, 9.5));
         //add players, finish and floor to scene
         this.player1 = new Player(7 * 32, 14 * 32, 1);
         this.player2 = new Player(9 * 32, 14 * 32, 2);
@@ -185,6 +185,7 @@ export class LevelOne extends Scene {
 
     onActivate() {
         console.log("level 1 loaded");
+        // this doesnt work for some reaason.
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
         Resources.gameMusic.volume = 0.1;
@@ -194,7 +195,6 @@ export class LevelOne extends Scene {
             this.player1.pos = new Vector(-512, 648);
             this.player2.pos = new Vector(-448, 648);
             Resources.finishMSG.stop();
-
         }
     }
 }
