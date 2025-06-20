@@ -14,6 +14,7 @@ import { Portal } from "../objects/portal.ts";
 import { Resources } from "../resources.ts";
 import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
+import { JumpPlate } from "../objects/jumpPlate.ts";
 
 export class LevelThree extends Scene {
     public levelKey = "level3";
@@ -47,10 +48,10 @@ export class LevelThree extends Scene {
         this.add(trap2);
 
         // Trap Plates
-        this.add(new TrapPlate(700, 310, trap1));
-        this.add(new TrapPlate(800, 310, trap1));
-        this.add(new TrapPlate(400, 310, trap2));
-        this.add(new TrapPlate(500, 310, trap2));
+        this.add(new TrapPlate(700, 310, 0, trap1));
+        this.add(new TrapPlate(800, 310, 0, trap1));
+        this.add(new TrapPlate(400, 310, 0, trap2));
+        this.add(new TrapPlate(500, 310, 0, trap2));
 
         // walls
         this.add(new Floor(-34, 0, 12, 60));
@@ -59,6 +60,12 @@ export class LevelThree extends Scene {
         // floor
         this.add(new Floor(0, 40, 100, 30));
         this.add(new Floor(0, -20, 100, 5));
+        this.add(new Floor(19.5, -39, 5, 9));
+
+        //floor for 3rd floor
+        //2nd floor ceiling
+        this.add(new Floor(-4, -43, 20, 5));
+        
         // this.add(new Floor(56, 40, 20, 30, [1, 2])); // the numbers [1, 2] are for boosting. Can either be left out, [1], [2], or [1, 2]
 
         //higher floors
@@ -68,6 +75,10 @@ export class LevelThree extends Scene {
         this.add(new Floor(58, 1, 5, 4));
         this.add(new Floor(70, 5, 10, 3));
         this.add(new Floor(82, 1, 5, 4));
+
+        //higher floors (2nd floor)
+        this.add(new Floor(5, -25, 5, 10));
+        this.add(new Floor(43, -25, 10, 10));
 
         //special platforms
         const alwaysPlatform = new AlwaysMovingPlatform(
@@ -98,6 +109,20 @@ export class LevelThree extends Scene {
         this.add(plateDoublePlatform);
 
         const pressurePlatePlatform = new PressurePlatePlatform(
+            30, -25, 100, 20,
+            PlatformType.DefaultPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(5, -25),
+            new Vector(5, -25),
+            192,
+            0,
+            [],
+            new Vector(2, 2)
+        );
+        this.add(pressurePlatePlatform);
+        const boxForPressurePlate = new Box(-3, 0);
+
+        const pressurePlatePlatform2ndFloor = new PressurePlatePlatform(
             5, 4, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
@@ -108,12 +133,11 @@ export class LevelThree extends Scene {
             [],
             new Vector(2, 2)
         );
-        this.add(pressurePlatePlatform);
-        const boxForPressurePlate = new Box(-3, 0);
+        this.add(pressurePlatePlatform2ndFloor);
 
 
 
-        const platformPlate = new DefaultPlate(0, 320, pressurePlatePlatform, boxForPressurePlate);
+        const platformPlate = new DefaultPlate(0, 320, 0, pressurePlatePlatform, boxForPressurePlate);
 
         this.add(platformPlate);
         this.add(boxForPressurePlate)
@@ -124,10 +148,15 @@ export class LevelThree extends Scene {
         const boxForPlate2 = new Box(1560, -100);
         this.add(boxForPlate1);
         this.add(boxForPlate2);
-        const plate1 = new DefaultPlate(960, 180, plateDoublePlatform, boxForPlate1); // positionX, positionY, platform, targetBox
-        const plate2 = new DefaultPlate(1550, -100, plateDoublePlatform, boxForPlate2); // positionX, positionY, platform, targetBox
+        const plate1 = new DefaultPlate(960, 180, 0, plateDoublePlatform, boxForPlate1); // positionX, positionY, platform, targetBox
+        const plate2 = new DefaultPlate(1550, -100, 0, plateDoublePlatform, boxForPlate2); // positionX, positionY, platform, targetBox
         this.add(plate1);
         this.add(plate2);
+
+
+          //jump plate test
+        const jumpPlate = new JumpPlate(-80, -800, 900);
+        this.add(jumpPlate);
 
 
 
