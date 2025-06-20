@@ -9,8 +9,8 @@ import { Controls } from "../player.ts";
 export class Portal extends Actor {
     private player1Present: boolean = false;
     private player2Present: boolean = false;
-    
-    constructor(x: number, y: number) {
+    public coordinates: Vector;
+    constructor(x: number, y: number, coordinates: Vector) {
         super({ 
             width: 2, 
             height: 10, 
@@ -22,6 +22,7 @@ export class Portal extends Actor {
         this.scale = new Vector(0.7, 0.7)
         this.pos = new Vector(x * 32, y * 32);
         this.body.useGravity = false 
+        this.coordinates = coordinates;
         const portalSpritesheet = SpriteSheet.fromImageSource({
             image: Resources.Portal,
             grid: {
@@ -56,9 +57,7 @@ export class Portal extends Actor {
         if (event.other.owner instanceof Player && this.scene) {
             const player = event.other.owner as Player;
             
-            // Teleport the player to a new position.
-            const teleportPos = new Vector(-480, 648);
-            player.pos = teleportPos;
+            player.pos = this.coordinates; // Teleport to the coordinates given.
             
             // Debugging.
             console.log(`${player.playerNumber === 1 ? "Player 1" : "Player 2"} teleported!`);
