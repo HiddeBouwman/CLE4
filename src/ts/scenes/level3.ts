@@ -127,13 +127,16 @@ export class LevelThree extends Scene {
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
             new Vector(5, 4),
-            new Vector(25, 4),
+            new Vector(5, 25),
             192,
             0,
             [],
             new Vector(2, 2)
         );
+        const platformPlate2ndFloor = new DefaultPlate(800, -800, 0, pressurePlatePlatform2ndFloor, boxForPressurePlate);
+        
         this.add(pressurePlatePlatform2ndFloor);
+        this.add(platformPlate2ndFloor);
 
 
 
@@ -156,9 +159,9 @@ export class LevelThree extends Scene {
 
           //jump plate test
         const jumpPlate = new JumpPlate(-80, -800, 900);
+        //const jumpPlateTest = new JumpPlate(-80, -800, 900);
         this.add(jumpPlate);
-
-
+        //this.add(jumpPlateTest);
 
         // // ground platforms
         // this.add(new Floor(-15, -2, 4, 2));
