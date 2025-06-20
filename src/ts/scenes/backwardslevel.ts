@@ -3,29 +3,24 @@ import { Player } from "../player.ts";
 import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
-import { Box } from "../objects/box.ts";
-import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
-import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultplate.ts";
-import { JumpPlate } from "../objects/jumpPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
-import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
-import { PlatformType } from "../objects/platform.ts"; 
-import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
-import { Portal } from "../objects/portal.ts";
-import { Block } from "../objects/block.ts";
-import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
-
-import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
-import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
-import { PressurePlate } from "../objects/pressureplate.ts";
-
 import { Resources } from "../resources.ts";
+
+// stage specific
+import { Box } from "../objects/box.ts";
 import { Fire } from "../objects/fire.ts";
 import { FireWall } from "../objects/fireWall";
+import { PlatformType } from "../objects/platform.ts";
+import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
+import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
+import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
+import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
+import { Block } from "../objects/block.ts"; 
+import { Portal } from "../objects/portal.ts";
 
-export class LevelOne extends Scene {
-    public levelKey = "level1";
+export class BackwardsLevel extends Scene {
+    public levelKey = "backwarslevel";
     floor: Floor;
     player1: Player;
     player2: Player;
@@ -36,16 +31,26 @@ export class LevelOne extends Scene {
     }
 
     onInitialize(engine: Engine) {
+        //add players, finish and floor to scene
+        this.player1 = new Player(0 * 32, 0 * 32, 1);
+        this.player2 = new Player(2 * 32, 0 * 32, 2);
+        this.add(this.player1);
+        this.add(this.player2);
+
+        // Floors
+        this.add(new Floor(4, 0, 12, 20))
+
+        // Platforms
+
+        // Stage hazards
+
+        // Timer blocks
+
+        // Portals
+        this.add(new Portal(-10, 9.5));
 
         // Finish
         this.add(new Finish(700, 302));
-        // Portal
-        this.add(new Portal(-10, 9.5));
-        //add players, finish and floor to scene
-        this.player1 = new Player(7 * 32, 14 * 32, 1);
-        this.player2 = new Player(9 * 32, 14 * 32, 2);
-        this.add(this.player1);
-        this.add(this.player2);
 
         // Parameters: x, y, width, height
 
@@ -66,18 +71,14 @@ export class LevelOne extends Scene {
         this.add(new Block(-250, -400, 8000));
         // this.add(new Block(-300, 300, 2000));
 
-        
 
-        
-        //boxes
+
+
+
         const box1 = new Box(6, -21);
         this.add(box1);;
         const box2 = new Box(35, 5);
         this.add(box2);
-
-        //jump plate test
-        const jumpPlate = new JumpPlate(6, 320, 900);
-        this.add(jumpPlate);
 
 
         /** 
@@ -114,9 +115,9 @@ export class LevelOne extends Scene {
         this.add(platePlatform);
 
         // In case it needs a pressure plate to move:
-        const plate1 = new DefaultPlate(256, -130, 0, platePlatform, box1);
+        const plate1 = new DefaultPlate(256, -130, platePlatform, box1);
         this.add(plate1);
-        const plate = new DefaultPlate(320, -130, 0, platePlatform, box1);
+        const plate = new DefaultPlate(320, -130, platePlatform, box1);
         this.add(plate);
 
 
@@ -132,27 +133,15 @@ export class LevelOne extends Scene {
             new Vector(2, 2)
         );
         this.add(returnPlatform);
-        const plate2 = new DefaultPlate(1120, -136, 0, returnPlatform, box2);
+        const plate2 = new DefaultPlate(1120, -136, returnPlatform, box2);
         this.add(plate2);
-        const plate3 = new DefaultPlate(1120, -520, 0, returnPlatform, box2);
+        const plate3 = new DefaultPlate(1120, -520, returnPlatform, box2);
         this.add(plate3);
-
-
-        /*
-        * Stage Hazards
-        */
-
-        // traps
-        const trap1 = new SpikeBallTrap(198, 8);
-        this.add(trap1);
-
-        // trap plates
-        this.add(new TrapPlate(190, 310, 0, trap1)); // positionX, positionY, trap
 
 
         // Fire
         this.add(new Fire(-4, -5)); // place the fire on gridposition (12, -5)
-       
+
         // Place a wall of fire from (15, -5) to (20, -5) (Horizontal)
         this.add(new FireWall(15, -5, 20, -5));
 
@@ -176,10 +165,10 @@ export class LevelOne extends Scene {
 
         if (this.player1.pos.y > deathY) {
             Resources.PlayerDeathSound1.play();
-            engine.goToScene("level1");
+            engine.goToScene("backwardslevel");
         } else if (this.player2.pos.y > deathY) {
             Resources.PlayerDeathSound3.play();
-            engine.goToScene("level1");
+            engine.goToScene("backwardslevel");
         }
     }
 
@@ -187,7 +176,7 @@ export class LevelOne extends Scene {
         console.log("level 1 loaded");
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
-        Resources.gameMusic.volume = 0.1;
+        Resources.gameMusic.volume = 0.3;
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
