@@ -10,10 +10,12 @@ import { dressingRoom } from './scenes/dressingroom.ts';
 import { BackwardsLevel } from "./scenes/backwardslevel.ts";
 
 export class Game extends Engine {
+    mygamepad
+
     constructor() {
         super({
             width: 800,
-            height: 600,
+            height: 500,
             maxFps: 60,
             pixelArt: true,
             // pixelRatio: 1,
@@ -33,6 +35,12 @@ export class Game extends Engine {
     }
 
     #startGame() {
+        this.input.gamepads.enabled = true
+        this.input.gamepads.on('connect', (connectevent) => {
+            console.log("gamepad detected")
+            this.mygamepad = connectevent.gamepad
+        })
+
         console.log("start de game!");
         //add and load start menu scene
         this.add('menu', new StartMenu());
