@@ -1,9 +1,9 @@
-import { FontSource, ImageFiltering, ImageSource, Loader, Resource, Sound } from "excalibur";
+import { FontSource, ImageFiltering, ImageSource, Loader, Resource, Sound,} from "excalibur";
 
 // voeg hier jouw eigen resources toe
 const Resources = {
 
-// Every file that's in pseudocode is unused.
+  // Every file that's in pseudocode is unused.
 
   // Audio
   // Player audio
@@ -61,7 +61,14 @@ const Resources = {
   changeSkin: new Sound("sounds/changeskin.mp3"),
 
 
-// Sprites
+  //fonts
+  mainMenu: new FontSource("fonts/Delicatus.ttf", "Delicatus"),
+
+
+  //start menu background
+  startMenuBackground: new ImageSource("images/backgrounds/titlescreen.png"),
+
+  // Sprites
   // Player
   CharacterSheet: new ImageSource("images/character.png"),
   Cosmetics: new ImageSource("cosmetics.png"),
