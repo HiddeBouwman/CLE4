@@ -6,19 +6,26 @@ import { Box } from "./box";
 import { Engine } from "excalibur";
 
 export class DefaultPlate extends PressurePlate {
-    protected targetPlatform: IMovablePlatform;
-    private targetBox?: Box; // Maak optioneel
+    protected targetPlatforms: IMovablePlatform[];
+    private targetBox?: Box;
     private _activeObjects = new Set<any>();
 
 
-    constructor(x: number, y: number, velocityBoost: number, targetPlatform: IMovablePlatform, targetBox?: Box) {
+    constructor(
+        x: number,
+        y: number,
+        velocityBoost: number,
+        targetPlatform: IMovablePlatform | IMovablePlatform[], // accepteer array of los object
+        targetBox?: Box
+    ) {
         super(
             x,
             y,
             velocityBoost,
             Resources.pressurePlateGreenBase.toSprite(),
         );
-        this.targetPlatform = targetPlatform;
+        // Altijd opslaan als array
+        this.targetPlatforms = Array.isArray(targetPlatform) ? targetPlatform : [targetPlatform];
         this.targetBox = targetBox;
 
         if (this.plateSprite) {
@@ -31,15 +38,17 @@ export class DefaultPlate extends PressurePlate {
         this.on("collisionstart", (evt) => {
             if ((evt.self as any).activator) {
                 const other = evt.other.owner;
-                // Sta toe: speler OF (box als die bestaat)
                 if (other && (other instanceof Player || (this.targetBox && other === this.targetBox))) {
                     this._activeObjects.add(other);
                     if (this._activeObjects.size === 1) {
                         Resources.Button.play();
-                        if (typeof this.targetPlatform.registerPressurePlateActivated === "function") {
-                            this.targetPlatform.registerPressurePlateActivated();
-                        } else {
-                            this.targetPlatform.startMoving();
+                        // Activeer ALLE platforms
+                        for (const platform of this.targetPlatforms) {
+                            if (typeof platform.registerPressurePlateActivated === "function") {
+                                platform.registerPressurePlateActivated();
+                            } else {
+                                platform.startMoving();
+                            }
                         }
                         this.plateSprite.graphics.use(Resources.PressurePlateGreenActivated.toSprite());
                     }
@@ -53,10 +62,13 @@ export class DefaultPlate extends PressurePlate {
                 if (other && (other instanceof Player || other instanceof Box)) {
                     this._activeObjects.delete(other);
                     if (this._activeObjects.size === 0) {
-                        if (typeof this.targetPlatform.registerPressurePlateDeactivated === "function") {
-                            this.targetPlatform.registerPressurePlateDeactivated();
-                        } else {
-                            this.targetPlatform.stopMoving();
+                        // Deactiveer ALLE platforms
+                        for (const platform of this.targetPlatforms) {
+                            if (typeof platform.registerPressurePlateDeactivated === "function") {
+                                platform.registerPressurePlateDeactivated();
+                            } else {
+                                platform.stopMoving();
+                            }
                         }
                         this.plateSprite.graphics.use(Resources.PressurePlateGreen.toSprite());
                     }
