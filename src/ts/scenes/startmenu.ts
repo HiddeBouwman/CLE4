@@ -116,9 +116,6 @@ export class StartMenu extends Scene {
         this.add(button_backwardslevel);
         this.add(button_dressingRoom);
 
-
-
-
          this.menuButtons = [
             button_level1,
             button_level3,
@@ -126,9 +123,16 @@ export class StartMenu extends Scene {
             button_dressingRoom
         ];
 
-        // Add all buttons to the scene
+        // Add all buttons and title to the scene
         this.add(titleLabel);
-        this.menuButtons.forEach(btn => this.add(btn));
+        this.menuButtons.forEach((btn, idx) => {
+            this.add(btn);
+            // Mouse hover highlight
+            btn.on('pointerenter', () => {
+                this.selectedIndex = idx;
+                this.highlightSelected();
+            });
+        });
 
         // Highlight the first button
         this.highlightSelected();
