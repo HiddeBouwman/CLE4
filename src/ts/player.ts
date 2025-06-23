@@ -12,6 +12,8 @@ import {
     Sprite,
     SpriteSheet,
     Vector,
+    Buttons,
+    Axes
 } from "excalibur";
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
@@ -26,6 +28,13 @@ import { Floor, isBoostFloorForPlayer } from "./floor.ts";
 import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
 import { Cosmetic } from "./cosmetic.ts";
+
+declare module "excalibur" {
+    interface Engine {
+        // Use the correct type if you know it
+        mygamepad?: any;
+    }
+}
 
 // Type voor elk bewegend platform
 type AnyMovingPlatform =
@@ -64,6 +73,7 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
 };
 
 export class Player extends Actor {
+    private gamepadIndex: number;
     #onGround: boolean = true;
     controls: PlayerControls;
     speedBoost: boolean = false;
@@ -106,7 +116,9 @@ export class Player extends Actor {
             },
         );
 
+
         this.playerNumber = playerNumber;
+        this.gamepadIndex = playerNumber - 1;
 
         //important requirements for a Actor
         this.scale = new Vector(2, 2);
@@ -225,7 +237,7 @@ export class Player extends Actor {
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
         this.collider.set(this.#capsule);
-        
+
         // this.addChild(new Cosmetic(playerNumber));
     }
 
@@ -243,9 +255,9 @@ export class Player extends Actor {
         }
         if (
             other.owner.get(BodyComponent)?.collisionType ===
-                CollisionType.Fixed ||
+            CollisionType.Fixed ||
             other.owner.get(BodyComponent)?.collisionType ===
-                CollisionType.Active
+            CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
                 // Landing sound with hard landing
@@ -426,6 +438,10 @@ export class Player extends Actor {
     }
 
     onPreUpdate(engine: Engine, delta: number) {
+        const gamepad = engine.input.gamepads.at(this.gamepadIndex);
+        let kb = engine.input.keyboard;
+
+
         if (this.isDead) {
             // Blokkeer alle beweging en input
             this.vel = Vector.Zero;
@@ -434,7 +450,7 @@ export class Player extends Actor {
             return;
         }
 
-        let kb = engine.input.keyboard;
+
 
         if (kb.wasPressed(this.controls.reset) && this.scene) {
             // Stop current music
@@ -453,6 +469,14 @@ export class Player extends Actor {
         if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
         }
+
+        if (gamepad) {
+        const stickX = gamepad.getAxes(Axes.LeftStickX);
+        // Use a deadzone to avoid drift
+        if (Math.abs(stickX) > 0.2) {
+            xspeed = stickX; // This will be a value between -1 (left) and 1 (right)
+        }
+    }
 
         // Idle detection
         if (xspeed === 0 && Math.abs(this.vel.x) < 1) {
@@ -488,7 +512,10 @@ export class Player extends Actor {
         }
 
         // Jump controls
-        if (kb.wasPressed(this.controls.up) && this.#onGround) {
+        if (
+            (kb.wasPressed(this.controls.up) && this.#onGround) ||
+            (gamepad && gamepad.isButtonPressed(Buttons.Face1) && this.#onGround)
+        ) {
             this.jump();
         }
 
@@ -529,7 +556,7 @@ export class Player extends Actor {
             }
             // when moving right (positive x), do flip
             this.graphics.flipHorizontal = this.vel.x > 0;
-            
+
             // Update cosmetic to walk animation with same flip
             this.children.forEach(child => {
                 if (child instanceof Cosmetic) {
@@ -541,7 +568,7 @@ export class Player extends Actor {
             if (this.graphics.current !== this.#idleAnimation) {
                 this.graphics.use(this.#idleAnimation);
                 this.graphics.flipHorizontal = false; // Reset flip when idle
-                
+
                 // Update cosmetic to idle animation
                 this.children.forEach(child => {
                     if (child instanceof Cosmetic) {

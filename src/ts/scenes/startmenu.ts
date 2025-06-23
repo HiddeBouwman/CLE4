@@ -1,7 +1,11 @@
-import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign } from "excalibur";
+import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign, Buttons, Engine, Axes } from "excalibur";
 import { Resources } from "../resources.ts";
 
 export class StartMenu extends Scene {
+    private menuButtons: Label[] = [];
+    private selectedIndex: number = 0;
+    private lastStickY: number = 0;
+
     constructor() {
         super();
         console.log("game started");
@@ -13,7 +17,7 @@ export class StartMenu extends Scene {
         const titleLabel = new Label({
             text: "Choose level",
             x: engine.drawWidth / 2,
-            y: 100, 
+            y: 100,
             font: new Font({
                 size: 48,
                 unit: FontUnit.Px,
@@ -36,7 +40,7 @@ export class StartMenu extends Scene {
             color: Color.Black
         });
 
-          //button via label class
+        //button via label class
         const button_level3 = new Label({
             text: "Level 3",
             x: engine.drawWidth / 2,
@@ -63,7 +67,7 @@ export class StartMenu extends Scene {
             }),
             color: Color.Black
         });
-        
+
         //  Dressing Room button.
         const button_dressingRoom = new Label({
             text: "Change skin",
@@ -112,5 +116,96 @@ export class StartMenu extends Scene {
         this.add(button_backwardslevel);
         this.add(button_dressingRoom);
 
+
+
+
+         this.menuButtons = [
+            button_level1,
+            button_level3,
+            button_backwardslevel,
+            button_dressingRoom
+        ];
+
+        // Add all buttons to the scene
+        this.add(titleLabel);
+        this.menuButtons.forEach(btn => this.add(btn));
+
+        // Highlight the first button
+        this.highlightSelected();
+
+        // Optionally, listen for keyboard as well
+        engine.input.keyboard.on('press', (evt) => {
+            if (evt.key === 'ArrowDown') {
+                this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
+                this.highlightSelected();
+            } else if (evt.key === 'ArrowUp') {
+                this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
+                this.highlightSelected();
+            } else if (evt.key === 'Enter') {
+                this.activateSelected(engine);
+            }
+        });
     }
+
+
+
+    onPreUpdate(engine: Engine) {
+        const gamepad = engine.input.gamepads.at(0); // Use first gamepad
+
+        if (gamepad) {
+            // Up/Down navigation with stick or dpad
+            const stickY = gamepad.getAxes(Axes.LeftStickY);
+
+            // Deadzone and edge detection for stick
+            if (stickY > 0.5 && this.lastStickY <= 0.5) {
+                this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
+                this.highlightSelected();
+            } else if (stickY < -0.5 && this.lastStickY >= -0.5) {
+                this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
+                this.highlightSelected();
+            }
+            this.lastStickY = stickY;
+
+            // Dpad navigation
+            if (gamepad.isButtonPressed(Buttons.DpadDown)) {
+                this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
+                this.highlightSelected();
+            } else if (gamepad.isButtonPressed(Buttons.DpadUp)) {
+                this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
+                this.highlightSelected();
+            }
+
+            // Activate with Face1 (A/X)
+            if (gamepad.isButtonPressed(Buttons.Face1)) {
+                this.activateSelected(engine);
+            }
+        }
+    }
+
+    highlightSelected() {
+        this.menuButtons.forEach((btn, idx) => {
+            btn.color = idx === this.selectedIndex ? Color.Yellow : Color.Black;
+        });
+    }
+
+    activateSelected(engine: Engine) {
+        switch (this.selectedIndex) {
+            case 0:
+                engine.goToScene('level1');
+                Resources.FinishMC.stop();
+                break;
+            case 1:
+                engine.goToScene('level3');
+                Resources.FinishMC.stop();
+                break;
+            case 2:
+                engine.goToScene('backwardslevel');
+                Resources.FinishMC.stop();
+                break;
+            case 3:
+                engine.goToScene('dressingRoom');
+                break;
+        }
+    }
+    
 }
