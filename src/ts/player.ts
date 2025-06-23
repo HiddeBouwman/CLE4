@@ -106,6 +106,8 @@ export class Player extends Actor {
     private isDead: boolean = false;
     private respawnTimeout: any = null;
 
+    private groundContacts: number = 0;
+
     constructor(x: number, y: number, playerNumber: number) {
         super(
             {
@@ -260,6 +262,8 @@ export class Player extends Actor {
             CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
+                this.groundContacts++;
+                this.#onGround = true;
                 // Landing sound with hard landing
                 if (this.lastYVelocity > 750) { // Change this value for sensitivity
                     const landSounds = [
@@ -277,7 +281,6 @@ export class Player extends Actor {
                         Math.floor(Math.random() * softLandSounds.length)
                     ].play();
                 }
-                this.#onGround = true;
             }
         }
         // Boost on platform
@@ -356,7 +359,10 @@ export class Player extends Actor {
             otherBody?.collisionType === CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
-                this.#onGround = false;
+                this.groundContacts = Math.max(0, this.groundContacts - 1);
+                if (this.groundContacts === 0) {
+                    this.#onGround = false;
+                }
                 // Carry on platform momentum
                 if (
                     other.owner &&
@@ -432,9 +438,9 @@ export class Player extends Actor {
         this.acc = Vector.Zero;
         this.body.useGravity = true; // Zet zwaartekracht weer aan
         this.graphics.opacity = 1; // Zorg dat speler zichtbaar is
+        this.groundContacts = 0;
         // Log de spawnpositie in de console
         console.log(`Player ${this.playerNumber} respawned at (${this.initialX}, ${this.initialY})`);
-        // Optioneel: tijdelijke onkwetsbaarheid of animatie
     }
 
     onPreUpdate(engine: Engine, delta: number) {

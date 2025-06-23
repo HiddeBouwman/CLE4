@@ -86,19 +86,31 @@ export class BackwardsLevel extends Scene {
         )
         this.add(yellowPlatform2);
 
-        const purplePlatform3 = new PressurePlateReturnPlatform(
-            -42, -3, 100, 20,
-            PlatformType.PurplePlatform,
+        const defaultPlatform1 = new PressurePlateReturnPlatform(
+            -28, 1, 100, 20,
+            PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(-42, -3),
-            new Vector(-26, -3),
-            288,
-            [1],
+            new Vector(-28, 1),
+            new Vector(-50, 1),
+            192,
+            [],
             new Vector(2, 2)
         )
+        this.add(defaultPlatform1);
 
-        this.add(purplePlatform3);
-        const multiPlate1 = new DefaultPlate(-35 * 32, -10 * 32, 0, [yellowPlatform2, purplePlatform3]);
+        const defaultPlatform2 = new PressurePlateReturnPlatform(
+            -25, 1, 100, 20,
+            PlatformType.DefaultPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(-25, 1),
+            new Vector(-47, 1),
+            192,
+            [],
+            new Vector(2, 2)
+        )
+        this.add(defaultPlatform2);
+
+        const multiPlate1 = new DefaultPlate(-35 * 32, -10 * 32, 0, [yellowPlatform2, defaultPlatform1, defaultPlatform2]);
         this.add(multiPlate1);
 
 
@@ -129,6 +141,8 @@ export class BackwardsLevel extends Scene {
         this.add(new FireWall(-13, -4.6, -21, -4.6, "up"));
         this.add(new FireWall(-31.5, -19.6, -32.5, -19.6, "up"));
         this.add(new FireWall(-33.5, -9.6, -33.5, -18.6, "left"));
+        this.add(new FireWall(-27.5, 1.4, -34.5, 1.4, "up"));
+        this.add(new FireWall(-35.5, -1.6, -36.5, -1.6, "up"));
         
         //add players, finish and floor to scene
         this.player1 = new Player(0 * 32, 0 * 32, 1);
@@ -137,7 +151,6 @@ export class BackwardsLevel extends Scene {
         this.add(this.player2);
 
         // Floors
-        // Section 1
         this.add(new Floor(0, 2, 4, 2))
         this.add(new Floor(-0.5, -5, 4.5, 2))
         this.add(new Floor(-10.5, -5, 3.5, 2))
@@ -153,11 +166,13 @@ export class BackwardsLevel extends Scene {
         this.add(new Floor(-31, -11, 3, 5))
         this.add(new Floor(-35, -8, 5, 2))
         this.add(new Floor(-23, -16, 5, 3))
-        this.add(new Floor(-35, 6, 13, 10))
+        this.add(new Floor(-29, -7, 3, 2))
+        this.add(new Floor(-24, 2, 2, 6))
+        this.add(new Floor(-26, 2, 2, 4))
+        this.add(new Floor(-35, 11, 13, 10))
 
 
         // Ceiling
-        // Section 1
         this.add(new Floor(10, -20, 10, 17))
         this.add(new Floor(-8, -25, 12, 6))
         this.add(new Floor(-25, -32, 12, 6))
@@ -165,11 +180,11 @@ export class BackwardsLevel extends Scene {
 
 
         // Walls
-        // Section 1
         this.add(new Floor(2, -12, 2, 16))
         this.add(new Floor(16, -5, 8, 20))
         this.add(new Floor(-12, 4, 2, 14))
         this.add(new Floor(-32, -13, 2, 7))
+        this.add(new Floor(-36, 5, 2, 7))
 
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
@@ -206,7 +221,7 @@ export class BackwardsLevel extends Scene {
             this.player2.setSpawn(0, 0);
 
             this.player1.pos = new Vector(-720, -384);
-            this.player2.pos = new Vector(-688, -384);
+            this.player2.pos = new Vector(-1024, -384);
             Resources.finishMSG.stop();
         }
     }
