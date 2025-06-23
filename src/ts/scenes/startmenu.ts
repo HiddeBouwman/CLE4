@@ -1,4 +1,4 @@
-import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign, Buttons, Engine, Axes } from "excalibur";
+import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign, Buttons, Engine, Axes, Vector } from "excalibur";
 import { Resources } from "../resources.ts";
 
 export class StartMenu extends Scene {
@@ -13,6 +13,28 @@ export class StartMenu extends Scene {
     }
 
     onInitialize(engine) {
+        // Create background sprite from the image source
+        const bgSprite = Resources.startMenuBackground.toSprite();
+
+        // Create a background actor
+        const bgActor = new Actor({
+            x: engine.drawWidth / 2,
+            y: engine.drawHeight / 2,
+            width: engine.drawWidth,
+            height: engine.drawHeight,
+            anchor: Vector.Half // center it
+        });
+
+        // Set the background sprite and scale to fit the screen
+        bgSprite.width = engine.drawWidth;
+        bgSprite.height = engine.drawHeight;
+        bgActor.graphics.use(bgSprite);
+
+        // Add background first so it's behind everything
+        this.add(bgActor);
+
+
+
         // Add title label at the top
         const titleLabel = new Label({
             text: "Choose level",
@@ -22,7 +44,8 @@ export class StartMenu extends Scene {
                 size: 48,
                 unit: FontUnit.Px,
                 color: Color.Black,
-                textAlign: TextAlign.Center
+                textAlign: TextAlign.Center,
+                family: 'Delicatus'
             })
         });
 
@@ -35,7 +58,8 @@ export class StartMenu extends Scene {
                 size: 32,
                 unit: FontUnit.Px,
                 color: Color.White,
-                textAlign: TextAlign.Center
+                textAlign: TextAlign.Center,
+                family: 'Delicatus'
             }),
             color: Color.Black
         });
@@ -49,7 +73,8 @@ export class StartMenu extends Scene {
                 size: 32,
                 unit: FontUnit.Px,
                 color: Color.White,
-                textAlign: TextAlign.Center
+                textAlign: TextAlign.Center,
+                family: 'Delicatus'
             }),
             color: Color.Black
         });
@@ -63,7 +88,8 @@ export class StartMenu extends Scene {
                 size: 32,
                 unit: FontUnit.Px,
                 color: Color.White,
-                textAlign: TextAlign.Center
+                textAlign: TextAlign.Center,
+                family: 'Delicatus'
             }),
             color: Color.Black
         });
@@ -77,7 +103,8 @@ export class StartMenu extends Scene {
                 size: 32,
                 unit: FontUnit.Px,
                 color: Color.White,
-                textAlign: TextAlign.Center
+                textAlign: TextAlign.Center,
+                family: 'Delicatus'
             }),
             color: Color.Black
         });
@@ -91,7 +118,8 @@ export class StartMenu extends Scene {
                 size: 32,
                 unit: FontUnit.Px,
                 color: Color.White,
-                textAlign: TextAlign.Center
+                textAlign: TextAlign.Center,
+                family: 'Delicatus'
             }),
             color: Color.Black
         });
@@ -210,7 +238,7 @@ export class StartMenu extends Scene {
 
     highlightSelected() {
         this.menuButtons.forEach((btn, idx) => {
-            btn.color = idx === this.selectedIndex ? Color.Yellow : Color.Black;
+            btn.color = idx === this.selectedIndex ? new Color(0, 100, 0) : Color.Black;
         });
     }
 
