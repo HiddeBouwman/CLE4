@@ -137,3 +137,11 @@ for (let res of Object.values(Resources)) {
 }
 
 export { ResourceLoader, Resources };
+
+export function stopAllMusic() {
+    Resources.Menu.stop?.();
+    Resources.changeSkin.stop?.();
+    Resources.gameMusic.stop?.();
+    Resources.FinishMC.stop?.();
+}
+   

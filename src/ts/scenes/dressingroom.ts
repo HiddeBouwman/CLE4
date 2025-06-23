@@ -1,5 +1,5 @@
 import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign, Sprite } from "excalibur";
-import { Resources } from "../resources.ts";
+import { Resources, stopAllMusic } from "../resources.ts";
 
 export class dressingRoom extends Scene {
     constructor() {
@@ -90,5 +90,11 @@ export class dressingRoom extends Scene {
         this.add(titleLabel);
         this.add(gameMenu_return);
     }
+
+    onActivate() {
+    stopAllMusic();
+    Resources.changeSkin.loop = true;
+    Resources.changeSkin.play();
+}
 }
 

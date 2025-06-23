@@ -20,7 +20,7 @@ import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
 import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
 import { PressurePlate } from "../objects/pressureplate.ts";
 
-import { Resources } from "../resources.ts";
+import { Resources, stopAllMusic } from "../resources.ts";
 import { Fire } from "../objects/fire.ts";
 import { FireWall } from "../objects/fireWall";
 
@@ -189,6 +189,10 @@ export class LevelOne extends Scene {
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
         Resources.gameMusic.volume = 0.1;
+        stopAllMusic();
+
+
+
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {

@@ -1,5 +1,5 @@
 import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign, Buttons, Engine, Axes, Vector } from "excalibur";
-import { Resources } from "../resources.ts";
+import { Resources, stopAllMusic } from "../resources.ts";
 
 export class StartMenu extends Scene {
     private menuButtons: Label[] = [];
@@ -13,6 +13,7 @@ export class StartMenu extends Scene {
     }
 
     onInitialize(engine) {
+
         // Create background sprite from the image source
         const bgSprite = Resources.startMenuBackground.toSprite();
 
@@ -266,4 +267,9 @@ export class StartMenu extends Scene {
         }
     }
 
+    onActivate() {
+        stopAllMusic();
+        Resources.Menu.loop = true;
+        Resources.Menu.play();
+    }
 }
