@@ -109,6 +109,7 @@ const Resources = {
 
 
   // Background
+  TitleScreen: new ImageSource("images/backgrounds/titlescreen.png"),
   BackgroundFront: new ImageSource("images/backgrounds/background-front-layer.png"),
   BackgroundSecond: new ImageSource("images/backgrounds/background-second-layer.png"),
   BackgroundThird: new ImageSource("images/backgrounds/background-third-layer.png"),
