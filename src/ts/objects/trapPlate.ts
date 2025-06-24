@@ -6,6 +6,15 @@ import { SpikeBallTrap } from "./spikeBallTrap";
 import { Box } from "./box";
 import { SpikeBall } from "./spikeBall";
 
+/**
+ * Orange pressure plate that activates a spike ball trap when pressed.
+ * Can be triggered by players or boxes and has a cooldown period.
+ * 
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ * @param velocityBoost - Vertical velocity boost (unused in this implementation)
+ * @param trap - The SpikeBallTrap to activate when this plate is pressed
+ */
 export class TrapPlate extends PressurePlate {
     private trap: SpikeBallTrap;
     frameCounter

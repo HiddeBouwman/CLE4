@@ -1,6 +1,13 @@
 import { Actor, Vector, SpriteSheet, Animation, AnimationStrategy } from "excalibur";
 import { Resources } from "../resources.ts";
 
+/**
+ * Visual indicator for portal exit locations.
+ * Displays an animated portal effect without teleportation functionality.
+ * 
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ */
 export class PortalExit extends Actor {
     constructor(x: number, y: number) {
         super({

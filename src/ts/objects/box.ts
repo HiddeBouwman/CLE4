@@ -9,6 +9,14 @@ import { Resources } from "../resources.ts";
 import { Player } from "../player.ts";
 import { Floor } from "../floor.ts";
 
+/**
+ * A pushable box that players can interact with.
+ * Box produces sound effects when being pushed or when falling.
+ * Can be used to activate pressure plates.
+ *
+ * @param x - X coordinate in grid units (will be multiplied by 32)
+ * @param y - Y coordinate in grid units (will be multiplied by 32)
+ */
 export class Box extends Actor {
     #roundedbox = new CompositeCollider([
         Shape.Box(33, 33, new Vector(0.5, 0.5), new Vector(0, 0)),

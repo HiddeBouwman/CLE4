@@ -2,6 +2,13 @@ import { Actor, CollisionType, Vector, Engine } from "excalibur";
 import { Resources } from "../resources.ts";
 import { SpikeBall } from "./spikeBall.ts";
 
+/**
+ * Trap that drops spike balls when activated by a TrapPlate.
+ * Creates three spike balls in a row below the trap.
+ * 
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ */
 export class SpikeBallTrap extends Actor {
     constructor(x, y) {
         super({

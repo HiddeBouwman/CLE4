@@ -3,6 +3,16 @@ import { Fire } from "./fire";
 
 type FireDirection = "up" | "down" | "left" | "right";
 
+/**
+ * Creates a line of fire hazards between two coordinates.
+ * Can be horizontal, vertical, or diagonal.
+ *
+ * @param startX - Starting X coordinate in grid units
+ * @param startY - Starting Y coordinate in grid units
+ * @param endX - Ending X coordinate in grid units
+ * @param endY - Ending Y coordinate in grid units
+ * @param direction - Direction of fire animation ("up", "down", "left", "right", default: "up")
+ */
 export class FireWall extends Actor {
     start: Vector;
     end: Vector;

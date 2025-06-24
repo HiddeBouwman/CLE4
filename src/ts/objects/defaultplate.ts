@@ -5,6 +5,16 @@ import { Player } from "../player";
 import { Box } from "./box";
 import { Engine } from "excalibur";
 
+/**
+ * A green pressure plate that activates one or more platforms when pressed.
+ * Can be activated by players or a specific box.
+ *
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ * @param velocityBoost - Vertical velocity boost applied to players (usually 0 for this plate type)
+ * @param targetPlatform - The platform(s) to activate when pressed (single or array)
+ * @param targetBox - Optional specific box that can activate this plate (in addition to players)
+ */
 export class DefaultPlate extends PressurePlate {
     protected targetPlatforms: IMovablePlatform[];
     private targetBox?: Box;

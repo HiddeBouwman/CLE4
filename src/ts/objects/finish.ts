@@ -6,6 +6,13 @@ import { CollisionGroup } from "../collision.ts";
 // Import Controls from Player class.
 import { Controls } from "../player.ts";
 
+/**
+ * Level finish door that triggers level completion when both players reach it.
+ * Tracks which players are present and switches to the menu scene when both arrive.
+ * 
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ */
 export class Finish extends Actor {
     private player1Present: boolean = false;
     private player2Present: boolean = false;

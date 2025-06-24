@@ -1,6 +1,16 @@
 import { Actor, Vector, Shape, CollisionType } from "excalibur";
 import { Resources } from "../resources";
 
+/**
+ * Base class for all pressure plates.
+ * Provides basic collision detection and visual representation.
+ * Extended by specific pressure plate types with different behaviors.
+ *
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ * @param velocityBoost - Amount of vertical velocity boost (used by some subclasses)
+ * @param sprite - Base sprite for the pressure plate
+ */
 export class PressurePlate extends Actor {
     protected plateSprite: Actor;
     protected _activeCount = 0;

@@ -5,6 +5,15 @@ import { CollisionGroup } from "../collision.ts";
 
 type FireDirection = "up" | "down" | "left" | "right";
 
+/**
+ * Hazard that kills players on contact.
+ * Can be placed in various directions (up, down, left, right).
+ * Displays an animated fire effect.
+ * 
+ * @param x - X coordinate in grid units (will be multiplied by 32)
+ * @param y - Y coordinate in grid units (will be multiplied by 32)
+ * @param direction - Direction of fire animation ("up", "down", "left", "right", default: "up")
+ */
 export class Fire extends Actor {
     constructor(x: number, y: number, direction: FireDirection = "up") {
         super({

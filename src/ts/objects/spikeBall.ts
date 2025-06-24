@@ -3,6 +3,14 @@ import { Resources } from "../resources.ts";
 import { Floor } from "../floor.ts";
 import { TrapPlate } from "./trapPlate.ts";
 
+/**
+ * Hazardous spike ball that bounces around and damages players.
+ * Created by SpikeBallTrap and disappears after a set time.
+ * Makes metallic sound effects when bouncing.
+ * 
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ */
 export class SpikeBall extends Actor {
     frameCounter
 
