@@ -81,7 +81,7 @@ export class LevelOne extends Scene {
             -12, 23.5, 100, 20,
             PlatformType.PurplePlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(-12, 12),
+            new Vector(-12, 22),
             new Vector(-12, -12),
             192, // speed
             0, // pauseDuration
@@ -109,14 +109,14 @@ export class LevelOne extends Scene {
 
 
         //pressure plates
-        const doubleplate1 = new DefaultPlate(-660, 793, 0, doublePlatePlatform1);
+        const doubleplate1 = new DefaultPlate(-660, 792, 0, doublePlatePlatform1);
         this.add(doubleplate1);
-        const doubleplate2 = new DefaultPlate(100, 524, 0, doublePlatePlatform1, box1);
+        const doubleplate2 = new DefaultPlate(100, 533, 0, doublePlatePlatform1, box1);
         this.add(doubleplate2);
 
-        const doubleplate3 = new DefaultPlate(100, 14, 0, doublePlatePlatform2, box2);
+        const doubleplate3 = new DefaultPlate(100, 19, 0, doublePlatePlatform2, box2);
         this.add(doubleplate3);
-        const doubleplate4 = new DefaultPlate(100, -650, 0, doublePlatePlatform2);
+        const doubleplate4 = new DefaultPlate(100, -645, 0, doublePlatePlatform2);
         this.add(doubleplate4);
 
         //hazards
