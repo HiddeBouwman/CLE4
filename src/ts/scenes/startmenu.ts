@@ -211,8 +211,6 @@ export class StartMenu extends Scene {
         engine.input.keyboard.on('press', this.keyboardHandler);
     }
 
-
-
     onPreUpdate(engine: Engine) {
         const gamepad = engine.input.gamepads.at(0); // Use first gamepad
 
