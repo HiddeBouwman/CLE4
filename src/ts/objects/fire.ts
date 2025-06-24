@@ -55,7 +55,18 @@ export class Fire extends Actor {
     onInitialize(engine: Engine) {
         this.on("collisionstart", (evt) => {
             if (evt.other.owner instanceof Player) {
-                evt.other.owner.die(engine);
+
+                // Find current scene.
+                const engineScenes = engine.scenes as Record<string, any>;
+                let sceneKey = Object.keys(engineScenes).find(
+                    key => engineScenes[key] === this.scene
+                );
+                sceneKey = (this.scene as any).levelKey || sceneKey;
+                if (sceneKey) {
+                    engine.goToScene(sceneKey);
+                } else {
+                console.warn("Problem with scene name or not found....");
+                }
             }
         });
     }

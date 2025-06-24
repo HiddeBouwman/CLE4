@@ -10,10 +10,13 @@ export class StartMenu extends Scene {
     constructor() {
         super();
         console.log("game started");
-        Resources.Menu.play();
+
     }
 
     onInitialize(engine) {
+
+         Resources.Menu.play();
+        Resources.Menu.volume = 0.1
 
         // Create background sprite from the image source
         const bgSprite = Resources.startMenuBackground.toSprite();
@@ -186,32 +189,9 @@ export class StartMenu extends Scene {
             });
         });
 
-        // Highlight the first button
+        // Highlight the first button.
         this.highlightSelected();
-
-        // Optionally, listen for keyboard as well
-        engine.input.keyboard.on('press', (evt) => {
-            // ... UI sound logic ...
-        });
-
-        this.keyboardHandler = (evt) => {
-            if (evt.key === 'ArrowDown' || evt.key === 'KeyS') {
-                this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
-                this.highlightSelected();
-                Resources.UI.play();
-            } else if (evt.key === 'ArrowUp' || evt.key === 'KeyW') {
-                this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
-                this.highlightSelected();
-                Resources.UI.play();
-            } else if (evt.key === 'Enter') {
-                this.activateSelected(engine);
-                Resources.confirmUI.play();
-            }
-        };
-        engine.input.keyboard.on('press', this.keyboardHandler);
     }
-
-
 
     onPreUpdate(engine: Engine) {
         const gamepad = engine.input.gamepads.at(0); // Use first gamepad
@@ -281,12 +261,29 @@ export class StartMenu extends Scene {
         stopAllMusic();
         Resources.Menu.loop = true;
         Resources.Menu.play();
+
+        // Always create a new handler and register it
+        this.keyboardHandler = (evt) => {
+            if (evt.key === 'ArrowDown' || evt.key === 'KeyS') {
+                this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
+                this.highlightSelected();
+                Resources.UI.play();
+            } else if (evt.key === 'ArrowUp' || evt.key === 'KeyW') {
+                this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
+                this.highlightSelected();
+                Resources.UI.play();
+            } else if (evt.key === 'Enter') {
+                this.activateSelected(this.engine);
+                Resources.confirmUI.play();
+            }
+        };
+        this.engine.input.keyboard.on('press', this.keyboardHandler);
     }
 
     onDeactivate() {
-        // Remove the keyboard handler when leaving startmenu.
         if (this.keyboardHandler) {
             this.engine.input.keyboard.off('press', this.keyboardHandler);
+            this.keyboardHandler = null;
         }
     }
 }

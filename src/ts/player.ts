@@ -36,15 +36,17 @@ declare module "excalibur" {
     }
 }
 
-// Type voor elk bewegend platform
 type AnyMovingPlatform =
     | AlwaysMovingPlatform
     | PressurePlatePlatform
-    | PressurePlateReturnPlatform;
+    | PressurePlateReturnPlatform
+    | TwoPlatePlatform;  
+
 function isMovingPlatform(owner: any): owner is AnyMovingPlatform {
     return owner instanceof AlwaysMovingPlatform ||
         owner instanceof PressurePlatePlatform ||
-        owner instanceof PressurePlateReturnPlatform;
+        owner instanceof PressurePlateReturnPlatform ||
+        owner instanceof TwoPlatePlatform;  
 }
 
 type PlayerControls = {
@@ -300,6 +302,7 @@ export class Player extends Actor {
             if (isBoostPlatformForPlayer(platform, this.playerNumber)) {
                 this.speedBoost = true;
                 this.jumpBoost = true;
+                console.log("boost is active")
                 this.lastBoostSource = platform;
                 if (this.playerNumber === 1) {
                     Resources.Player1GetsBoosted.play();
@@ -313,6 +316,7 @@ export class Player extends Actor {
                 ) {
                     this.speedBoost = false;
                     this.jumpBoost = false;
+                    console.log("boost is inactive")
                     this.lastBoostSource = null;
                 }
             }
@@ -490,12 +494,12 @@ export class Player extends Actor {
         }
 
         if (gamepad) {
-        const stickX = gamepad.getAxes(Axes.LeftStickX);
-        // Use a deadzone to avoid drift
-        if (Math.abs(stickX) > 0.2) {
-            xspeed = stickX; // This will be a value between -1 (left) and 1 (right)
+            const stickX = gamepad.getAxes(Axes.LeftStickX);
+            // Use a deadzone to avoid drift
+            if (Math.abs(stickX) > 0.2) {
+                xspeed = stickX; // This will be a value between -1 (left) and 1 (right)
+            }
         }
-}
 
         // Idle detection
         if (xspeed === 0 && Math.abs(this.vel.x) < 1) {
