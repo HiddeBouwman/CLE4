@@ -5,8 +5,8 @@ export class LevelManager {
         if (!localStorage.getItem("level")) {
             // For testing, start with all cosmetics unlocked
             // In production, you'd want to set this to 0
-            localStorage.setItem("level", JSON.stringify({ unlockedLevel: 4 }));
-            console.log("Initialized level storage with default level 4");
+            localStorage.setItem("level", JSON.stringify({ unlockedLevel: 0 }));
+            console.log("Initialized level storage with default level 0");
         }
     }
 
