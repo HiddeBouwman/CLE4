@@ -262,28 +262,28 @@ export class StartMenu extends Scene {
         Resources.Menu.loop = true;
         Resources.Menu.play();
 
-        if (!this.keyboardHandler) {
-            this.keyboardHandler = (evt) => {
-                if (evt.key === 'ArrowDown' || evt.key === 'KeyS') {
-                    this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
-                    this.highlightSelected();
-                    Resources.UI.play();
-                } else if (evt.key === 'ArrowUp' || evt.key === 'KeyW') {
-                    this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
-                    this.highlightSelected();
-                    Resources.UI.play();
-                } else if (evt.key === 'Enter') {
-                    this.activateSelected(this.engine);
-                    Resources.confirmUI.play();
-                }
-            };
-        }
+        // Always create a new handler and register it
+        this.keyboardHandler = (evt) => {
+            if (evt.key === 'ArrowDown' || evt.key === 'KeyS') {
+                this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
+                this.highlightSelected();
+                Resources.UI.play();
+            } else if (evt.key === 'ArrowUp' || evt.key === 'KeyW') {
+                this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
+                this.highlightSelected();
+                Resources.UI.play();
+            } else if (evt.key === 'Enter') {
+                this.activateSelected(this.engine);
+                Resources.confirmUI.play();
+            }
+        };
         this.engine.input.keyboard.on('press', this.keyboardHandler);
     }
 
     onDeactivate() {
         if (this.keyboardHandler) {
             this.engine.input.keyboard.off('press', this.keyboardHandler);
+            this.keyboardHandler = null;
         }
     }
 }
