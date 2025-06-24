@@ -44,9 +44,12 @@ export class LevelOne extends Scene {
         this.add(new Floor(0, 35, 46, 10));
 
         // middle layers
-        this.add(new Floor(0, -15, 10, 5));
         this.add(new Floor(0, 23, 10, 6.2));
         this.add(new Floor(0, 5, 10, 4.2));
+        this.add(new Floor(-7, -15, 17, 5));
+
+        // blocking unintended places
+        this.add(new Floor(8, 14, 2, 8.2));
 
         //roof
         this.add(new Floor(0, -35, 46, 10));
@@ -56,74 +59,62 @@ export class LevelOne extends Scene {
         //boxes
         const box1 = new Box(-3, 15);
         this.add(box1);
-        const box2 = new Box(-3, 3);
+        const box2 = new Box(-13, 15);
         this.add(box2);
+        const box3 = new Box(-3, 3);
+        this.add(box3);
 
 
         // static platforms
-        const doublePlatePlatform3 = new TwoPlatePlatform(
-            -12, 25, 100, 20,
-            PlatformType.YellowPlatform,
-            186, 60, new Vector(0.5, 0.5),
-            new Vector(18, 20),
-            new Vector(18, -20),
-            0, // speed
-            0, // pauseDuration
-            [2], // boostForPlayers
-            new Vector(2, 2),
-            2 // requires two plates (can be set to more than 2 plates)
-        );
-        this.add(doublePlatePlatform3);
+
 
 
         //double pressure plate platforms
-        const doublePlatePlatform1 = new TwoPlatePlatform(
-            -12, 23.5, 100, 20,
-            PlatformType.PurplePlatform,
+        const plateplatform1 = new PressurePlatePlatform(
+            -12, 25, 100, 20,
+            PlatformType.PurpleYellowPlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(-12, 22),
-            new Vector(-12, -12),
+            new Vector(-12, 26),
+            new Vector(-12, 1),
             192, // speed
             0, // pauseDuration
-            [1], // boostForPlayers
+            [1, 2], // boostForPlayers
+            new Vector(2, 2)
+        );
+        this.add(plateplatform1);
+
+
+        const doublePlatePlatform1 = new TwoPlatePlatform(
+            16, 2, 100, 20,
+            PlatformType.PurpleYellowPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(16, 1),
+            new Vector(16, -20),
+            192, // speed
+            0, // pauseDuration
+            [1, 2], // boostForPlayers
             new Vector(2, 2),
             2 // requires two plates (can be set to more than 2 plates)
         );
         this.add(doublePlatePlatform1);
 
 
-        const doublePlatePlatform2 = new TwoPlatePlatform(
-            18, 20, 100, 20,
-            PlatformType.YellowPlatform,
-            186, 60, new Vector(0.5, 0.5),
-            new Vector(18, 20),
-            new Vector(18, -20),
-            192, // speed
-            0, // pauseDuration
-            [2], // boostForPlayers
-            new Vector(2, 2),
-            2 // requires two plates (can be set to more than 2 plates)
-        );
-        this.add(doublePlatePlatform2);
-
-
 
         //pressure plates
-        const doubleplate1 = new DefaultPlate(-660, 792, 0, doublePlatePlatform1);
+        const doubleplate1 = new DefaultPlate(-690, 796, 0, plateplatform1, box2);
         this.add(doubleplate1);
+
         const doubleplate2 = new DefaultPlate(100, 533, 0, doublePlatePlatform1, box1);
         this.add(doubleplate2);
-
-        const doubleplate3 = new DefaultPlate(100, 19, 0, doublePlatePlatform2, box2);
+        const doubleplate3 = new DefaultPlate(100, 19, 0, doublePlatePlatform1, box3);
         this.add(doubleplate3);
-        const doubleplate4 = new DefaultPlate(100, -645, 0, doublePlatePlatform2);
-        this.add(doubleplate4);
 
         //hazards
         this.add(new FireWall(10, 25.3, 23, 25.3));
 
         // Finish
-        this.add(new Finish(-3, 15));
+        // needs fixing
+        // this.add(new Finish(-10, 15));
 
 
 
@@ -165,7 +156,7 @@ export class LevelOne extends Scene {
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
             this.player1.pos = new Vector(-600, 700);
-            this.player2.pos = new Vector(-500, 700);
+            this.player2.pos = new Vector(-650, 700);
             Resources.finishMSG.stop();
         }
     }
