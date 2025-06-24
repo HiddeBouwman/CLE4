@@ -4,18 +4,10 @@ import { Floor } from "../floor.ts";
 import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { Box } from "../objects/box.ts";
-import { SpikeBallTrap } from "../objects/spikeBallTrap.ts";
-import { TrapPlate } from "../objects/trapPlate.ts";
 import { DefaultPlate } from "../objects/defaultplate.ts";
-import { JumpPlate } from "../objects/jumpPlate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
-import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
-import { PlatformType } from "../objects/platform.ts"; 
+import { PlatformType } from "../objects/platform.ts";
 import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
-import { Portal } from "../objects/portal.ts";
-import { Block } from "../objects/block.ts";
-import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
-
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
 import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
 import { PressurePlate } from "../objects/pressureplate.ts";
@@ -36,14 +28,9 @@ export class LevelOne extends Scene {
     }
 
     onInitialize(engine: Engine) {
-
-        // Finish
-        this.add(new Finish(700, 302));
-        // Portal
-        this.add(new Portal(-10, 9.5, new Vector(-480, 648)));
         //add players, finish and floor to scene
-        this.player1 = new Player(7 * 32, 14 * 32, 1);
-        this.player2 = new Player(9 * 32, 14 * 32, 2);
+        this.player1 = new Player(7 * 32, 0, 1);
+        this.player2 = new Player(9 * 32, 0, 2);
         this.add(this.player1);
         this.add(this.player2);
 
@@ -51,116 +38,97 @@ export class LevelOne extends Scene {
 
         // walls
         this.add(new Floor(-34, 0, 12, 30));
-        this.add(new Floor(58, 0, 12, 30));
+        this.add(new Floor(34, 0, 12, 30));
 
         // floor
-        this.add(new Floor(0, 40, 30, 30));
-        this.add(new Floor(56, 40, 20, 30, [1, 2])); // the numbers [1, 2] are for boosting. Can either be left out, [1], [2], or [1, 2]
+        this.add(new Floor(0, 35, 46, 10));
 
-        // ground platforms
-        this.add(new Floor(-15, -2, 4, 2));
-        this.add(new Floor(8, -2, 6, 2));
-        this.add(new Floor(35, -2, 3, 2));
-        this.add(new Floor(35, -14, 3, 2));
-        this.add(new Block(-300, -250, 5000));
-        this.add(new Block(-250, -400, 8000));
-        // this.add(new Block(-300, 300, 2000));
+        // middle layers
+        this.add(new Floor(0, -15, 10, 5));
+        this.add(new Floor(0, 23, 10, 6.2));
+        this.add(new Floor(0, 5, 10, 4.2));
 
-        
+        //roof
+        this.add(new Floor(0, -35, 46, 10));
 
-        
+
+
         //boxes
-        const box1 = new Box(6, -21);
-        this.add(box1);;
-        const box2 = new Box(35, 5);
+        const box1 = new Box(-3, 15);
+        this.add(box1);
+        const box2 = new Box(-3, 3);
         this.add(box2);
 
-        //jump plate test
-        const jumpPlate = new JumpPlate(6, 320, 900);
-        this.add(jumpPlate);
 
-
-        /** 
-         * Platforms
-         */
-
-        const alwaysPlatform = new AlwaysMovingPlatform(
-            -8, -2, 100, 20,
-            PlatformType.PurpleYellowPlatform,
+        // static platforms
+        const doublePlatePlatform3 = new TwoPlatePlatform(
+            -12, 25, 100, 20,
+            PlatformType.YellowPlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(-8, -2),
-            new Vector(-1, -2),
-            96,
-            2000,
-            [1, 2],
-            new Vector(2, 2)
-        );
-        this.add(alwaysPlatform);
-
-
-
-        const platePlatform = new TwoPlatePlatform(
-            17, -2, 100, 20,
-            PlatformType.DefaultPlatform,
-            186, 60, new Vector(0.5, 0.5),
-            new Vector(17, -2),
-            new Vector(29, -10),
-            192, // speed
+            new Vector(18, 20),
+            new Vector(18, -20),
+            0, // speed
             0, // pauseDuration
-            [], // boostForPlayers
+            [2], // boostForPlayers
             new Vector(2, 2),
             2 // requires two plates (can be set to more than 2 plates)
         );
-        this.add(platePlatform);
-
-        // In case it needs a pressure plate to move:
-        const plate1 = new DefaultPlate(256, -130, 0, platePlatform, box1);
-        this.add(plate1);
-        const plate = new DefaultPlate(320, -130, 0, platePlatform, box1);
-        this.add(plate);
+        this.add(doublePlatePlatform3);
 
 
-
-        const returnPlatform = new PressurePlateReturnPlatform(
-            42, -2, 100, 20,
-            PlatformType.DefaultPlatform,
+        //double pressure plate platforms
+        const doublePlatePlatform1 = new TwoPlatePlatform(
+            -12, 23.5, 100, 20,
+            PlatformType.PurplePlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(42, -2),
-            new Vector(42, -12),
-            96,
-            [],
-            new Vector(2, 2)
+            new Vector(-12, 12),
+            new Vector(-12, -12),
+            192, // speed
+            0, // pauseDuration
+            [1], // boostForPlayers
+            new Vector(2, 2),
+            2 // requires two plates (can be set to more than 2 plates)
         );
-        this.add(returnPlatform);
-        const plate2 = new DefaultPlate(1120, -136, 0, returnPlatform, box2);
-        this.add(plate2);
-        const plate3 = new DefaultPlate(1120, -520, 0, returnPlatform, box2);
-        this.add(plate3);
+        this.add(doublePlatePlatform1);
 
 
-        /*
-        * Stage Hazards
-        */
+        const doublePlatePlatform2 = new TwoPlatePlatform(
+            18, 20, 100, 20,
+            PlatformType.YellowPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(18, 20),
+            new Vector(18, -20),
+            192, // speed
+            0, // pauseDuration
+            [2], // boostForPlayers
+            new Vector(2, 2),
+            2 // requires two plates (can be set to more than 2 plates)
+        );
+        this.add(doublePlatePlatform2);
 
-        // traps
-        const trap1 = new SpikeBallTrap(198, 8);
-        this.add(trap1);
-
-        // trap plates
-        this.add(new TrapPlate(190, 310, 0, trap1)); // positionX, positionY, trap
 
 
-        // Fire
-        this.add(new Fire(-4, -5)); // place the fire on gridposition (12, -5)
+        //pressure plates
+        const doubleplate1 = new DefaultPlate(-660, 793, 0, doublePlatePlatform1);
+        this.add(doubleplate1);
+        const doubleplate2 = new DefaultPlate(100, 524, 0, doublePlatePlatform1, box1);
+        this.add(doubleplate2);
 
-        // Place a wall of fire from (15, -5) to (20, -5) (Horizontal)
-        this.add(new FireWall(15, -5, 20, -5));
+        const doubleplate3 = new DefaultPlate(100, 14, 0, doublePlatePlatform2, box2);
+        this.add(doubleplate3);
+        const doubleplate4 = new DefaultPlate(100, -650, 0, doublePlatePlatform2);
+        this.add(doubleplate4);
 
-        // Or vertical:
-        this.add(new FireWall(10, 8, 10, 10));
+        //hazards
+        this.add(new FireWall(10, 25.3, 23, 25.3));
 
-        // Or diagonal:
-        this.add(new FireWall(20, 8, 18, 10));
+        // Finish
+        this.add(new Finish(-3, 15));
+
+
+
+
+
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
@@ -196,8 +164,8 @@ export class LevelOne extends Scene {
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
-            this.player1.pos = new Vector(-512, 648);
-            this.player2.pos = new Vector(-448, 648);
+            this.player1.pos = new Vector(-600, 700);
+            this.player2.pos = new Vector(-500, 700);
             Resources.finishMSG.stop();
         }
     }
