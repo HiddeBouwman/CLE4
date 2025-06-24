@@ -21,7 +21,7 @@ import { Portal } from "../objects/portal.ts";
 import { PortalExit } from "../objects/portalExit.ts";
 
 export class BackwardsLevel extends Scene {
-    public levelKey = "backwarslevel";
+    public levelKey = "backwardslevel";
     floor: Floor;
     player1: Player;
     player2: Player;

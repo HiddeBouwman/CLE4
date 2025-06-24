@@ -53,6 +53,7 @@ type PlayerControls = {
     up: Keys;
     down: Keys;
     reset: Keys;
+    mainscreen: Keys;
 };
 
 export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
@@ -62,6 +63,7 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         up: Keys.W,
         down: Keys.S,
         reset: Keys.R,
+        mainscreen: Keys.Esc,
     },
     player2: {
         left: Keys.Left,
@@ -69,6 +71,8 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         up: Keys.Up,
         down: Keys.Down,
         reset: Keys.R,
+        mainscreen: Keys.M,
+
     },
 };
 
@@ -447,22 +451,31 @@ export class Player extends Actor {
         const gamepad = engine.input.gamepads.at(this.gamepadIndex);
         let kb = engine.input.keyboard;
 
-
         if (this.isDead) {
-            // Blokkeer alle beweging en input
             this.vel = Vector.Zero;
             this.acc = Vector.Zero;
             this.actions.clearActions();
             return;
         }
 
-
-
+        // Dynamic level reset
         if (kb.wasPressed(this.controls.reset) && this.scene) {
-            // Stop current music
-            Resources.gameMusic.stop();
-            // Restart current level
-            engine.goToScene("level1");
+            const engineScenes = engine.scenes as Record<string, any>;
+            let sceneKey = Object.keys(engineScenes).find(
+                key => engineScenes[key] === this.scene
+            );
+            sceneKey = (this.scene as any).levelKey || sceneKey;
+            if (sceneKey) {
+                engine.goToScene(sceneKey);
+            } else {
+                console.warn("Problem with scene name or not found....");
+            }
+        }
+
+        // Mainscreen (main menu) functionality
+        if (kb.wasPressed(this.controls.mainscreen) && this.scene) {
+            Resources.gameMusic.stop?.();
+            engine.goToScene("menu");
         }
 
         let xspeed = 0;
@@ -482,7 +495,7 @@ export class Player extends Actor {
         if (Math.abs(stickX) > 0.2) {
             xspeed = stickX; // This will be a value between -1 (left) and 1 (right)
         }
-    }
+}
 
         // Idle detection
         if (xspeed === 0 && Math.abs(this.vel.x) < 1) {
