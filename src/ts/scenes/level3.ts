@@ -121,6 +121,7 @@ export class LevelThree extends Scene {
         );
         this.add(pressurePlatePlatform);
         const boxForPressurePlate = new Box(-3, 0);
+        const boxForPressurePlate2ndFloor = new Box(5, -25);
 
         const pressurePlatePlatform2ndFloor = new PressurePlatePlatform(
             5, 4, 100, 20,

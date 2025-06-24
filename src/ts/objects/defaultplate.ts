@@ -37,6 +37,7 @@ export class DefaultPlate extends PressurePlate {
                         Resources.Button.play();
                         if (typeof this.targetPlatform.registerPressurePlateActivated === "function") {
                             this.targetPlatform.registerPressurePlateActivated();
+                            console.log("Pressure plate activated, starting platform movement.");
                         } else {
                             this.targetPlatform.startMoving();
                         }
