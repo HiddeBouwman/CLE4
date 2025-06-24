@@ -5,6 +5,7 @@ export class StartMenu extends Scene {
     private menuButtons: Label[] = [];
     private selectedIndex: number = 0;
     private lastStickY: number = 0;
+    private keyboardHandler: any;
 
     constructor() {
         super();
@@ -190,16 +191,24 @@ export class StartMenu extends Scene {
 
         // Optionally, listen for keyboard as well
         engine.input.keyboard.on('press', (evt) => {
-            if (evt.key === 'ArrowDown') {
+            // ... UI sound logic ...
+        });
+
+        this.keyboardHandler = (evt) => {
+            if (evt.key === 'ArrowDown' || evt.key === 'KeyS') {
                 this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
                 this.highlightSelected();
-            } else if (evt.key === 'ArrowUp') {
+                Resources.UI.play();
+            } else if (evt.key === 'ArrowUp' || evt.key === 'KeyW') {
                 this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
                 this.highlightSelected();
+                Resources.UI.play();
             } else if (evt.key === 'Enter') {
                 this.activateSelected(engine);
+                Resources.confirmUI.play();
             }
-        });
+        };
+        engine.input.keyboard.on('press', this.keyboardHandler);
     }
 
 
@@ -226,6 +235,7 @@ export class StartMenu extends Scene {
                 this.selectedIndex = (this.selectedIndex + 1) % this.menuButtons.length;
                 this.highlightSelected();
             } else if (gamepad.isButtonPressed(Buttons.DpadUp)) {
+
                 this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
                 this.highlightSelected();
             }
@@ -271,5 +281,12 @@ export class StartMenu extends Scene {
         stopAllMusic();
         Resources.Menu.loop = true;
         Resources.Menu.play();
+    }
+
+    onDeactivate() {
+        // Remove the keyboard handler when leaving startmenu.
+        if (this.keyboardHandler) {
+            this.engine.input.keyboard.off('press', this.keyboardHandler);
+        }
     }
 }

@@ -16,6 +16,9 @@ const Resources = {
     Player1GetsBoosted: new Sound("sounds/player/player1GetsBoost.mp3"),
     Player2GetsBoosted: new Sound("sounds/player/player2GetsBoost.mp3"),
     PlayerDeathSound1: new Sound("sounds/player/playerDeathSound1.mp3"),
+    UI: new Sound("sounds/game/UI.wav"),
+    confirmUI: new Sound("sounds/game/confirmUI.wav"),
+
     // PlayerDeathSound2: new Sound("sounds/player/playerDeathSound2.mp3"),
     PlayerDeathSound3: new Sound("sounds/player/playerDeathSound3.mp3"),
     // PlayerDeathSound4: new Sound("sounds/player/playerDeathSound4.mp3"),
