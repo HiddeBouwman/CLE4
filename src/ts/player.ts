@@ -74,7 +74,6 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         down: Keys.Down,
         reset: Keys.R,
         mainscreen: Keys.M,
-
     },
 };
 
@@ -249,18 +248,20 @@ export class Player extends Actor {
         this.addChild(new Cosmetic(playerNumber));
     }
 
+   
+   
+    onInitialize(engine: Engine) {
+
+         }
+         
     onCollisionStart(
         self: Collider,
         other: Collider,
         side: Side,
         contact: CollisionContact,
     ): void {
-        const otherBody = other.owner.get(BodyComponent);
-        if (other.owner instanceof SpikeBall) {
-            //if player die reset level
-            this.die(this.scene!.engine);
-            console.log(`Player ${this.playerNumber} died to a spike ball!`);
-        }
+         
+      
         if (
             other.owner.get(BodyComponent)?.collisionType ===
             CollisionType.Fixed ||
@@ -423,20 +424,20 @@ export class Player extends Actor {
         }
     }
 
-    //player handles death and level reset
+    //player handles level death
     die(engine: Engine) {
-        if (this.isDead) return; // voorkom dubbele dood
-        this.isDead = true;
-        this.graphics.opacity = 0; // Maak speler onzichtbaar
-        this.vel = Vector.Zero;    // Stop beweging
-        this.acc = Vector.Zero;
-        this.body.useGravity = false; // Zet zwaartekracht uit
-        this.actions.clearActions(); // Stop alle acties
 
-        // Respawn na 1 seconde (1000 ms)
-        this.respawnTimeout = setTimeout(() => {
-            this.respawn();
-        }, 1000);
+                // Find current scene.
+                const engineScenes = engine.scenes as Record<string, any>;
+                let sceneKey = Object.keys(engineScenes).find(
+                    key => engineScenes[key] === this.scene
+                );
+                sceneKey = (this.scene as any).levelKey || sceneKey;
+                if (sceneKey) {
+                    engine.goToScene(sceneKey);
+                } else {
+                console.warn("Problem with scene name or not found....");
+                }
     }
 
     respawn() {

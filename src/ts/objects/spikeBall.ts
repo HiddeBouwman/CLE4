@@ -3,6 +3,7 @@ import { Resources } from "../resources.ts";
 import { Floor } from "../floor.ts";
 import { TrapPlate } from "./trapPlate.ts";
 
+
 /**
  * Hazardous spike ball that bounces around and damages players.
  * Created by SpikeBallTrap and disappears after a set time.
@@ -44,6 +45,7 @@ export class SpikeBall extends Actor {
             if (evt.other.owner instanceof TrapPlate) {
                 this.body.applyLinearImpulse(new Vector(Math.random() * 100 - 50, -9000));
             }
+            console.log("User activates spikeball trap.")
         });
 
         //reset vertical velocity if it is too low
@@ -58,6 +60,7 @@ export class SpikeBall extends Actor {
         this.frameCounter++;
         if (this.frameCounter > 300) {
             this.kill();
+            console.log("It will disappear.")
         }
     }
 

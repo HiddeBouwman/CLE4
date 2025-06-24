@@ -145,10 +145,12 @@ export class BackwardsLevel extends Scene {
         this.add(new FireWall(-35.5, 1.4, -44.5, 1.4, "up"));
         
         //add players, finish and floor to scene
+        // RuRO
         this.player1 = new Player(0 * 32, 0 * 32, 1);
         this.player2 = new Player(0 * 32, 0 * 32, 2);
         this.add(this.player1);
         this.add(this.player2);
+        this.add(new Floor(0, -35, 46, 10));
 
         // Floors
         this.add(new Floor(0, 2, 4, 2))
