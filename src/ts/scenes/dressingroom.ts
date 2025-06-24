@@ -102,7 +102,7 @@ export class dressingRoom extends Scene {
             
             // Add player label
             const playerLabel = new Label({
-                text: `Player ${playerNumber}`,
+                text: `${playerNumber === 1 ? 'Bip' : 'Kaz'}`,
                 x: xPos,
                 y: engine.drawHeight / 2 - 70,
                 font: new Font({
