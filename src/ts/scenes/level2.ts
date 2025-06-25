@@ -137,7 +137,7 @@ export class LevelTwo extends Scene {
             PlatformType.PurpleYellowPlatform,
             186, 60, new Vector(0.5, 0.5),
             new Vector(-55, -33),
-            new Vector(-55, -30),
+            new Vector(-55, -26),
             224,
             0,
             [1, 2],
@@ -177,7 +177,7 @@ export class LevelTwo extends Scene {
         this.add(new FireWall(-33.5, -9.6, -33.5, -18.6, "left"));
         this.add(new FireWall(-27.5, 1.4, -32.5, 1.4, "up"));
         this.add(new FireWall(-33.5, -1.6, -34.5, -1.6, "up"));
-        this.add(new FireWall(-35.5, 1.4, -44.5, 1.4, "up"));
+        this.add(new FireWall(-35.5, 1.4, -46.5, 1.4, "up"));
         this.add(new FireWall(-73.4, -12.5, -73.4, -43, "right"));
 
         //add players, finish and floor to scene
