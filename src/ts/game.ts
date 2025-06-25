@@ -28,7 +28,7 @@ export class Game extends Engine {
             }
         });
 
-        this.backgroundColor = Color.fromHex("#5fb2e9");
+        this.backgroundColor = Color.fromHex("#1C252A");
         // this.showDebug(true)
 
         // Start game
