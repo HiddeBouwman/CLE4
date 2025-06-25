@@ -40,13 +40,13 @@ type AnyMovingPlatform =
     | AlwaysMovingPlatform
     | PressurePlatePlatform
     | PressurePlateReturnPlatform
-    | TwoPlatePlatform;  
+    | TwoPlatePlatform;
 
 function isMovingPlatform(owner: any): owner is AnyMovingPlatform {
     return owner instanceof AlwaysMovingPlatform ||
         owner instanceof PressurePlatePlatform ||
         owner instanceof PressurePlateReturnPlatform ||
-        owner instanceof TwoPlatePlatform;  
+        owner instanceof TwoPlatePlatform;
 }
 
 type PlayerControls = {
@@ -248,20 +248,20 @@ export class Player extends Actor {
         this.addChild(new Cosmetic(playerNumber));
     }
 
-   
-   
+
+
     onInitialize(engine: Engine) {
 
-         }
-         
+    }
+
     onCollisionStart(
         self: Collider,
         other: Collider,
         side: Side,
         contact: CollisionContact,
     ): void {
-         
-      
+
+
         if (
             other.owner.get(BodyComponent)?.collisionType ===
             CollisionType.Fixed ||
@@ -424,21 +424,21 @@ export class Player extends Actor {
         }
     }
 
-    //player handles level death
-    die(engine: Engine) {
+    // //player handles level death
+    // hitBySpikeBall(engine: Engine) {
 
-                // Find current scene.
-                const engineScenes = engine.scenes as Record<string, any>;
-                let sceneKey = Object.keys(engineScenes).find(
-                    key => engineScenes[key] === this.scene
-                );
-                sceneKey = (this.scene as any).levelKey || sceneKey;
-                if (sceneKey) {
-                    engine.goToScene(sceneKey);
-                } else {
-                console.warn("Problem with scene name or not found....");
-                }
-    }
+    //     // Find current scene.
+    //     const engineScenes = engine.scenes as Record<string, any>;
+    //     let sceneKey = Object.keys(engineScenes).find(
+    //         key => engineScenes[key] === this.scene
+    //     );
+    //     sceneKey = (this.scene as any).levelKey || sceneKey;
+    //     if (sceneKey) {
+    //         engine.goToScene(sceneKey);
+    //     } else {
+    //         console.warn("Problem with scene name or not found....");
+    //     }
+    // }
 
     respawn() {
         this.isDead = false;
@@ -470,6 +470,7 @@ export class Player extends Actor {
                 key => engineScenes[key] === this.scene
             );
             sceneKey = (this.scene as any).levelKey || sceneKey;
+            console.log("reset.")
             if (sceneKey) {
                 engine.goToScene(sceneKey);
             } else {
@@ -541,11 +542,6 @@ export class Player extends Actor {
             (gamepad && gamepad.isButtonPressed(Buttons.Face1) && this.#onGround)
         ) {
             this.jump();
-        }
-
-        // Reset action.
-        if (kb.wasPressed(this.controls.reset)) {
-            this.resetPosition();
         }
 
         // Acceleration
@@ -637,11 +633,6 @@ export class Player extends Actor {
         }
     }
 
-    private resetPosition(): void {
-        if (this._lastEngine) {
-            this._lastEngine.goToScene("level1");
-        }
-    }
 
     updateCarrierPlatform() {
         if (this._carrierPlatform) {
