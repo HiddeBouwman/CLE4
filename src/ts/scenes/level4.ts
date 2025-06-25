@@ -10,7 +10,7 @@ import { Resources } from "../resources.ts";
 // stage specific
 import { Box } from "../objects/box.ts";
 import { Fire } from "../objects/fire.ts";
-import { FireWall } from "../objects/fireWall";
+import { FireWall } from "../objects/fireWall.ts";
 import { PlatformType } from "../objects/platform.ts";
 import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
@@ -20,8 +20,8 @@ import { Block } from "../objects/block.ts";
 import { Portal } from "../objects/portal.ts";
 import { PortalExit } from "../objects/portalExit.ts";
 
-export class BackwardsLevel extends Scene {
-    public levelKey = "backwardslevel";
+export class Level4 extends Scene {
+    public levelKey = "level4";
     floor: Floor;
     player1: Player;
     player2: Player;
@@ -203,10 +203,10 @@ export class BackwardsLevel extends Scene {
 
         if (this.player1.pos.y > deathY) {
             Resources.PlayerDeathSound1.play();
-            engine.goToScene("backwardslevel");
+            engine.goToScene("level4");
         } else if (this.player2.pos.y > deathY) {
             Resources.PlayerDeathSound3.play();
-            engine.goToScene("backwardslevel");
+            engine.goToScene("level4");
         }
     }
 
