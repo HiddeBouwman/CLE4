@@ -5,7 +5,7 @@ import { Finish } from "../objects/finish.ts";
 import { CameraController } from "../camera.ts";
 import { DefaultPlate } from "../objects/defaultplate.ts";
 import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.ts";
-import { Resources } from "../resources.ts";
+import { Resources, stopAllMusic } from "../resources.ts";
 
 // stage specific
 import { Box } from "../objects/box.ts";
@@ -220,7 +220,6 @@ export class LevelTwo extends Scene {
         this.add(new Floor(-17, -24, 7, 8))
         this.add(new Floor(-60, -59, 40, 10))
 
-
         // Walls
         this.add(new Floor(2, -12, 2, 16))
         this.add(new Floor(16, -5, 8, 20))
@@ -230,8 +229,6 @@ export class LevelTwo extends Scene {
         this.add(new Floor(-37, -20, 2, 8))
         this.add(new Floor(-85, -5, 12, 50))
         this.add(new Floor(-28, -47, 10, 5))
-
-
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
@@ -255,10 +252,11 @@ export class LevelTwo extends Scene {
     }
 
     onActivate() {
+        stopAllMusic();
         console.log("level ? loaded");
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
-        Resources.gameMusic.volume = 0.3;
+        Resources.gameMusic.volume = 0.1;
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {

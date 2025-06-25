@@ -4,7 +4,6 @@ import { Floor } from "../floor.ts";
 import { TrapPlate } from "./trapPlate.ts";
 import { Player } from "../player.ts";
 
-
 /**
  * Hazardous spike ball that bounces around and damages players.
  * Created by SpikeBallTrap and disappears after a set time.
