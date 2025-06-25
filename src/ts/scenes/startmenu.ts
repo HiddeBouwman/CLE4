@@ -99,26 +99,11 @@ export class StartMenu extends Scene {
             color: Color.Black
         });
 
-        //button via label class
-        const button_level4 = new Label({
-            text: "Level 4",
-            x: engine.drawWidth / 2,
-            y: engine.drawHeight / 2.2 + 100,
-            font: new Font({
-                size: 32,
-                unit: FontUnit.Px,
-                color: Color.White,
-                textAlign: TextAlign.Center,
-                family: 'Delicatus'
-            }),
-            color: Color.Black
-        });
-
         //  Dressing Room button.
         const button_dressingRoom = new Label({
             text: "Change skin",
             x: engine.drawWidth / 2,
-            y: engine.drawHeight / 2.2 + 150,
+            y: engine.drawHeight / 2.2 + 100,
             font: new Font({
                 size: 32,
                 unit: FontUnit.Px,
@@ -148,12 +133,6 @@ export class StartMenu extends Scene {
         });
 
         //register clicks on label
-        button_level4.on('pointerup', () => {
-            engine.goToScene('level4');
-            Resources.FinishMC.stop();
-        });
-
-        //register clicks on label
         button_dressingRoom.on('pointerup', () => {
             engine.goToScene('dressingRoom');
 
@@ -167,14 +146,12 @@ export class StartMenu extends Scene {
         this.add(button_level1);
         this.add(button_level2);
         this.add(button_level3);
-        this.add(button_level4);
         this.add(button_dressingRoom);
 
         this.menuButtons = [
             button_level1,
             button_level2,
             button_level3,
-            button_level4,
             button_dressingRoom
         ];
 
@@ -248,10 +225,6 @@ export class StartMenu extends Scene {
                 Resources.FinishMC.stop();
                 break;
             case 3:
-                engine.goToScene('level4');
-                Resources.FinishMC.stop();
-                break;
-            case 4:
                 engine.goToScene('dressingRoom');
                 break;
         }
