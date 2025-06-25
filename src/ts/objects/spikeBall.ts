@@ -2,6 +2,7 @@ import { Actor, CollisionType, Vector, Engine } from "excalibur";
 import { Resources } from "../resources.ts";
 import { Floor } from "../floor.ts";
 import { TrapPlate } from "./trapPlate.ts";
+import { Player } from "../player.ts";
 
 
 /**
@@ -32,6 +33,22 @@ export class SpikeBall extends Actor {
     //set collision based results depending on the object
     onInitialize(engine: Engine) {
         this.on("collisionstart", (evt) => {
+            if (evt.other.owner instanceof Player) {
+
+                // Find current scene.
+                const engineScenes = engine.scenes as Record<string, any>;
+                let sceneKey = Object.keys(engineScenes).find(
+                    key => engineScenes[key] === this.scene
+                );
+                sceneKey = (this.scene as any).levelKey || sceneKey;
+                if (sceneKey) {
+                    engine.goToScene(sceneKey);
+                } else {
+                    console.warn("Problem with scene name or not found....");
+                }
+            }
+        });
+        this.on("collisionstart", (evt) => {
             // Speel MetalSlam af bij elke botsing met Floor of TrapPlate, als de spikeball een beetje valt
             if (
                 (evt.other.owner instanceof Floor || evt.other.owner instanceof TrapPlate) &&
@@ -39,6 +56,7 @@ export class SpikeBall extends Actor {
             ) {
                 Resources.MetalSlam.play();
             }
+
             if (evt.other.owner instanceof Floor) {
                 this.body.applyLinearImpulse(new Vector(Math.random() * 100 - 50, -9000));
             }

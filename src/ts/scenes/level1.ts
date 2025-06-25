@@ -9,11 +9,7 @@ import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.
 import { PlatformType } from "../objects/platform.ts";
 import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
-import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
-import { PressurePlate } from "../objects/pressureplate.ts";
-
 import { Resources, stopAllMusic } from "../resources.ts";
-import { Fire } from "../objects/fire.ts";
 import { FireWall } from "../objects/fireWall";
 
 export class LevelOne extends Scene {
@@ -26,8 +22,10 @@ export class LevelOne extends Scene {
     constructor() {
         super();
     }
-
+    
     onInitialize(engine: Engine) {
+        // Finish
+        this.add(new Finish(-690, -660));
         //add players, finish and floor to scene
         this.player1 = new Player(7 * 32, 0, 1);
         this.player2 = new Player(9 * 32, 0, 2);
@@ -112,9 +110,6 @@ export class LevelOne extends Scene {
         //hazards
         this.add(new FireWall(10, 25.3, 23, 25.3));
 
-        // Finish
-        // needs fixing
-        // this.add(new Finish(-10, 15));
 
 
 
