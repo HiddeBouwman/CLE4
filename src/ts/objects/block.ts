@@ -1,5 +1,6 @@
 import { Actor, Vector, CollisionType, Engine } from "excalibur"
 import { Resources } from '../resources'
+import { GhostBlock } from './ghostblock.ts'
 
 /**
  * A block that can appear and disappear at regular intervals.
@@ -27,29 +28,33 @@ export class Block extends Actor {
         this.toggleInterval = toggleInterval
     }
 
-    onPreUpdate(_engine: Engine, delta: number) {
+    onPreUpdate(engine: Engine, delta: number) {
         if (this.toggleInterval <= 0) return;
 
         this.timeElapsed += delta;
 
         if (this.timeElapsed >= this.toggleInterval && this.shouldRespawn) {
             this.shouldRespawn = false;
-            console.log('Block disappearing');
             this.kill();
 
-            // Create new block after half the interval
             const currentScene = this.scene;
             const pos = this.pos;
             const interval = this.toggleInterval;
 
-            // Use engine's timer system instead of setTimeout
-            _engine.clock.schedule(() => {
-                if (currentScene) {
-                    console.log('Block reappearing');
-                    const newBlock = new Block(pos.x, pos.y, interval);
-                    currentScene.add(newBlock);
-                }
-            }, this.toggleInterval / 2);
+            // Voeg een GhostBlock toe
+            if (currentScene) {
+                const ghost = new GhostBlock(pos.x, pos.y, this.width, this.height);
+                currentScene.add(ghost);
+
+                // Na de helft van het interval: verwijder ghost en voeg Block weer toe
+                engine.clock.schedule(() => {
+                    ghost.kill();
+                    if (currentScene) {
+                        const newBlock = new Block(pos.x, pos.y, interval);
+                        currentScene.add(newBlock);
+                    }
+                }, this.toggleInterval / 2);
+            }
         }
     }
 }

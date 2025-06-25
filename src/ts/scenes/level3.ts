@@ -11,7 +11,7 @@ import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.
 import { ElevatorPlatform } from "../objects/elevatorPlatform.ts";
 import { Platform, PlatformType } from "../objects/platform.ts";
 import { Portal } from "../objects/portal.ts";
-import { Resources } from "../resources.ts";
+import { Resources, stopAllMusic } from "../resources.ts";
 import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
 import { JumpPlate } from "../objects/jumpPlate.ts";
@@ -28,16 +28,11 @@ export class LevelThree extends Scene {
         super();
     }
 
-    onInitialize(engine: Engine) {
-
-        Resources.Menu.stop();
-        // Standard Coordinates
+    onInitialize(engine: Engine) {        // Standard Coordinates
         this.player1 = new Player(7 * 32, 14 * 32, 1);
         this.player2 = new Player(9 * 32, 14 * 32, 2);
         this.add(this.player1);
         this.add(this.player2);
-
-        
 
         // Parameters: x, y, width, height
 
@@ -245,13 +240,11 @@ export class LevelThree extends Scene {
         const boxForPressurePlateHorizontal = new Box(45, -34);
         const platformPlateHorizontal = new DefaultPlate(1600, -1120, 0, pressurePlatePlatform2ndFloorHorizontal, boxForPressurePlateHorizontal);
         
-
         this.add(pressurePlatePlatform2ndFloorHorizontal);
         this.add(platformPlateHorizontal);
         this.add(boxForPressurePlateHorizontal);
         this.add(pressurePlatePlatform2ndFloorColor);
         this.add(platformPlate2ndFloorHorizontal);
-
 
         //eigenlijk first floor
         const pressurePlatePlatform2ndFloor = new PressurePlatePlatform(
@@ -272,8 +265,6 @@ export class LevelThree extends Scene {
         this.add(platformPlate2ndFloor);
         this.add(platformPlate2ndFloor2);
 
-
-
         const platformPlate = new DefaultPlate(0, 320, 0, pressurePlatePlatform2ndFloor, boxForPressurePlate);
 
         this.add(platformPlate);
@@ -290,12 +281,12 @@ export class LevelThree extends Scene {
         this.add(plate1);
         this.add(plate2);
 
-
-          //jump plate test
+        //jump plate test
         const jumpPlate = new JumpPlate(-80, -800, 900);
         const jumpPlate2 = new JumpPlate(2400, -1540, 900); // Another jump plate for testing
         const jumpPlate3 = new JumpPlate(-1050, -1920, 900); 
         //const jumpPlateTest = new JumpPlate(-80, -800, 900);
+        
         this.add(jumpPlate);
         this.add(jumpPlate2);
         this.add(jumpPlate3);
@@ -318,7 +309,6 @@ export class LevelThree extends Scene {
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
-
 
         //hazards
         this.add(new FireWall(52, -24.5, 72, -24.5));
@@ -354,12 +344,18 @@ export class LevelThree extends Scene {
     }
 
     onActivate() {
+        stopAllMusic();
+        Resources.gameMusic.loop = true;
+        Resources.gameMusic.play();
+        Resources.gameMusic.volume = 0.3;
+
         console.log("level 3 loaded");
 
-        // Reset player positions when level is activated.
+      // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
-            this.player1.pos = new Vector(-512, 648);
-            this.player2.pos = new Vector(-448, 648);
+            this.player1.pos = new Vector(-600, 700);
+            this.player2.pos = new Vector(-650, 700);
+            Resources.finishMSG.stop();
         }
     }
 }

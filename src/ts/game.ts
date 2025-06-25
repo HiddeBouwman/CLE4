@@ -9,7 +9,6 @@ import { LevelThree } from './scenes/level3.ts';
 import { player1 } from './scenes/player1.ts';
 import { player2 } from './scenes/player2.ts';
 import { dressingRoom } from './scenes/dressingroom.ts';
-import { Level4 } from "./scenes/level4.ts";
 
 export class Game extends Engine {
     mygamepad
@@ -52,7 +51,6 @@ export class Game extends Engine {
         this.add('player1', new player1());
         this.add('player2', new player2());
         this.add('dressingRoom', new dressingRoom());
-        this.add('level4', new Level4());
         this.goToScene('menu');
     }
 }
