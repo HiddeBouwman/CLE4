@@ -113,8 +113,7 @@ export class LevelOne extends Scene {
         this.add(new FireWall(10, 25.3, 23, 25.3));
 
         // Finish
-        // needs fixing
-        // this.add(new Finish(-10, 15));
+        this.add(new Finish(-690, -660));
 
 
 
