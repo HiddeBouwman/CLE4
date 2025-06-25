@@ -325,7 +325,7 @@ export class LevelThree extends Scene {
         this.add(new FireWall(34.5, 10.5, 45.5, 10.5));
 
         //finish
-        //this.add(new Finish(970, 180));
+        this.add(new Finish(1856, -2288, 3));
     }
 
     onPreUpdate(engine: Engine, delta: number) {
