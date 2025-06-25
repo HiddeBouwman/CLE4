@@ -7,7 +7,16 @@ import {
 } from "excalibur";
 import { Resources } from "../resources.ts";
 import { Player } from "../player.ts";
+import { Floor } from "../floor.ts";
 
+/**
+ * A pushable box that players can interact with.
+ * Box produces sound effects when being pushed or when falling.
+ * Can be used to activate pressure plates.
+ *
+ * @param x - X coordinate in grid units (will be multiplied by 32)
+ * @param y - Y coordinate in grid units (will be multiplied by 32)
+ */
 export class Box extends Actor {
     #roundedbox = new CompositeCollider([
         Shape.Box(33, 33, new Vector(0.5, 0.5), new Vector(0, 0)),
@@ -19,6 +28,9 @@ export class Box extends Actor {
     private isPushing: boolean = false;
     private pushSoundTimer: number = 0;
     private wasPushing: boolean = false;
+    private pushingPlayer: Player | null = null;
+    private pushDisconnectTimer: number = 0;
+    private lastYVelocity: number = 0;
 
     constructor(x: number, y: number) {
         super({
@@ -37,9 +49,22 @@ export class Box extends Actor {
         this.body.bounciness = 0.1;
     }
 
+    onInitialize(engine) {
+        this.on("collisionstart", (evt) => {
+            if (evt.other.owner instanceof Floor) {
+                // Check of de box hard genoeg valt
+                if (Math.abs(this.lastYVelocity) > 20) {
+                    Resources.MetalSlam.play();
+                }
+            }
+        });
+    }
+
     onPreUpdate(engine, delta) {
         let pushing = false;
-        if (this.scene) { // null-check!
+        let pushingPlayer: Player | null = null;
+
+        if (this.scene) {
             for (const actor of this.scene.actors) {
                 if (actor instanceof Player) {
                     const dx = Math.abs(actor.pos.x - this.pos.x);
@@ -50,12 +75,27 @@ export class Box extends Actor {
                             (actor.vel.x < -10 && actor.pos.x > this.pos.x)
                         ) {
                             pushing = true;
+                            pushingPlayer = actor;
                             break;
                         }
                     }
                 }
             }
         }
+
+        // Houd de speler verbonden zolang deze duwt, met een kleine "grace period"
+        if (pushing) {
+            this.pushingPlayer = pushingPlayer;
+            this.pushDisconnectTimer = 200; // ms, bijv. 0.2 seconde
+        } else if (this.pushingPlayer) {
+            if (this.pushDisconnectTimer > 0) {
+                this.pushDisconnectTimer -= delta;
+                pushing = true; // Blijf nog even in push-state
+            } else {
+                this.pushingPlayer = null;
+            }
+        }
+
         this.isPushing = pushing;
 
         // --- BoxMove sound logic ---
@@ -84,5 +124,7 @@ export class Box extends Actor {
             this.pushSoundTimer = 0;
         }
         this.wasPushing = this.isPushing;
+
+        this.lastYVelocity = this.vel.y;
     }
 }

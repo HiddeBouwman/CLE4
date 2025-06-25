@@ -1,6 +1,25 @@
 import { Platform, PlatformType, isBoostPlatformForPlayer } from "./platform.ts";
 import { Vector } from "excalibur";
 
+/**
+ * A platform that continuously moves back and forth between two positions,
+ * regardless of player interaction or pressure plates.
+ *
+ * @param x - X coordinate in grid units (will be multiplied by 32)
+ * @param y - Y coordinate in grid units (will be multiplied by 32)
+ * @param width - Width of the platform actor
+ * @param height - Height of the platform actor
+ * @param platformType - Type of platform from PlatformType enum, determines sprite
+ * @param colliderWidth - Width of the collision box
+ * @param colliderHeight - Height of the collision box
+ * @param colliderOffset - Offset position of the collision box
+ * @param startPos - Starting position in grid units (will be multiplied by 32)
+ * @param endPos - Ending position in grid units (will be multiplied by 32)
+ * @param speed - Movement speed in pixels per second (default: 100)
+ * @param pauseDuration - Time to pause at endpoints in milliseconds (default: 0)
+ * @param boostForPlayers - Array of player numbers that receive speed boost on this platform (default: [])
+ * @param spriteScale - Scale factor for the platform sprite (default: Vector(1, 1))
+ */
 export class AlwaysMovingPlatform extends Platform {
     start: Vector;
     end: Vector;

@@ -3,9 +3,15 @@ import { Resources } from "../resources";
 import { Player } from "../player";
 import { Engine } from "excalibur";
 
+/**
+ * A pressure plate that boosts players upward when stepped on.
+ * Does not control any platforms, just provides vertical velocity boost.
+ *
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ * @param velocityBoost - Amount of upward velocity boost applied to players
+ */
 export class JumpPlate extends PressurePlate {
- 
-
     constructor(x: number, y: number, velocityBoost: number) {
         super(
             x,

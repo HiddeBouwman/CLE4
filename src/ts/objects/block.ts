@@ -1,6 +1,14 @@
 import { Actor, Vector, CollisionType, Engine } from "excalibur"
 import { Resources } from '../resources'
 
+/**
+ * A block that can appear and disappear at regular intervals.
+ * If toggleInterval is set, the block will disappear and reappear periodically.
+ * 
+ * @param x - X coordinate in pixels
+ * @param y - Y coordinate in pixels
+ * @param toggleInterval - Time interval in milliseconds for disappearing/reappearing (0 for static block)
+ */
 export class Block extends Actor {
     private timeElapsed: number = 0;
     private toggleInterval: number;

@@ -6,6 +6,14 @@ import { CollisionGroup } from "../collision.ts";
 // Import Controls from Player class.
 import { Controls } from "../player.ts";
 
+/**
+ * A portal that teleports players to a specified location when they touch it.
+ * Plays animation and sound effects during teleportation.
+ * 
+ * @param x - X coordinate in grid units (will be multiplied by 32)
+ * @param y - Y coordinate in grid units (will be multiplied by 32)
+ * @param coordinates - Destination Vector coordinates (in pixels) where players will be teleported
+ */
 export class Portal extends Actor {
     private player1Present: boolean = false;
     private player2Present: boolean = false;

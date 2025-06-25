@@ -5,6 +5,7 @@ enum Category {
     Player = 0b0000_0010,
     Item = 0b0000_0100,
     Finish = 0b0000_1000,
+    Fire = 0b0001_0000,
 }
 
 export const CollisionGroup = {
@@ -18,7 +19,8 @@ export const CollisionGroup = {
         Category.Player,
         collideWith(
             Category.Ground,
-            Category.Finish,  
+            Category.Finish,
+            Category.Fire
         ),
     ),
     Item: new ex.CollisionGroup(
@@ -29,6 +31,11 @@ export const CollisionGroup = {
     Finish: new ex.CollisionGroup(
         "finish",
         Category.Finish,
+        collideWith(Category.Player)
+    ),
+    Fire: new ex.CollisionGroup(
+        "fire",
+        Category.Fire,
         collideWith(Category.Player)
     ),
 };

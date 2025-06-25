@@ -12,6 +12,8 @@ import {
     Sprite,
     SpriteSheet,
     Vector,
+    Buttons,
+    Axes
 } from "excalibur";
 import type { Collider, CollisionContact, Engine } from "excalibur";
 import { Resources } from "./resources.ts";
@@ -27,15 +29,24 @@ import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
 import { Cosmetic } from "./cosmetic.ts";
 
-// Type voor elk bewegend platform
+declare module "excalibur" {
+    interface Engine {
+        // Use the correct type if you know it
+        mygamepad?: any;
+    }
+}
+
 type AnyMovingPlatform =
     | AlwaysMovingPlatform
     | PressurePlatePlatform
-    | PressurePlateReturnPlatform;
+    | PressurePlateReturnPlatform
+    | TwoPlatePlatform;  
+
 function isMovingPlatform(owner: any): owner is AnyMovingPlatform {
     return owner instanceof AlwaysMovingPlatform ||
         owner instanceof PressurePlatePlatform ||
-        owner instanceof PressurePlateReturnPlatform;
+        owner instanceof PressurePlateReturnPlatform ||
+        owner instanceof TwoPlatePlatform;  
 }
 
 type PlayerControls = {
@@ -44,6 +55,7 @@ type PlayerControls = {
     up: Keys;
     down: Keys;
     reset: Keys;
+    mainscreen: Keys;
 };
 
 export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
@@ -53,6 +65,7 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         up: Keys.W,
         down: Keys.S,
         reset: Keys.R,
+        mainscreen: Keys.Esc,
     },
     player2: {
         left: Keys.Left,
@@ -60,10 +73,12 @@ export const Controls: { player1: PlayerControls; player2: PlayerControls } = {
         up: Keys.Up,
         down: Keys.Down,
         reset: Keys.R,
+        mainscreen: Keys.M,
     },
 };
 
 export class Player extends Actor {
+    private gamepadIndex: number;
     #onGround: boolean = true;
     controls: PlayerControls;
     speedBoost: boolean = false;
@@ -93,6 +108,11 @@ export class Player extends Actor {
 
     private lastBoostSource: Actor | null = null;
 
+    private isDead: boolean = false;
+    private respawnTimeout: any = null;
+
+    private groundContacts: number = 0;
+
     constructor(x: number, y: number, playerNumber: number) {
         super(
             {
@@ -103,7 +123,9 @@ export class Player extends Actor {
             },
         );
 
+
         this.playerNumber = playerNumber;
+        this.gamepadIndex = playerNumber - 1;
 
         //important requirements for a Actor
         this.scale = new Vector(2, 2);
@@ -222,29 +244,33 @@ export class Player extends Actor {
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.bounciness = 0.1;
         this.collider.set(this.#capsule);
-        
-        // this.addChild(new Cosmetic(playerNumber));
+
+        this.addChild(new Cosmetic(playerNumber));
     }
 
+   
+   
+    onInitialize(engine: Engine) {
+
+         }
+         
     onCollisionStart(
         self: Collider,
         other: Collider,
         side: Side,
         contact: CollisionContact,
     ): void {
-        const otherBody = other.owner.get(BodyComponent);
-        if (other.owner instanceof SpikeBall) {
-            //if player die reset level
-            this.die(this.scene!.engine);
-            console.log(`Player ${this.playerNumber} died to a spike ball!`);
-        }
+         
+      
         if (
             other.owner.get(BodyComponent)?.collisionType ===
-                CollisionType.Fixed ||
+            CollisionType.Fixed ||
             other.owner.get(BodyComponent)?.collisionType ===
-                CollisionType.Active
+            CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
+                this.groundContacts++;
+                this.#onGround = true;
                 // Landing sound with hard landing
                 if (this.lastYVelocity > 750) { // Change this value for sensitivity
                     const landSounds = [
@@ -262,7 +288,6 @@ export class Player extends Actor {
                         Math.floor(Math.random() * softLandSounds.length)
                     ].play();
                 }
-                this.#onGround = true;
             }
         }
         // Boost on platform
@@ -278,6 +303,7 @@ export class Player extends Actor {
             if (isBoostPlatformForPlayer(platform, this.playerNumber)) {
                 this.speedBoost = true;
                 this.jumpBoost = true;
+                console.log("boost is active")
                 this.lastBoostSource = platform;
                 if (this.playerNumber === 1) {
                     Resources.Player1GetsBoosted.play();
@@ -291,6 +317,7 @@ export class Player extends Actor {
                 ) {
                     this.speedBoost = false;
                     this.jumpBoost = false;
+                    console.log("boost is inactive")
                     this.lastBoostSource = null;
                 }
             }
@@ -341,7 +368,10 @@ export class Player extends Actor {
             otherBody?.collisionType === CollisionType.Active
         ) {
             if (side === Side.Bottom && other.owner.hasTag("ground")) {
-                this.#onGround = false;
+                this.groundContacts = Math.max(0, this.groundContacts - 1);
+                if (this.groundContacts === 0) {
+                    this.#onGround = false;
+                }
                 // Carry on platform momentum
                 if (
                     other.owner &&
@@ -394,29 +424,63 @@ export class Player extends Actor {
         }
     }
 
-    //player handles death and level reset
+    //player handles level death
     die(engine: Engine) {
-        this.kill();
-        this.scene!.actors.forEach((actor) => {
-            if (actor instanceof SpikeBall) {
-                actor.kill();
-            }
-        });
 
-        this.unkill();
-        const key = (this.scene as any).levelKey || "level1";
-        Resources.gameMusic.stop();
-        engine.goToScene(key);
+                // Find current scene.
+                const engineScenes = engine.scenes as Record<string, any>;
+                let sceneKey = Object.keys(engineScenes).find(
+                    key => engineScenes[key] === this.scene
+                );
+                sceneKey = (this.scene as any).levelKey || sceneKey;
+                if (sceneKey) {
+                    engine.goToScene(sceneKey);
+                } else {
+                console.warn("Problem with scene name or not found....");
+                }
+    }
+
+    respawn() {
+        this.isDead = false;
+        this.pos = new Vector(this.initialX, this.initialY); // Terug naar spawn
+        this.vel = Vector.Zero; // Reset snelheid
+        this.acc = Vector.Zero;
+        this.body.useGravity = true; // Zet zwaartekracht weer aan
+        this.graphics.opacity = 1; // Zorg dat speler zichtbaar is
+        this.groundContacts = 0;
+        // Log de spawnpositie in de console
+        console.log(`Player ${this.playerNumber} respawned at (${this.initialX}, ${this.initialY})`);
     }
 
     onPreUpdate(engine: Engine, delta: number) {
+        const gamepad = engine.input.gamepads.at(this.gamepadIndex);
         let kb = engine.input.keyboard;
 
+        if (this.isDead) {
+            this.vel = Vector.Zero;
+            this.acc = Vector.Zero;
+            this.actions.clearActions();
+            return;
+        }
+
+        // Dynamic level reset
         if (kb.wasPressed(this.controls.reset) && this.scene) {
-            // Stop current music
-            Resources.gameMusic.stop();
-            // Restart current level
-            engine.goToScene("level1");
+            const engineScenes = engine.scenes as Record<string, any>;
+            let sceneKey = Object.keys(engineScenes).find(
+                key => engineScenes[key] === this.scene
+            );
+            sceneKey = (this.scene as any).levelKey || sceneKey;
+            if (sceneKey) {
+                engine.goToScene(sceneKey);
+            } else {
+                console.warn("Problem with scene name or not found....");
+            }
+        }
+
+        // Mainscreen (main menu) functionality
+        if (kb.wasPressed(this.controls.mainscreen) && this.scene) {
+            Resources.gameMusic.stop?.();
+            engine.goToScene("menu");
         }
 
         let xspeed = 0;
@@ -428,6 +492,14 @@ export class Player extends Actor {
 
         if (kb.isHeld(this.controls.right)) {
             xspeed = 1;
+        }
+
+        if (gamepad) {
+            const stickX = gamepad.getAxes(Axes.LeftStickX);
+            // Use a deadzone to avoid drift
+            if (Math.abs(stickX) > 0.2) {
+                xspeed = stickX; // This will be a value between -1 (left) and 1 (right)
+            }
         }
 
         // Idle detection
@@ -464,7 +536,10 @@ export class Player extends Actor {
         }
 
         // Jump controls
-        if (kb.wasPressed(this.controls.up) && this.#onGround) {
+        if (
+            (kb.wasPressed(this.controls.up) && this.#onGround) ||
+            (gamepad && gamepad.isButtonPressed(Buttons.Face1) && this.#onGround)
+        ) {
             this.jump();
         }
 
@@ -505,7 +580,7 @@ export class Player extends Actor {
             }
             // when moving right (positive x), do flip
             this.graphics.flipHorizontal = this.vel.x > 0;
-            
+
             // Update cosmetic to walk animation with same flip
             this.children.forEach(child => {
                 if (child instanceof Cosmetic) {
@@ -517,7 +592,7 @@ export class Player extends Actor {
             if (this.graphics.current !== this.#idleAnimation) {
                 this.graphics.use(this.#idleAnimation);
                 this.graphics.flipHorizontal = false; // Reset flip when idle
-                
+
                 // Update cosmetic to idle animation
                 this.children.forEach(child => {
                     if (child instanceof Cosmetic) {
@@ -542,6 +617,12 @@ export class Player extends Actor {
     }
 
     onPostUpdate(engine, delta) {
+        if (this.isDead) {
+            // Blokkeer alle beweging
+            this.vel = Vector.Zero;
+            this.acc = Vector.Zero;
+            return;
+        }
         // Apply delta AFTER physics
         if (!this._pendingCarrierDelta.equals(Vector.Zero)) {
             this.pos = this.pos.add(this._pendingCarrierDelta);
@@ -566,5 +647,12 @@ export class Player extends Actor {
         if (this._carrierPlatform) {
             console.log("currentDelta:", this._carrierPlatform.currentDelta);
         }
+    }
+
+    setSpawn(x: number, y: number) {
+        this.initialX = x;
+        this.initialY = y;
+        // Log de nieuwe spawnpositie in de console
+        console.log(`Player ${this.playerNumber} spawn set to (${x}, ${y})`);
     }
 }

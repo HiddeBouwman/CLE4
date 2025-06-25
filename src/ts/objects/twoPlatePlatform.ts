@@ -1,6 +1,27 @@
 import { Vector } from "excalibur";
 import { Platform, PlatformType, IMovablePlatform } from "./platform.ts";
 
+/**
+ * Platform that moves when multiple pressure plates are activated simultaneously.
+ * Default requires 2 plates, but can be configured for more.
+ * Moves between two positions when the required number of plates are active.
+ *
+ * @param x - X coordinate in grid units (will be multiplied by 32)
+ * @param y - Y coordinate in grid units (will be multiplied by 32)
+ * @param width - Width of the platform actor
+ * @param height - Height of the platform actor
+ * @param platformType - Type of platform from PlatformType enum, determines sprite
+ * @param colliderWidth - Width of the collision box
+ * @param colliderHeight - Height of the collision box
+ * @param colliderOffset - Offset position of the collision box
+ * @param start - Starting position in grid units (will be multiplied by 32)
+ * @param end - Ending position in grid units (will be multiplied by 32)
+ * @param speed - Movement speed in pixels per second (default: 100)
+ * @param pauseDuration - Time to pause at endpoints in milliseconds (default: 0)
+ * @param boostForPlayers - Array of player numbers that receive speed boost on this platform (default: [])
+ * @param spriteScale - Scale factor for the platform sprite (default: Vector(1, 1))
+ * @param requiredPlates - Number of pressure plates required to activate (default: 2, minimum: 2)
+ */
 export class TwoPlatePlatform extends Platform implements IMovablePlatform {
     start: Vector; // starting position (x, y)
     end: Vector; // end position (x, y)

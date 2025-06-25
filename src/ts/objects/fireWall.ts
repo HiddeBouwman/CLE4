@@ -1,32 +1,44 @@
-import { Actor, Engine, Vector } from "excalibur";
+import { Actor, Vector, Engine } from "excalibur";
 import { Fire } from "./fire";
 
-// Plaats een muur van vuur tussen (startX, startY) en (endX, endY), elke 0.25 tile (8px)
+type FireDirection = "up" | "down" | "left" | "right";
+
+/**
+ * Creates a line of fire hazards between two coordinates.
+ * Can be horizontal, vertical, or diagonal.
+ *
+ * @param startX - Starting X coordinate in grid units
+ * @param startY - Starting Y coordinate in grid units
+ * @param endX - Ending X coordinate in grid units
+ * @param endY - Ending Y coordinate in grid units
+ * @param direction - Direction of fire animation ("up", "down", "left", "right", default: "up")
+ */
 export class FireWall extends Actor {
-    constructor(startX: number, startY: number, endX: number, endY: number) {
+    start: Vector;
+    end: Vector;
+    direction: FireDirection;
+
+    constructor(startX: number, startY: number, endX: number, endY: number, direction: FireDirection = "up") {
         super();
-        // Bepaal richting en afstand
-        const start = new Vector(startX, startY);
-        const end = new Vector(endX, endY);
-        const delta = end.sub(start);
-        const length = delta.magnitude; // GOED
-        const steps = Math.floor(length / 0.25); // aantal kwart-tiles
-
-        // Richtingsvector per stap (in grid tiles)
-        const stepVec = delta.normalize().scale(0.25);
-
-        for (let i = 0; i <= steps; i++) {
-            const pos = start.add(stepVec.scale(i));
-            // Maak een Fire op deze positie (let op: Fire verwacht grid-coördinaten)
-            const fire = new Fire(pos.x, pos.y);
-            this.addChild(fire);
-        }
+        this.start = new Vector(startX, startY);
+        this.end = new Vector(endX, endY);
+        this.direction = direction;
     }
 
     onInitialize(engine: Engine) {
-        // Voeg alle vuur-actors toe aan de scene
-        for (const child of this.children) {
-            engine.add(child);
+        // Plaats vuur-actors tussen start en end, elke 0.5 tile (8px)
+        const dx = this.end.x - this.start.x;
+        const dy = this.end.y - this.start.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const steps = Math.floor(length * 2); // elke halve tile
+
+        for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            const x = this.start.x + dx * t;
+            const y = this.start.y + dy * t;
+            if (this.scene) {
+                this.scene.add(new Fire(x, y, this.direction));
+            }
         }
     }
 }

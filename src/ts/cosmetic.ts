@@ -1,5 +1,6 @@
-import { Actor, CollisionType, Sprite, Vector } from "excalibur";
+import { Actor, CollisionType, Color, Sprite, Vector, Timer, Engine } from "excalibur";
 import { Resources } from "./resources";
+import { LevelManager } from "./levelManager";
 
 // Create and export the enum for cosmetic types
 export enum CosmeticType {
@@ -19,18 +20,25 @@ export class Cosmetic extends Actor {
     playerNumber: number;
     curentCosmetic: Sprite[];
     cosmetics: Record<CosmeticType, { idle: Sprite; walk: Sprite }>;
+    
+    // For selection UI
+    isBlinking: boolean = false;
+    blinkTimer: Timer;
+    currentSelection: number = 0;
+    cosmeticTypes: CosmeticType[];
+    lockedFilter: Color = new Color(30, 30, 30, 1); // Dark filter for locked items
 
     constructor(playerNumber: number) {
         super({
-            width: 1,
-            height: 1,
+            width: 32,
+            height: 32,
             collisionType: CollisionType.PreventCollision,
         });
         this.playerNumber = playerNumber;
 
-        // Define array based on enum values
-        const cosmeticTypes = Object.values(CosmeticType);
-
+        // Store cosmetic types for cycling
+        this.cosmeticTypes = Object.values(CosmeticType);
+        
         // Initialize cosmetics object with proper typing
         this.cosmetics = {} as Record<
             CosmeticType,
@@ -62,8 +70,8 @@ export class Cosmetic extends Actor {
         // Generate sprite coordinates for other cosmetic types
         const generateCosmetics = () => {
             // Start from index 1 to skip 'none' which we defined separately
-            for (let i = 1; i < cosmeticTypes.length; i++) {
-                const cosmeticType = cosmeticTypes[i] as CosmeticType;
+            for (let i = 1; i < this.cosmeticTypes.length; i++) {
+                const cosmeticType = this.cosmeticTypes[i] as CosmeticType;
                 const column = i - 1; // Column index (0-based for actual cosmetics)
 
                 // Calculate row based on player number
@@ -98,9 +106,20 @@ export class Cosmetic extends Actor {
 
         this.initLocalStorage();
         this.setCosmetic();
+        
+        // Initialize blink timer
+        this.blinkTimer = new Timer({
+            fcn: () => this.toggleBlink(),
+            interval: 500,
+            repeats: true
+        });
+        
+        // Enable debugging
+        console.log(`Cosmetic for Player ${playerNumber} created`);
     }
 
     initLocalStorage() {
+        // If there is no cosmetics object creates one
         if (!localStorage.getItem("cosmetics")) {
             const defaultCosmetics: LocalStorageCosmetics = {
                 player1: CosmeticType.None,
@@ -111,6 +130,7 @@ export class Cosmetic extends Actor {
     }
 
     setCosmetic() {
+        // If the cosmetics object exists parses it and puts the correct cosmetic in the curentCosmetic variable
         if (localStorage.getItem("cosmetics")) {
             const cosmeticsStr = localStorage.getItem("cosmetics");
             if (cosmeticsStr) {
@@ -136,6 +156,12 @@ export class Cosmetic extends Actor {
                     ];
                 }
                 this.graphics.use(this.curentCosmetic[0]);
+                
+                // Set the current selection index based on the saved cosmetic
+                const index = this.cosmeticTypes.findIndex(type => type === selectedCosmeticKey);
+                if (index !== -1) {
+                    this.currentSelection = index;
+                }
             }
         } else {
             this.initLocalStorage();
@@ -143,6 +169,126 @@ export class Cosmetic extends Actor {
         }
     }
 
+    // Get currently selected cosmetic type
+    getCurrentCosmeticType(): CosmeticType {
+        return this.cosmeticTypes[this.currentSelection];
+    }
+
+    // Update the cosmetic display based on the current selection
+    updateCosmeticDisplay() {
+        const selectedType = this.getCurrentCosmeticType();
+        console.log(`Player ${this.playerNumber} displaying cosmetic: ${selectedType}`);
+        
+        // Check if cosmetic is unlocked
+        const isUnlocked = LevelManager.isCosmeticUnlocked(selectedType);
+        
+        if (this.cosmetics[selectedType]) {
+            this.graphics.use(this.cosmetics[selectedType].idle);
+            
+            // Apply locked filter if needed
+            if (!isUnlocked) {
+                this.graphics.opacity = 0.6;
+                this.graphics.color = this.lockedFilter;
+            } else {
+                this.graphics.opacity = this.isBlinking ? 0.5 : 1;
+                this.graphics.color = Color.White;
+            }
+        }
+    }
+    
+    // Cycle to the next available cosmetic
+    cycleNext() {
+        this.currentSelection = (this.currentSelection + 1) % this.cosmeticTypes.length;
+        console.log(`Player ${this.playerNumber} cycling next to: ${this.getCurrentCosmeticType()}`);
+        
+        // Restart blinking when cycling
+        this.isBlinking = false;
+        if (!this.blinkTimer.isRunning) {
+            this.blinkTimer.start();
+        }
+        
+        this.updateCosmeticDisplay();
+    }
+    
+    // Cycle to the previous available cosmetic
+    cyclePrevious() {
+        this.currentSelection = (this.currentSelection - 1 + this.cosmeticTypes.length) % this.cosmeticTypes.length;
+        console.log(`Player ${this.playerNumber} cycling previous to: ${this.getCurrentCosmeticType()}`);
+        
+        // Restart blinking when cycling
+        this.isBlinking = false;
+        if (!this.blinkTimer.isRunning) {
+            this.blinkTimer.start();
+        }
+        
+        this.updateCosmeticDisplay();
+    }
+    
+    // Select the current cosmetic
+    select() {
+        const selectedType = this.getCurrentCosmeticType();
+        if (LevelManager.isCosmeticUnlocked(selectedType)) {
+            this.switchCosmetic(this.playerNumber, selectedType);
+            
+            // Stop blinking when selected
+            this.stopBlinking();
+            
+            // Make the cosmetic fully opaque
+            this.graphics.opacity = 1;
+            
+            console.log(`Player ${this.playerNumber} selected: ${selectedType}`);
+            return true;
+        }
+        console.log(`Player ${this.playerNumber} cannot select locked cosmetic: ${selectedType}`);
+        return false;
+    }
+    
+    // Toggle blink effect for cosmetics
+    toggleBlink() {
+        this.isBlinking = !this.isBlinking;
+        this.updateCosmeticDisplay();
+    }
+    
+    // Start blinking effect
+    startBlinking(engine: Engine) {
+        engine.add(this.blinkTimer);
+        this.blinkTimer.start();
+    }
+    
+    // Stop blinking effect
+    stopBlinking() {
+        this.blinkTimer.stop();
+        this.isBlinking = false;
+        this.updateCosmeticDisplay();
+    }
+
+    // This function sets up this cosmetic as a preview in the dressing room
+    setupAsPreview(engine: Engine) {
+        this.pos = new Vector(0, 0);
+        this.scale = new Vector(3, 4);
+        
+        // Find the saved cosmetic and set it as the current selection
+        const cosmeticsStr = localStorage.getItem("cosmetics");
+        if (cosmeticsStr) {
+            const cosmetics = JSON.parse(cosmeticsStr) as LocalStorageCosmetics;
+            const playerKey = this.playerNumber === 1 ? "player1" : "player2";
+            const currentCosmeticType = cosmetics[playerKey] as CosmeticType;
+            
+            // Find the index of the saved cosmetic
+            const index = this.cosmeticTypes.findIndex(type => type === currentCosmeticType);
+            if (index !== -1) {
+                this.currentSelection = index;
+            }
+        }
+        
+        // Make sure we're visible and start blinking
+        this.updateCosmeticDisplay();
+        this.startBlinking(engine);
+        
+        console.log(`Player ${this.playerNumber} cosmetic preview setup as child of player actor`);
+    }
+
+    // Switch the saved cosmetic from the localtorage with a diffrent key
     switchCosmetic(playerNumber: number, cosmeticKey: CosmeticType) {
         const cosmeticsStr = localStorage.getItem("cosmetics");
         if (cosmeticsStr) {
@@ -155,9 +301,11 @@ export class Cosmetic extends Actor {
             }
 
             localStorage.setItem("cosmetics", JSON.stringify(cosmetics));
+            console.log(`Saved cosmetic for Player ${playerNumber}: ${cosmeticKey}`);
         }
     }
 
+    // Makes sure that the walking animation also functions for the cosmetic
     switchCosmeticState(isWalking: boolean, flipHorizontal: boolean) {
         if (this.curentCosmetic) {
             // Use either idle (0) or walk (1) sprite based on isWalking parameter

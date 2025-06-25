@@ -9,6 +9,21 @@ export enum PlatformType {
     PurpleYellowPlatform
 }
 
+/**
+ * Base platform class that serves as a foundation for all platform types.
+ * Handles collision, graphics, and basic movement detection with sound effects.
+ * 
+ * @param x - X coordinate in grid units (will be multiplied by 32)
+ * @param y - Y coordinate in grid units (will be multiplied by 32)
+ * @param width - Width of the platform actor
+ * @param height - Height of the platform actor
+ * @param platformType - Type of platform from PlatformType enum, determines sprite
+ * @param colliderWidth - Width of the collision box
+ * @param colliderHeight - Height of the collision box
+ * @param colliderOffset - Offset position of the collision box
+ * @param spriteScale - Scale factor for the platform sprite (default: Vector(1, 1))
+ * @param boostForPlayers - Array of player numbers that receive speed boost on this platform (default: [])
+ */
 export class Platform extends Actor {
     platformType: PlatformType;
     spriteScale: Vector;
@@ -115,6 +130,10 @@ export class Platform extends Actor {
 }
 
 // Interface for platforms that can be moved (by pressure plates)
+/**
+ * Interface for platforms that can be moved by pressure plates or other triggers.
+ * Implemented by platform classes that need to respond to activation/deactivation events.
+ */
 export interface IMovablePlatform {
     startMoving(): void;
     stopMoving(): void;
@@ -122,7 +141,13 @@ export interface IMovablePlatform {
     registerPressurePlateDeactivated?(): void;
 }
 
-// Utility functie om te checken of een platform boost geeft aan een speler
+/**
+ * Utility function to check if a platform provides a speed boost for a specific player.
+ * 
+ * @param platform - The platform to check
+ * @param playerNumber - The player number to check for boost (1 or 2)
+ * @returns True if the platform boosts the specified player
+ */
 export function isBoostPlatformForPlayer(platform: Platform, playerNumber: number): boolean {
     return platform.boostForPlayers.includes(playerNumber);
 }

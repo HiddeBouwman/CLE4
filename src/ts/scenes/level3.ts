@@ -15,6 +15,7 @@ import { Resources } from "../resources.ts";
 import { AlwaysMovingPlatform } from "../objects/AlwaysMovingPlatform.ts";
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
 import { JumpPlate } from "../objects/jumpPlate.ts";
+import { FireWall } from "../objects/fireWall.ts";
 
 export class LevelThree extends Scene {
     public levelKey = "level3";
@@ -56,6 +57,7 @@ export class LevelThree extends Scene {
         // walls
         this.add(new Floor(-34, 0, 12, 60));
         this.add(new Floor(101, 0, 12, 60));
+        this.add(new Floor(-41, -70, 5, 20));
 
         // floor
         this.add(new Floor(0, 40, 100, 30));
@@ -63,6 +65,8 @@ export class LevelThree extends Scene {
         this.add(new Floor(19.5, -39, 5, 9));
 
         //floor for 3rd floor
+        this.add(new Floor(45, -48, 20, 4));
+        
         //2nd floor ceiling
         this.add(new Floor(-4, -43, 20, 5));
         
@@ -79,20 +83,110 @@ export class LevelThree extends Scene {
         //higher floors (2nd floor)
         this.add(new Floor(5, -25, 5, 10));
         this.add(new Floor(43, -25, 10, 10));
+        this.add(new Floor(76, -25, 5, 10));
+        this.add(new Floor(79, -25, 5, 6));
+        this.add(new Floor(90, -30, 5, 15));
+        this.add(new Floor(76, -45, 5, 3));
+        this.add(new Floor(68, -50, 5, 8));
+
+        //higher floors (3rd floor)
+        this.add(new Floor(52, -63, 9, 8));
+        this.add(new Floor(31, -55, 6, 7));
+        this.add(new Floor(22, -52, 5, 5));
+        this.add(new Floor(8, -52, 5, 5));
+        this.add(new Floor(-6, -52, 5, 5));
+        this.add(new Floor(-20, -52, 5, 5));
+        this.add(new Floor(-27, -67, 5, 3));
 
         //special platforms
-        const alwaysPlatform = new AlwaysMovingPlatform(
-            160, 100, 100, 20, // spawnposX, spawnposY, width (unused), height (unused) 
-            PlatformType.PurpleYellowPlatform, // what type of sprite gets rendered, but that doesn't really matter
-            186, 30, new Vector(0.5, 0.5), // width, height, offset
-            new Vector(160, 100), // start
-            new Vector(950, 100), // end, this means you can do diagonal movement as well.
-            96, // movement speed
-            2000, // Pause for 2 seconds at each end
-            [1, 2], // Player 1 and 2 both get a boost on this platform. This is either set to [], [1], [2], or [1, 2].
-            new Vector(2, 2) // Makes the sprite have twice the width, and twice the height.
+        
+
+        //3rd floor
+        const alwaysMovingPlatform = new AlwaysMovingPlatform(
+            40, -52, 100, 20,
+            PlatformType.DefaultPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(40, -52),
+            new Vector(40, -63),
+            192,
+            0,
+            [],
+            new Vector(2, 2)
         );
-        this.add(alwaysPlatform);
+        const alwaysMovingPlatformTwo = new AlwaysMovingPlatform(
+            -14, -68, 100, 20,
+            PlatformType.DefaultPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(-17, -68),
+            new Vector(-5, -68),
+            192,
+            0,
+            [],
+            new Vector(2, 2)
+        );
+        const alwaysMovingPlatformThree = new AlwaysMovingPlatform(
+            1, -68, 100, 20,
+            PlatformType.DefaultPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(1, -65),
+            new Vector(1, -75),
+            192,
+            0,
+            [],
+            new Vector(2, 2)
+        );
+        const alwaysMovingPlatformFour = new AlwaysMovingPlatform(
+            5, -70, 100, 20,
+            PlatformType.DefaultPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(5, -70),
+            new Vector(35, -70),
+            192,
+            0,
+            [],
+            new Vector(2, 2)
+        );
+        this.add(alwaysMovingPlatformFour);
+        this.add(alwaysMovingPlatformThree);
+        this.add(alwaysMovingPlatformTwo);
+        this.add(alwaysMovingPlatform);
+
+        const colorPlatformOne = new PressurePlatePlatform(
+            15, -55.5, 100, 20,
+            PlatformType.YellowPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(15, -53),
+            new Vector(15, -53),
+            192,
+            0,
+            [2],
+            new Vector(2, 2)
+        );
+        const colorPlatformTwo = new PressurePlatePlatform(
+            1, -55.5, 100, 20,
+            PlatformType.PurplePlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(0, -53),
+            new Vector(0, -53),
+            192,
+            0,
+            [1],
+            new Vector(2, 2)
+        );
+        const colorPlatformThree = new PressurePlatePlatform(
+            -13, -55.5, 100, 20,
+            PlatformType.YellowPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(-13, -53),
+            new Vector(-13, -53),
+            192,
+            0,
+            [2],
+            new Vector(2, 2)
+        );
+        this.add(colorPlatformThree);
+        this.add(colorPlatformTwo);
+        this.add(colorPlatformOne);
 
 
         const plateDoublePlatform = new PressurePlatePlatform(
@@ -108,12 +202,13 @@ export class LevelThree extends Scene {
         );
         this.add(plateDoublePlatform);
 
+        //second floor
         const pressurePlatePlatform = new PressurePlatePlatform(
             30, -25, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(5, -25),
-            new Vector(5, -25),
+            new Vector(30, -25),
+            new Vector(30, -33),
             192,
             0,
             [],
@@ -123,25 +218,63 @@ export class LevelThree extends Scene {
         const boxForPressurePlate = new Box(-3, 0);
         const boxForPressurePlate2ndFloor = new Box(5, -25);
 
-        const pressurePlatePlatform2ndFloor = new PressurePlatePlatform(
-            5, 4, 100, 20,
+        const pressurePlatePlatform2ndFloorHorizontal = new PressurePlatePlatform(
+            56, -34, 100, 20,
             PlatformType.DefaultPlatform,
             186, 60, new Vector(0.5, 0.5),
-            new Vector(5, 4),
-            new Vector(5, 25),
+            new Vector(56, -34),
+            new Vector(68, -34),
             192,
             0,
             [],
             new Vector(2, 2)
         );
-        const platformPlate2ndFloor = new DefaultPlate(800, -800, 0, pressurePlatePlatform2ndFloor, boxForPressurePlate);
+
+        const pressurePlatePlatform2ndFloorColor = new PressurePlatePlatform(
+            83, -37, 100, 20,
+            PlatformType.YellowPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(83, -37),
+            new Vector(83, -45),
+            192,
+            0,
+            [2],
+            new Vector(2, 2)
+        );
+        const platformPlate2ndFloorHorizontal = new DefaultPlate(2830, -1440, 0, pressurePlatePlatform2ndFloorColor, boxForPressurePlate2ndFloor);
+        const boxForPressurePlateHorizontal = new Box(45, -34);
+        const platformPlateHorizontal = new DefaultPlate(1600, -1120, 0, pressurePlatePlatform2ndFloorHorizontal, boxForPressurePlateHorizontal);
+        
+
+        this.add(pressurePlatePlatform2ndFloorHorizontal);
+        this.add(platformPlateHorizontal);
+        this.add(boxForPressurePlateHorizontal);
+        this.add(pressurePlatePlatform2ndFloorColor);
+        this.add(platformPlate2ndFloorHorizontal);
+
+
+        //eigenlijk first floor
+        const pressurePlatePlatform2ndFloor = new PressurePlatePlatform(
+            5, 4, 100, 20,
+            PlatformType.DefaultPlatform,
+            186, 60, new Vector(0.5, 0.5),
+            new Vector(5, 4),
+            new Vector(25, 4),
+            192,
+            0,
+            [],
+            new Vector(2, 2)
+        );
+        const platformPlate2ndFloor = new DefaultPlate(800, -800, 0, pressurePlatePlatform, boxForPressurePlate);
+        const platformPlate2ndFloor2 = new DefaultPlate(1200, -1120, 0, pressurePlatePlatform, boxForPressurePlate2ndFloor);
         
         this.add(pressurePlatePlatform2ndFloor);
         this.add(platformPlate2ndFloor);
+        this.add(platformPlate2ndFloor2);
 
 
 
-        const platformPlate = new DefaultPlate(0, 320, 0, pressurePlatePlatform, boxForPressurePlate);
+        const platformPlate = new DefaultPlate(0, 320, 0, pressurePlatePlatform2ndFloor, boxForPressurePlate);
 
         this.add(platformPlate);
         this.add(boxForPressurePlate)
@@ -152,7 +285,7 @@ export class LevelThree extends Scene {
         const boxForPlate2 = new Box(1560, -100);
         this.add(boxForPlate1);
         this.add(boxForPlate2);
-        const plate1 = new DefaultPlate(960, 180, 0, plateDoublePlatform, boxForPlate1); // positionX, positionY, platform, targetBox
+        const plate1 = new DefaultPlate(960, 190, 0, plateDoublePlatform, boxForPlate1); // positionX, positionY, platform, targetBox
         const plate2 = new DefaultPlate(1550, -100, 0, plateDoublePlatform, boxForPlate2); // positionX, positionY, platform, targetBox
         this.add(plate1);
         this.add(plate2);
@@ -160,8 +293,12 @@ export class LevelThree extends Scene {
 
           //jump plate test
         const jumpPlate = new JumpPlate(-80, -800, 900);
+        const jumpPlate2 = new JumpPlate(2400, -1540, 900); // Another jump plate for testing
+        const jumpPlate3 = new JumpPlate(-1050, -1920, 900); 
         //const jumpPlateTest = new JumpPlate(-80, -800, 900);
         this.add(jumpPlate);
+        this.add(jumpPlate2);
+        this.add(jumpPlate3);
         //this.add(jumpPlateTest);
 
         // // ground platforms
@@ -176,10 +313,29 @@ export class LevelThree extends Scene {
 
         //teleporter
         this.add(new Portal(57, 9.5, new Vector(-480, -1000)));
-        this.add(new Portal(-8, 9.5, new Vector(-480, -1000)));
+        //this.add(new Portal(-8, 9.5, new Vector(-480, -1000)));
+        //this.add(new Portal(-8, 9.5, new Vector(2830, -1500)));
 
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
+
+
+        //hazards
+        this.add(new FireWall(52, -24.5, 72, -24.5));
+        this.add(new FireWall(80, -30.5, 83, -30.5));
+        this.add(new FireWall(83, -25, 86, -25));
+        this.add(new FireWall(4, -38.5, 8, -38.5, "down"));
+        this.add(new FireWall(15, -38.5, 15, -32, "left"));
+        this.add(new FireWall(9.5, -34, 9.5, -25, "right"));
+        //this.add(new FireWall(48, -51.5, 50, -51.5));
+        this.add(new FireWall(21, -56.5, 24, -56.5));
+        this.add(new FireWall(8, -56.5, 11, -56.5));
+        this.add(new FireWall(-6, -56.5, -3, -56.5));
+        this.add(new FireWall(-23, -56.5, -20, -56.5));
+        this.add(new FireWall(34.5, 10.5, 45.5, 10.5));
+
+        //finish
+        //this.add(new Finish(970, 180));
     }
 
     onPreUpdate(engine: Engine, delta: number) {
