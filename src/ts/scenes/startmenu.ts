@@ -1,5 +1,6 @@
 import { Scene, Actor, Label, Color, Font, FontUnit, TextAlign, Buttons, Engine, Axes, Vector } from "excalibur";
 import { Resources, stopAllMusic } from "../resources.ts";
+import { LevelManager } from "../levelManager.ts";
 
 export class StartMenu extends Scene {
     private menuButtons: Label[] = [];
@@ -15,7 +16,7 @@ export class StartMenu extends Scene {
 
     onInitialize(engine) {
 
-         Resources.Menu.play();
+        Resources.Menu.play();
         Resources.Menu.volume = 0.1
 
         // Create background sprite from the image source
@@ -116,21 +117,27 @@ export class StartMenu extends Scene {
 
         //register clicks on label
         button_level1.on('pointerup', () => {
-            engine.goToScene('level1');
-            Resources.FinishMC.stop();
+            if (LevelManager.getUnlockedLevel() >= 0) {
+                engine.goToScene('level1');
+                Resources.FinishMC.stop();
+            }
         });
 
         //register clicks on label
         button_level2.on('pointerup', () => {
-            engine.goToScene('level2');
-            Resources.FinishMC.stop();
+            if (LevelManager.getUnlockedLevel() >= 1) {
+                engine.goToScene('level2');
+                Resources.FinishMC.stop();
+            }
         });
-
         //register clicks on label
         button_level3.on('pointerup', () => {
-            engine.goToScene('level3');
-            Resources.FinishMC.stop();
+            if (LevelManager.getUnlockedLevel() >= 2) {
+                engine.goToScene('level3');
+                Resources.FinishMC.stop();
+            }
         });
+
 
         //register clicks on label
         button_dressingRoom.on('pointerup', () => {
@@ -245,10 +252,7 @@ export class StartMenu extends Scene {
                 this.selectedIndex = (this.selectedIndex - 1 + this.menuButtons.length) % this.menuButtons.length;
                 this.highlightSelected();
                 Resources.UI.play();
-            } else if (evt.key === 'Enter') {
-                this.activateSelected(this.engine);
-                Resources.confirmUI.play();
-            }
+            } 
         };
         this.engine.input.keyboard.on('press', this.keyboardHandler);
     }
