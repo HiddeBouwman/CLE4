@@ -23,7 +23,6 @@ import { AlwaysMovingPlatform } from "./objects/AlwaysMovingPlatform.ts";
 import { PressurePlatePlatform } from "./objects/PressurePlatePlatform.ts";
 import { PressurePlateReturnPlatform } from "./objects/PressurePlateReturnPlatform.ts";
 import { TwoPlatePlatform } from "./objects/twoPlatePlatform.ts";
-import { SpikeBall } from "./objects/spikeBall.ts";
 import { Floor, isBoostFloorForPlayer } from "./floor.ts";
 import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
@@ -424,22 +423,6 @@ export class Player extends Actor {
             Resources.PlayerJump.play();
         }
     }
-
-    // //player handles level death
-    // hitBySpikeBall(engine: Engine) {
-
-    //     // Find current scene.
-    //     const engineScenes = engine.scenes as Record<string, any>;
-    //     let sceneKey = Object.keys(engineScenes).find(
-    //         key => engineScenes[key] === this.scene
-    //     );
-    //     sceneKey = (this.scene as any).levelKey || sceneKey;
-    //     if (sceneKey) {
-    //         engine.goToScene(sceneKey);
-    //     } else {
-    //         console.warn("Problem with scene name or not found....");
-    //     }
-    // }
 
     respawn() {
         this.isDead = false;
