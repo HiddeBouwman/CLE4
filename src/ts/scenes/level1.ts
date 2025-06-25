@@ -26,8 +26,10 @@ export class LevelOne extends Scene {
     constructor() {
         super();
     }
-
+    
     onInitialize(engine: Engine) {
+        // Finish
+        this.add(new Finish(-690, -660));
         //add players, finish and floor to scene
         this.player1 = new Player(7 * 32, 0, 1);
         this.player2 = new Player(9 * 32, 0, 2);
@@ -112,8 +114,6 @@ export class LevelOne extends Scene {
         //hazards
         this.add(new FireWall(10, 25.3, 23, 25.3));
 
-        // Finish
-        this.add(new Finish(-690, -660));
 
 
 
