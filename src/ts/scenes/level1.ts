@@ -9,7 +9,11 @@ import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.
 import { PlatformType } from "../objects/platform.ts";
 import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
+import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
+import { PressurePlate } from "../objects/pressureplate.ts";
+
 import { Resources, stopAllMusic } from "../resources.ts";
+import { Fire } from "../objects/fire.ts";
 import { FireWall } from "../objects/fireWall";
 
 export class LevelOne extends Scene {
@@ -24,6 +28,7 @@ export class LevelOne extends Scene {
     }
     
     onInitialize(engine: Engine) {
+
         // Finish
         this.add(new Finish(-690, -660));
         //add players, finish and floor to scene
@@ -96,8 +101,6 @@ export class LevelOne extends Scene {
         );
         this.add(doublePlatePlatform1);
 
-
-
         //pressure plates
         const doubleplate1 = new DefaultPlate(-690, 796, 0, plateplatform1, box2);
         this.add(doubleplate1);
@@ -110,12 +113,6 @@ export class LevelOne extends Scene {
         //hazards
         this.add(new FireWall(10, 25.3, 23, 25.3));
 
-
-
-
-
-
-
         this.cameraController = new CameraController(engine.currentScene, engine.currentScene.camera);
         this.parallax = new ParallaxBackgroundManager(this, this.camera, engine); // Camera bepaalt deels hoe de achtergrond zich gedraagd
     }
@@ -123,7 +120,6 @@ export class LevelOne extends Scene {
     onPreUpdate(engine: Engine, delta: number) {
         this.cameraController.update(this.player1, this.player2);
         this.parallax.update();
-
 
         // --- Death zone check ---
         const deathY = 1000; // Pas deze waarde aan naar wens
@@ -143,10 +139,6 @@ export class LevelOne extends Scene {
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
         Resources.gameMusic.volume = 0.1;
-        stopAllMusic();
-
-
-
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {

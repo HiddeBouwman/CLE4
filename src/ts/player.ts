@@ -28,6 +28,7 @@ import { Floor, isBoostFloorForPlayer } from "./floor.ts";
 import { Box } from "./objects/box.ts";
 import { Block } from "./objects/block.ts";
 import { Cosmetic } from "./cosmetic.ts";
+import { stopAllMusic } from "./resources.ts";
 
 declare module "excalibur" {
     interface Engine {
@@ -471,6 +472,7 @@ export class Player extends Actor {
             );
             sceneKey = (this.scene as any).levelKey || sceneKey;
             console.log("reset.")
+            stopAllMusic();
             if (sceneKey) {
                 engine.goToScene(sceneKey);
             } else {
