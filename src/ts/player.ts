@@ -448,7 +448,9 @@ export class Player extends Actor {
         }
 
         // Dynamic level reset
-        if (kb.wasPressed(this.controls.reset) && this.scene) {
+        if (kb.wasPressed(this.controls.reset) && this.scene ||
+            (gamepad && gamepad.isButtonPressed(Buttons.Start) && this.scene)
+        ) {
             const engineScenes = engine.scenes as Record<string, any>;
             let sceneKey = Object.keys(engineScenes).find(
                 key => engineScenes[key] === this.scene
