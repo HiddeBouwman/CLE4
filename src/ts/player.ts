@@ -380,7 +380,7 @@ export class Player extends Actor {
                 ) {
                     // velocity = deltaPos / (deltaTime in seconds)
                     const platformVelocity = other.owner.currentDelta.scale(
-                        1000 / this._lastDelta,
+                        500 / this._lastDelta,
                     );
                     this.vel = this.vel.add(platformVelocity);
                 }
