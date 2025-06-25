@@ -48,7 +48,7 @@ export class LevelTwo extends Scene {
             new Vector(2, 2)
         )
         this.add(purplePlatform1);
-        const purplePlate1 = new DefaultPlate(-10 * 32, 0 * 32, 0, purplePlatform1);
+        const purplePlate1 = new DefaultPlate(-10 * 32, -0.125 * 32, 0, purplePlatform1);
         this.add(purplePlate1);
 
         const yellowPlatform1 = new PressurePlatePlatform(
@@ -75,7 +75,7 @@ export class LevelTwo extends Scene {
             new Vector(2, 2)
         )
         this.add(purplePlatform2);
-        const purplePlate2 = new DefaultPlate(-3 * 32, -7 * 32, 0, purplePlatform2);
+        const purplePlate2 = new DefaultPlate(-3 * 32, -7.125 * 32, 0, purplePlatform2);
         this.add(purplePlate2);
 
         const yellowPlatform2 = new PressurePlateReturnPlatform(
@@ -114,9 +114,9 @@ export class LevelTwo extends Scene {
         )
         this.add(purplePlatform3);
 
-        const multiPlate1 = new DefaultPlate(-35 * 32, -10 * 32, 0, [yellowPlatform2, defaultPlatform1, purplePlatform3]);
+        const multiPlate1 = new DefaultPlate(-35 * 32, -10.125 * 32, 0, [yellowPlatform2, defaultPlatform1, purplePlatform3]);
         this.add(multiPlate1);
-        const multiPlate2 = new DefaultPlate(-39.5 * 32, -20 * 32, 0, [yellowPlatform2, defaultPlatform1, purplePlatform3]);
+        const multiPlate2 = new DefaultPlate(-39.5 * 32, -20.125 * 32, 0, [yellowPlatform2, defaultPlatform1, purplePlatform3]);
         this.add(multiPlate2);
 
         const multiPlatform1 = new PressurePlatePlatform(
@@ -256,7 +256,7 @@ export class LevelTwo extends Scene {
         console.log("level ? loaded");
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
-        Resources.gameMusic.volume = 0.1;
+        Resources.gameMusic.volume = 0.7;
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
@@ -264,8 +264,8 @@ export class LevelTwo extends Scene {
             this.player1.setSpawn(-32, 0);
             this.player2.setSpawn(0, 0);
 
-            this.player1.pos = new Vector(-1 * 32, 0 * 32);
-            this.player2.pos = new Vector(0 * 32, 0 * 32);
+            this.player1.pos = new Vector(-1 * 32, -1 * 32);
+            this.player2.pos = new Vector(0 * 32, -1 * 32);
             Resources.finishMSG.stop();
         }
     }

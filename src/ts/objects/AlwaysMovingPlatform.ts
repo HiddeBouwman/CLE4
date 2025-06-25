@@ -29,20 +29,20 @@ export class AlwaysMovingPlatform extends Platform {
     private _pauseTimer: number = 0;
 
     constructor(
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        platformType: PlatformType,
-        colliderWidth: number,
-        colliderHeight: number,
-        colliderOffset: Vector,
-        startPos: Vector,
-        endPos: Vector,
-        speed: number = 100,
-        pauseDuration: number = 0,
-        boostForPlayers: number[] = [],
-        spriteScale: Vector = new Vector(1, 1)
+        x: number, // Starting position X
+        y: number, // Starting position Y
+        width: number, // Currently has no real use
+        height: number, // Currently has no real use
+        platformType: PlatformType, // Decides the sprite of the platform
+        colliderWidth: number, // Width of the platform, calculated from the left side
+        colliderHeight: number, // Height of the platform, calculated from the top side
+        colliderOffset: Vector, // Offset of the platform
+        startPos: Vector, // Beginning point of the moving platform, goes to endPos from this position.
+        endPos: Vector, // End point of the moving platform, goes back to startPos after reaching this position.
+        speed: number = 100, // Movement speed of the platform
+        pauseDuration: number = 0, // Allows for cooldown when it reaches starting point or endpoint, in milliseconds.
+        boostForPlayers: number[] = [], // Allows for boost for players. is either [], [1], [2], or [1, 2]
+        spriteScale: Vector = new Vector(1, 1) // Changes the scale of the sprite
     ) {
         super(x, y, width, height, platformType, colliderWidth, colliderHeight, colliderOffset, spriteScale, boostForPlayers);
         this.start = new Vector(startPos.x * 32, startPos.y * 32);

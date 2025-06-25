@@ -347,7 +347,7 @@ export class LevelThree extends Scene {
         stopAllMusic();
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
-        Resources.gameMusic.volume = 0.3;
+        Resources.gameMusic.volume = 0.7;
 
         console.log("level 3 loaded");
 

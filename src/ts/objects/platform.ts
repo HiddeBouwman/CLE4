@@ -33,19 +33,19 @@ export class Platform extends Actor {
     private _wasActuallyMoving: boolean = false;
     private startSoundPlaying: boolean = false;
     private movingSoundPlaying: boolean = false;
-    public currentDelta: Vector = Vector.Zero; // <-- Voeg deze toe
+    public currentDelta: Vector = Vector.Zero;
 
     constructor(
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        platformType: PlatformType,
-        colliderWidth: number,
-        colliderHeight: number,
-        colliderOffset: Vector,
-        spriteScale: Vector = new Vector(1, 1),
-        boostForPlayers: number[] = []
+        x: number, // Starting position X
+        y: number, // Starting position Y
+        width: number, // Currently has no real use
+        height: number, // Currently has no real use
+        platformType: PlatformType, // Decides the sprite of the platform
+        colliderWidth: number, // Width of the platform, calculated from the left side
+        colliderHeight: number, // Height of the platform, calculated from the top side
+        colliderOffset: Vector, // Offset of the platform
+        spriteScale: Vector = new Vector(1, 1), // Changes the scale of the sprite
+        boostForPlayers: number[] = [] // Allows for boost for players. is either [], [1], [2], or [1, 2]
     ) {
         super({
             width,
@@ -90,7 +90,7 @@ export class Platform extends Actor {
 
         if (this._actuallyMoving && !this._wasActuallyMoving && playerNearby) {
             if (!this.startSoundPlaying) {
-                Resources.PlatformMoving.volume = 0.1
+                Resources.PlatformMoving.volume = 1
                 Resources.PlatformStartMoving.play();
                 this.startSoundPlaying = true;
                 this.movingSoundPlaying = false;
@@ -99,7 +99,7 @@ export class Platform extends Actor {
 
         if (this._actuallyMoving && playerNearby) {
             if (!Resources.PlatformMoving.isPlaying()) {
-                Resources.PlatformMoving.volume = 0.2
+                Resources.PlatformMoving.volume = 1
                 Resources.PlatformMoving.loop = true;
                 Resources.PlatformMoving.play();
                 this.movingSoundPlaying = true;
@@ -110,7 +110,7 @@ export class Platform extends Actor {
         }
 
         if (!this._actuallyMoving && this._wasActuallyMoving && playerNearby) {
-            Resources.PlatformStopMoving.volume = 0.2
+            Resources.PlatformStopMoving.volume = 1
             Resources.PlatformStopMoving.play();
             this.startSoundPlaying = false;
         }

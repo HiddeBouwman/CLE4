@@ -17,7 +17,7 @@ export class Game extends Engine {
         super({
             width: 800,
             height: 500,
-            maxFps: 60,
+            maxFps: 30,
             pixelArt: true,
             // pixelRatio: 1,
             suppressHiDPIScaling: true,

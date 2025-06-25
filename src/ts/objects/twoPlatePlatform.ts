@@ -48,7 +48,7 @@ export class TwoPlatePlatform extends Platform implements IMovablePlatform {
         pauseDuration: number = 0, // in ms
         boostForPlayers: number[] = [], // Default = none, other options are [1], [2], or [1, 2]
         spriteScale: Vector = new Vector(1, 1), // Ability to change sprite scale if needed
-        requiredPlates: number = 2 // <-- nieuw, optioneel
+        requiredPlates: number = 2 // number of pressure plates it requires, can be two or more.
     ) {
         super(x, y, width, height, platformType, colliderWidth, colliderHeight, colliderOffset, spriteScale, boostForPlayers);
         this.start = new Vector(start.x * 32, start.y * 32);

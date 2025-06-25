@@ -138,7 +138,7 @@ export class LevelOne extends Scene {
         // this doesnt work for some reaason.
         Resources.gameMusic.loop = true;
         Resources.gameMusic.play();
-        Resources.gameMusic.volume = 0.1;
+        Resources.gameMusic.volume = 0.7;
 
         // Reset player positions when level is activated.
         if (this.player1 && this.player2) {
