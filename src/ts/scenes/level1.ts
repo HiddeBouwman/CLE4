@@ -9,11 +9,7 @@ import { ParallaxBackgroundManager } from "../objects/parallaxBackgroundManager.
 import { PlatformType } from "../objects/platform.ts";
 import { TwoPlatePlatform } from "../objects/twoPlatePlatform.ts";
 import { PressurePlatePlatform } from "../objects/PressurePlatePlatform.ts";
-import { PressurePlateReturnPlatform } from "../objects/PressurePlateReturnPlatform.ts";
-import { PressurePlate } from "../objects/pressureplate.ts";
-
 import { Resources, stopAllMusic } from "../resources.ts";
-import { Fire } from "../objects/fire.ts";
 import { FireWall } from "../objects/fireWall";
 
 export class LevelOne extends Scene {
