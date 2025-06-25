@@ -33,7 +33,7 @@ export class LevelTwo extends Scene {
 
     onInitialize(engine: Engine) {
         // Finish
-        this.add(new Finish(-39 * 32, -45.5 * 32));
+        this.add(new Finish(-39 * 32, -45.5 * 32, 2));
 
 
         // Platforms
