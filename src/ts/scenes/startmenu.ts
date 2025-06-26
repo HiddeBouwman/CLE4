@@ -220,16 +220,22 @@ export class StartMenu extends Scene {
     activateSelected(engine: Engine) {
         switch (this.selectedIndex) {
             case 0:
-                engine.goToScene('level1');
-                Resources.FinishMC.stop();
+                if (LevelManager.getUnlockedLevel() >= 0) {
+                    engine.goToScene('level1');
+                    Resources.FinishMC.stop();
+                }
                 break;
             case 1:
-                engine.goToScene('level2');
-                Resources.FinishMC.stop();
+                if (LevelManager.getUnlockedLevel() >= 1) {
+                    engine.goToScene('level2');
+                    Resources.FinishMC.stop();
+                }
                 break;
             case 2:
-                engine.goToScene('level3');
-                Resources.FinishMC.stop();
+                if (LevelManager.getUnlockedLevel() >= 2) {
+                    engine.goToScene('level3');
+                    Resources.FinishMC.stop();
+                }
                 break;
             case 3:
                 engine.goToScene('dressingRoom');
